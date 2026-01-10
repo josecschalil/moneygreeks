@@ -118,6 +118,16 @@ class MarketBreadth(models.Model):
     advancing = models.PositiveIntegerField()
     declining = models.PositiveIntegerField()
     advance_decline_ratio = models.DecimalField(max_digits=5, decimal_places=2)
+
+
+class SectorAnalysis(models.Model):
+    report = models.OneToOneField(
+        MarketReport,
+        on_delete=models.CASCADE,
+        related_name="sector_analysis"
+    )
+    analysis = models.TextField()
+
 class SectorPerformance(models.Model):
     report = models.ForeignKey(
         MarketReport,
@@ -131,11 +141,9 @@ class SectorPerformance(models.Model):
     )
 
     sector_name = models.CharField(max_length=100)
+    prev_close = models.DecimalField(max_digits=10, decimal_places=2)
+    change = models.DecimalField(max_digits=10, decimal_places=2)
     change_percent = models.DecimalField(max_digits=6, decimal_places=2)
-class SectorAnalysis(models.Model):
-    report = models.OneToOneField(
-        MarketReport,
-        on_delete=models.CASCADE,
-        related_name="sector_analysis"
-    )
-    analysis = models.TextField()
+    pe = models.DecimalField(max_digits=6, decimal_places=2)
+    pb = models.DecimalField(max_digits=6, decimal_places=2)
+    div_yield = models.DecimalField(max_digits=10, decimal_places=2)
