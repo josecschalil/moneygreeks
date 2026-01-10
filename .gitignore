@@ -4,12 +4,13 @@
 
 # Node modules
 frontend/node_modules/
+backend/.env
 
 # Next.js build output
 frontend/.next/
 frontend/out/
 frontend/dist/
-
+frontend/next-env.d.ts
 # Logs
 frontend/npm-debug.log*
 frontend/yarn-debug.log*
