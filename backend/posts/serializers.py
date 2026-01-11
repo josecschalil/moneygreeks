@@ -125,3 +125,13 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
         ]
 
 
+class ReportListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MarketReport
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "report_date",
+            "overall_conclusion",
+        ]

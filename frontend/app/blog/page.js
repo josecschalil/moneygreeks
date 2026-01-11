@@ -1,5 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+async function fetchPreMarketData() {
+  const res = await fetch("http://127.0.0.1:8000/report-list/", {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch pre-market data");
+  }
+  return res.json();
+}
+const imageLink =
+  "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a";
 const demoData = {
   premarket: [
     {
@@ -105,9 +116,10 @@ const demoData = {
 
 /* ---------------- PAGE ---------------- */
 
-export default function BlogPage() {
-  const latestPremarket = demoData.premarket[0];
-  const olderPremarkets = demoData.premarket.slice(1);
+export default async function BlogPage() {
+  const premarketData = await fetchPreMarketData();
+  const latestPremarket = premarketData[0];
+  const olderPremarkets = premarketData.slice(0);
 
   return (
     <main className="bg-white min-h-screen">
@@ -132,13 +144,13 @@ export default function BlogPage() {
             </p>
           </div>
 
-          <Link href={`/blog/${latestPremarket.slug}`}>
+          <Link href={`/market-data/${latestPremarket.slug}`}>
             <article className="group relative bg-white rounded-3xl overflow-hidden border border-gray-200 hover:border-gray-900 transition-all duration-500 hover:shadow-2xl">
               <div className="grid md:grid-cols-2 gap-0">
                 {/* Image Section */}
                 <div className="relative h-96 md:h-auto overflow-hidden">
                   <Image
-                    src={latestPremarket.cover_image}
+                    src={imageLink}
                     alt={latestPremarket.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -161,7 +173,7 @@ export default function BlogPage() {
                         />
                       </svg>
                       <span className="text-sm font-semibold text-gray-900">
-                        {latestPremarket.published_at}
+                        {latestPremarket.report_date}
                       </span>
                     </span>
                   </div>
@@ -181,7 +193,7 @@ export default function BlogPage() {
                   </h1>
 
                   <p className="text-gray-600 text-lg leading-relaxed mb-8">
-                    {latestPremarket.excerpt}
+                    {latestPremarket.overall_conclusion}
                   </p>
 
                   <div className="flex items-center gap-3">
@@ -246,7 +258,7 @@ export default function BlogPage() {
                 <article className="group h-full">
                   <div className="relative h-64 rounded-2xl overflow-hidden mb-6 bg-gray-100">
                     <Image
-                      src={post.cover_image}
+                      src={imageLink}
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -255,8 +267,8 @@ export default function BlogPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <span className="text-sm font-medium text-gray-500">
-                      {post.published_at}
+                    <span className="text-sm font-medium text-gray-500 pb-2">
+                      {post.report_date}
                     </span>
 
                     <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-gray-600 transition-colors">
@@ -264,7 +276,7 @@ export default function BlogPage() {
                     </h3>
 
                     <p className="text-gray-600 leading-relaxed line-clamp-2">
-                      {post.excerpt}
+                      {post.overall_conclusion}
                     </p>
 
                     <div className="pt-2">

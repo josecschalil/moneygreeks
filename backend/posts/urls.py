@@ -20,5 +20,6 @@ router.register("market-breadth", MarketBreadthViewSet)
 
 router.register("sector-performance", SectorPerformanceViewSet)
 router.register("sector-analysis", SectorAnalysisViewSet)
+router.register("report-list", MarketReportListViewSet, basename="report-list")
 
 urlpatterns = router.urls

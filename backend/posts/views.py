@@ -21,6 +21,7 @@ from .serializers import (
     IndianMarketAnalysisSerializer,
     InstitutionalFlowSerializer,
     InstitutionalFlowAnalysisSerializer,
+    ReportListSerializer,
     StockMoverSerializer,
     StockMoverAnalysisSerializer,
     MarketBreadthSerializer,
@@ -64,3 +65,7 @@ class SectorPerformanceViewSet(viewsets.ModelViewSet):
 class SectorAnalysisViewSet(viewsets.ModelViewSet):
     queryset = SectorAnalysis.objects.all()
     serializer_class = SectorAnalysisSerializer
+class MarketReportListViewSet(viewsets.ModelViewSet):
+    queryset = MarketReport.objects.all().order_by("-report_date")
+    serializer_class = ReportListSerializer
+    lookup_field = "slug"
