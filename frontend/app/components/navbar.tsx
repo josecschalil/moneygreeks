@@ -9,15 +9,15 @@ export default function Navbar() {
   return (
     <nav className="bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
               <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
                 <div className="w-3 h-3 border-2 border-white rounded-full"></div>
               </div>
-              <span className="text-lg font-semibold text-gray-900">
-                Untitled UI
+              <span className="text-3xl font-semibold text-gray-900">
+                MoneyGreeks
               </span>
             </div>
           </div>
@@ -25,32 +25,29 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <a
-              href="#"
-              className="text-gray-700 hover:text-gray-900 text-sm font-medium"
+              href="/"
+              className="text-gray-700 hover:text-gray-900 text-md font-medium"
             >
               Home
             </a>
             <div className="relative group">
-              <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 text-sm font-medium">
-                <span>Products</span>
+              <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 text-md font-medium">
+                <span>
+                  <a href="/blog">Resources</a>
+                </span>
                 <ChevronDown className="w-4 h-4" />
               </button>
             </div>
             <div className="relative group">
-              <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 text-sm font-medium">
-                <span>Blog</span>
+              <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 text-md font-medium">
+                <span>Market Data</span>
                 <ChevronDown className="w-4 h-4" />
               </button>
             </div>
+
             <a
               href="#"
-              className="text-gray-700 hover:text-gray-900 text-sm font-medium"
-            >
-              Pricing
-            </a>
-            <a
-              href="#"
-              className="text-gray-700 hover:text-gray-900 text-sm font-medium"
+              className="text-gray-700 hover:text-gray-900 text-md font-medium"
             >
               About us
             </a>
