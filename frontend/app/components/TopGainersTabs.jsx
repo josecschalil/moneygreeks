@@ -63,9 +63,6 @@ export default function TopGainersTabs({ gainers, losers }) {
               <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase">
                 Volume
               </th>
-              <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase">
-                Target
-              </th>
             </tr>
           </thead>
           <tbody>
@@ -75,15 +72,13 @@ export default function TopGainersTabs({ gainers, losers }) {
                 className="py-3.5 px-3 text-left text-gray-600 text-sm"
               >
                 <td className="py-3 px-3 font-medium">{stock.symbol}</td>
-                <td className="py-3 px-3 text-right">
-                  {stock.previousClose.toFixed(2)}
-                </td>
+                <td className="py-3 px-3 text-right">{stock.prev_close}</td>
                 <td
                   className={`py-3 px-3 text-right font-medium ${
                     activeTab === "gainers" ? "text-green-600" : "text-red-600"
                   }`}
                 >
-                  {stock.open.toFixed(2)}
+                  {stock.open_price}
                 </td>
                 <td className="py-3 px-3 text-right">
                   <span
@@ -93,14 +88,11 @@ export default function TopGainersTabs({ gainers, losers }) {
                         : "bg-red-50 text-red-600"
                     }`}
                   >
-                    {stock.changePercent > 0 ? "+" : ""}
-                    {stock.changePercent.toFixed(2)}%
+                    {stock.change_percent > 0 ? "+" : ""}
+                    {stock.change_percent}%
                   </span>
                 </td>
                 <td className="py-3 px-3 text-right">{stock.volume}</td>
-                <td className="py-3 px-3 text-right">
-                  {stock.target.toFixed(2)}
-                </td>
               </tr>
             ))}
           </tbody>

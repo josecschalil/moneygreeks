@@ -1,38 +1,11 @@
 import TopSectorsTabs from "./TopSectorsTabs";
 
-export default async function TopSectors() {
-  const topGainers = [
-    {
-      symbol: "UNIONBANK",
-      previousClose: 162.36,
-      open: 163.6,
-      changePercent: 2.46,
-      pe: 12.4,
-      pb: 1.2,
-      divYield: 3.4,
-    },
-    {
-      symbol: "SBIN",
-      previousClose: 1005.55,
-      open: 1007.95,
-      changePercent: 1.52,
-      pe: 11.8,
-      pb: 1.5,
-      divYield: 2.1,
-    },
-  ];
+export default async function TopSectors({ sectors }) {
+  if (!sectors) return null;
+  const Collection = Array.isArray(sectors) ? sectors : [];
+  const TopSectors = Collection.filter((item) => item.category === "gainer");
 
-  const topLosers = [
-    {
-      symbol: "RELIANCE",
-      previousClose: 2845.5,
-      open: 2789.3,
-      changePercent: -1.97,
-      pe: 23.4,
-      pb: 2.3,
-      divYield: 0.4,
-    },
-  ];
+  const LosingSectors = Collection.filter((item) => item.category === "loser");
 
   return (
     <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
@@ -40,8 +13,7 @@ export default async function TopSectors() {
         Top Gaining and Losing Sectors
       </h2>
 
-      {/* Client-side tabs */}
-      <TopSectorsTabs gainers={topGainers} losers={topLosers} />
+      <TopSectorsTabs gainers={TopSectors} losers={LosingSectors} />
     </section>
   );
 }

@@ -65,22 +65,22 @@ export default function TopSectorsTabs({ gainers, losers }) {
           <tbody>
             {data.map((s) => (
               <tr
-                key={s.symbol}
+                key={s.id}
                 className="border-b border-gray-100 hover:bg-gray-50 transition"
               >
                 <td className="py-3.5 px-3 font-medium text-gray-900 text-sm">
-                  {s.symbol}
+                  {s.sector_name}
                 </td>
                 <td className="py-3 px-3 text-right text-gray-600">
-                  {s.previousClose.toFixed(2)}
+                  {s.prev_close}
                 </td>
                 <td
                   className={`py-3 px-3 text-right font-medium ${
                     activeTab === "gainers" ? "text-green-600" : "text-red-600"
                   }`}
                 >
-                  {s.changePercent > 0 ? "+" : ""}
-                  {s.changePercent.toFixed(2)}%
+                  {s.change_percent > 0 ? "+" : ""}
+                  {s.change_percent}%
                 </td>
                 <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
                   {s.pe}
@@ -89,7 +89,7 @@ export default function TopSectorsTabs({ gainers, losers }) {
                   {s.pb}
                 </td>
                 <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
-                  {s.divYield}%
+                  {s.div_yield}%
                 </td>
               </tr>
             ))}

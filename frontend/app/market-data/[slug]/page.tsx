@@ -2,14 +2,53 @@ import React from "react";
 import { ArrowUp, ArrowDown, Clock, Calendar, User } from "lucide-react";
 import TopGainers from "@/app/components/topGainers";
 import TopSectors from "@/app/components/topSectors";
-const MarketBlogPost = () => {
-  // SEO metadata
+interface GlobalMarketIndex {
+  id: number;
+  index_name: string;
+  prev_close: number;
+  trend: "up" | "down";
+  open_price: number;
+  change: number;
+  change_percent: number;
+}
+export interface InstitutionalActivity {
+  id: number;
+  institution_type: "FII" | "DII" | string;
+  date: string;
+  buy_value: string;
+  sell_value: string;
+  net_value: string;
+  report: number;
+  trend: "up" | "down";
+}
+
+async function getMarketData(slug: string) {
+  console.log("Fetching data for slug:", slug);
+
+  const res = await fetch(`http://127.0.0.1:8000/reports/${slug}/`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch market data");
+  }
+
+  return res.json();
+}
+
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function MarketBlogPost({ params }: PageProps) {
+  const { slug } = await params;
+  const data = await getMarketData(slug);
   const metadata = {
-    title: "India Market Open Summary - January 5, 2026",
+    title: data.title,
     description:
       "Complete analysis of Indian stock market opening with GIFTNIFTY, NIFTY50, BANKNIFTY, BSE SENSEX performance and top gainers/losers.",
     author: "Market Analyst Team",
-    publishDate: "2026-01-05T09:15:00Z",
+    publishDate: data.report_date,
     keywords: [
       "India Market",
       "NIFTY",
@@ -18,52 +57,20 @@ const MarketBlogPost = () => {
       "Market Open",
       "Trading",
     ],
-    canonicalUrl:
-      "https://example.com/market-summary/india-market-open-january-5-2026",
+    canonicalUrl: "http://127.0.0.1:8000/market-data/" + slug,
   };
-
-  const indices = [
-    {
-      name: "GIFTNIFTY",
-      previousClose: 26417.5,
-      open: 26422.0,
-      change: -101.0,
-      changePercent: 0.38,
-      outlook: "down",
-    },
-    {
-      name: "NIFTY50",
-      previousClose: 26250.3,
-      open: 26189.7,
-      change: -63.95,
-      changePercent: 0.24,
-      outlook: "down",
-    },
-    {
-      name: "BANKNIFTY",
-      previousClose: 60044.2,
-      open: 59957.8,
-      change: 177.0,
-      changePercent: 0.29,
-      outlook: "up",
-    },
-    {
-      name: "BSESENSEX",
-      previousClose: 85439.62,
-      open: 85331.14,
-      change: -348.76,
-      changePercent: 0.41,
-      outlook: "down",
-    },
-    {
-      name: "INDVIX",
-      previousClose: 10.02,
-      open: 10.02,
-      change: 0.15,
-      changePercent: 1.5,
-      outlook: "up",
-    },
-  ];
+  const globalIndices = Array.isArray(data?.global_indices)
+    ? data.global_indices
+    : [];
+  const IndianIndices = Array.isArray(data?.indian_indices)
+    ? data.indian_indices
+    : [];
+  const FIIDII_DATA = Array.isArray(data?.institutional_flows)
+    ? data.institutional_flows
+    : [];
+  const globalAnalysis = data?.global_analysis;
+  const IndianAnalysis = data?.indian_analysis;
+  const MarketBreadth = data?.market_breadth;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,7 +102,7 @@ const MarketBlogPost = () => {
             <article>
               <header className="mb-8">
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                  India Market Open Summary
+                  {metadata.title}
                 </h1>
 
                 {/* Article Meta */}
@@ -106,7 +113,7 @@ const MarketBlogPost = () => {
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar size={16} />
-                    <time dateTime={metadata.publishDate}>January 5, 2026</time>
+                    <time>{metadata.publishDate}</time>
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock size={16} />
@@ -114,6 +121,203 @@ const MarketBlogPost = () => {
                   </div>
                 </div>
               </header>
+              <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
+                <div className="flex items-center justify-between mb-5 md:mb-6">
+                  <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+                    Global Market
+                  </h2>
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="font-medium">Live</span>
+                  </div>
+                </div>
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200/80">
+                        <th className="text-left py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Index
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Prev Close
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Open
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Change
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Change %
+                        </th>
+                        <th className="text-center py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Trend
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {globalIndices.map((index: GlobalMarketIndex) => (
+                        <tr
+                          key={index.id}
+                          className="border-b border-gray-100/80 hover:bg-gray-50/50 transition-colors duration-200"
+                        >
+                          <td className="py-3.5 px-3 font-medium text-gray-900 text-sm">
+                            {index.index_name}
+                          </td>
+                          <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                            {index.prev_close}
+                          </td>
+                          <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                            {index.open_price}
+                          </td>
+                          <td
+                            className={`py-3.5 px-3 text-right text-sm font-medium ${
+                              index.trend === "down"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            {index.change > 0 ? "+" : ""}
+                            {index.change}
+                          </td>
+                          <td className="py-3.5 px-3 text-right">
+                            <span
+                              className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                                index.trend === "down"
+                                  ? "bg-red-50 text-red-600 border border-red-200/50"
+                                  : "bg-green-50 text-green-600 border border-green-200/50"
+                              }`}
+                            >
+                              {index.change_percent > 0 ? "+" : ""}
+                              {index.change_percent}%
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-3 text-center">
+                            {index.trend === "down" ? (
+                              <ArrowDown
+                                size={16}
+                                className="inline text-red-500"
+                              />
+                            ) : (
+                              <ArrowUp
+                                size={16}
+                                className="inline text-green-500"
+                              />
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-2.5">
+                  {globalIndices.map((index: GlobalMarketIndex) => (
+                    <div
+                      key={index.id}
+                      className="relative bg-white rounded-xl p-4 border border-gray-200/70 hover:border-gray-300 hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900 text-base mb-0.5">
+                            {index.index_name}
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-gray-500">
+                              Open: {index.open_price}
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg flex-shrink-0 ${
+                            index.trend === "down" ? "bg-red-50" : "bg-green-50"
+                          }`}
+                        >
+                          {index.trend === "down" ? (
+                            <ArrowDown size={14} className="text-red-600" />
+                          ) : (
+                            <ArrowUp size={14} className="text-green-600" />
+                          )}
+                          <span
+                            className={`text-sm font-medium ${
+                              index.trend === "down"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            {index.change_percent > 0 ? "+" : ""}
+                            {index.change_percent}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">
+                            Previous Close
+                          </p>
+                          <p className="text-sm font-medium text-gray-900">
+                            {index.prev_close}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-gray-500 mb-1">Change</p>
+                          <p
+                            className={`text-sm font-medium ${
+                              index.trend === "down"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            {index.change > 0 ? "+" : ""}
+                            {index.change}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${
+                          index.trend === "down" ? "bg-red-500" : "bg-green-500"
+                        }`}
+                      ></div>
+                    </div>
+                  ))}
+                </div>
+                {/* Note Section */}
+                <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex gap-3">
+                    <span className="text-2xl">📝</span>
+                    <div>
+                      <p className="font-semibold text-gray-900 mb-2">Note:</p>
+                      <ul className="space-y-1 text-sm text-gray-700">
+                        <li>
+                          • Open prices are based on pre-market indicators and
+                          may differ slightly at actual market open.
+                        </li>
+                        <li>
+                          • Traders are advised to wait for the first 30 minutes
+                          of trading to gauge market direction more accurately.
+                        </li>
+                        <li>
+                          • Always use proper risk management techniques,
+                          especially on days with higher volatility.
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Global Market Sentiments Explained in Detail:
+                </h2>
+                <p className="mb-4 text-gray-700">{globalAnalysis.analysis}</p>
+              </section>
+
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
                 <div className="flex items-center justify-between mb-5 md:mb-6">
                   <h2 className="text-lg md:text-xl font-semibold text-gray-800">
@@ -151,50 +355,44 @@ const MarketBlogPost = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {indices.map((index) => (
+                      {IndianIndices.map((index: GlobalMarketIndex) => (
                         <tr
-                          key={index.name}
+                          key={index.id}
                           className="border-b border-gray-100/80 hover:bg-gray-50/50 transition-colors duration-200"
                         >
                           <td className="py-3.5 px-3 font-medium text-gray-900 text-sm">
-                            {index.name}
+                            {index.index_name}
                           </td>
                           <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
-                            {index.previousClose.toLocaleString("en-IN", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}
+                            {index.prev_close}
                           </td>
                           <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
-                            {index.open.toLocaleString("en-IN", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}
+                            {index.open_price}
                           </td>
                           <td
                             className={`py-3.5 px-3 text-right text-sm font-medium ${
-                              index.outlook === "down"
+                              index.trend === "down"
                                 ? "text-red-600"
                                 : "text-green-600"
                             }`}
                           >
                             {index.change > 0 ? "+" : ""}
-                            {index.change.toFixed(2)}
+                            {index.change}
                           </td>
                           <td className="py-3.5 px-3 text-right">
                             <span
                               className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                                index.outlook === "down"
+                                index.trend === "down"
                                   ? "bg-red-50 text-red-600 border border-red-200/50"
                                   : "bg-green-50 text-green-600 border border-green-200/50"
                               }`}
                             >
-                              {index.changePercent > 0 ? "+" : ""}
-                              {index.changePercent.toFixed(2)}%
+                              {index.change_percent > 0 ? "+" : ""}
+                              {index.change_percent}%
                             </span>
                           </td>
                           <td className="py-3.5 px-3 text-center">
-                            {index.outlook === "down" ? (
+                            {index.trend === "down" ? (
                               <ArrowDown
                                 size={16}
                                 className="inline text-red-500"
@@ -214,46 +412,41 @@ const MarketBlogPost = () => {
 
                 {/* Mobile Card View */}
                 <div className="md:hidden space-y-2.5">
-                  {indices.map((index) => (
+                  {IndianIndices.map((index: GlobalMarketIndex) => (
                     <div
-                      key={index.name}
+                      key={index.id}
                       className="relative bg-white rounded-xl p-4 border border-gray-200/70 hover:border-gray-300 hover:shadow-md transition-all duration-300"
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
                           <h3 className="font-medium text-gray-900 text-base mb-0.5">
-                            {index.name}
+                            {index.index_name}
                           </h3>
                           <div className="flex items-center gap-2">
                             <span className="text-xs text-gray-500">
-                              Open:{" "}
-                              {index.open.toLocaleString("en-IN", {
-                                minimumFractionDigits: 2,
-                              })}
+                              Open: {index.open_price}
                             </span>
                           </div>
                         </div>
                         <div
                           className={`flex items-center gap-1 px-2.5 py-1 rounded-lg flex-shrink-0 ${
-                            index.outlook === "down"
-                              ? "bg-red-50"
-                              : "bg-green-50"
+                            index.trend === "down" ? "bg-red-50" : "bg-green-50"
                           }`}
                         >
-                          {index.outlook === "down" ? (
+                          {index.trend === "down" ? (
                             <ArrowDown size={14} className="text-red-600" />
                           ) : (
                             <ArrowUp size={14} className="text-green-600" />
                           )}
                           <span
                             className={`text-sm font-medium ${
-                              index.outlook === "down"
+                              index.trend === "down"
                                 ? "text-red-600"
                                 : "text-green-600"
                             }`}
                           >
-                            {index.changePercent > 0 ? "+" : ""}
-                            {index.changePercent.toFixed(2)}%
+                            {index.change_percent > 0 ? "+" : ""}
+                            {index.change_percent}%
                           </span>
                         </div>
                       </div>
@@ -264,89 +457,205 @@ const MarketBlogPost = () => {
                             Previous Close
                           </p>
                           <p className="text-sm font-medium text-gray-900">
-                            {index.previousClose.toLocaleString("en-IN", {
-                              minimumFractionDigits: 2,
-                            })}
+                            {index.prev_close}
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="text-xs text-gray-500 mb-1">Change</p>
                           <p
                             className={`text-sm font-medium ${
-                              index.outlook === "down"
+                              index.trend === "down"
                                 ? "text-red-600"
                                 : "text-green-600"
                             }`}
                           >
                             {index.change > 0 ? "+" : ""}
-                            {index.change.toFixed(2)}
+                            {index.change}
                           </p>
                         </div>
                       </div>
 
                       <div
                         className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${
-                          index.outlook === "down"
-                            ? "bg-red-500"
-                            : "bg-green-500"
+                          index.trend === "down" ? "bg-red-500" : "bg-green-500"
                         }`}
                       ></div>
                     </div>
                   ))}
                 </div>
-                {/* Note Section */}
-                <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex gap-3">
-                    <span className="text-2xl">📝</span>
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-2">Note:</p>
-                      <ul className="space-y-1 text-sm text-gray-700">
-                        <li>
-                          • Open prices are based on pre-market indicators and
-                          may differ slightly at actual market open.
-                        </li>
-                        <li>
-                          • Traders are advised to wait for the first 30 minutes
-                          of trading to gauge market direction more accurately.
-                        </li>
-                        <li>
-                          • Always use proper risk management techniques,
-                          especially on days with higher volatility.
-                        </li>
-                      </ul>
-                    </div>
+              </section>
+
+              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Indian Market Sentiments Explained in Detail:
+                </h2>
+                <p className="mb-4 text-gray-700">{IndianAnalysis.analysis}</p>
+              </section>
+
+              <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
+                <div className="flex items-center justify-between mb-5 md:mb-6">
+                  <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+                    Institutional Money Flow [ Combined NSE,BSE and MSEI ]
+                  </h2>
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="font-medium">Live</span>
                   </div>
+                </div>
+
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200/80">
+                        <th className="text-left py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Category
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Buy Value
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Sell Value
+                        </th>
+                        <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Net Value
+                        </th>
+
+                        <th className="text-center py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                          Trend
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {FIIDII_DATA.map((index: InstitutionalActivity) => (
+                        <tr
+                          key={index.id}
+                          className="border-b border-gray-100/80 hover:bg-gray-50/50 transition-colors duration-200"
+                        >
+                          <td className="py-3.5 px-3 font-medium text-gray-900 text-sm">
+                            {index.date}
+                          </td>
+                          <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                            {index.buy_value}
+                          </td>
+                          <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                            {index.sell_value}
+                          </td>
+                          <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                            {index.net_value}
+                          </td>
+                          <td
+                            className={`py-3.5 px-3 text-right text-sm font-medium ${
+                              index.trend === "down"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }`}
+                          ></td>
+                          <td className="py-3.5 px-3 text-right">
+                            <span
+                              className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                                index.trend === "down"
+                                  ? "bg-red-50 text-red-600 border border-red-200/50"
+                                  : "bg-green-50 text-green-600 border border-green-200/50"
+                              }`}
+                            ></span>
+                          </td>
+                          <td className="py-3.5 px-3 text-center">
+                            {index.trend === "down" ? (
+                              <ArrowDown
+                                size={16}
+                                className="inline text-red-500"
+                              />
+                            ) : (
+                              <ArrowUp
+                                size={16}
+                                className="inline text-green-500"
+                              />
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden space-y-2.5">
+                  {FIIDII_DATA.map((index: InstitutionalActivity) => (
+                    <div
+                      key={index.id}
+                      className="relative bg-white rounded-xl p-4 border border-gray-200/70 hover:border-gray-300 hover:shadow-md transition-all duration-300"
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900 text-base mb-0.5">
+                            {index.institution_type}
+                          </h3>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">
+                              Buy Value
+                            </p>
+                            <p className="text-sm font-medium text-gray-900">
+                              {index.buy_value}
+                            </p>
+                          </div>
+                        </div>
+                        <div
+                          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg flex-shrink-0 ${
+                            index.trend === "down" ? "bg-red-50" : "bg-green-50"
+                          }`}
+                        >
+                          {index.trend === "down" ? (
+                            <ArrowDown size={14} className="text-red-600" />
+                          ) : (
+                            <ArrowUp size={14} className="text-green-600" />
+                          )}
+                          <span
+                            className={`text-sm font-medium ${
+                              index.trend === "down"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            Net: {index.net_value}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">
+                            Sell Value
+                          </p>
+                          <p className="text-sm font-medium text-gray-900">
+                            {index.sell_value}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-gray-500 mb-1">Date</p>
+                          <p
+                            className={`text-sm font-medium ${
+                              index.trend === "down"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }`}
+                          >
+                            {index.date}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-xl ${
+                          index.trend === "down" ? "bg-red-500" : "bg-green-500"
+                        }`}
+                      ></div>
+                    </div>
+                  ))}
                 </div>
               </section>
 
-              {/* Duplicate Sections from Original File */}
-              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Market Analysis
-                </h2>
-                <p className="text-gray-700 mb-4">
-                  The Indian equity markets opened on a mixed note today with
-                  significant volatility across major indices. GIFTNIFTY showed
-                  early weakness, declining 0.38% from its previous close,
-                  indicating a cautious start to the trading session.
-                </p>
-                <p className="text-gray-700 mb-4">
-                  Banking stocks showed resilience with BANKNIFTY gaining 0.29%,
-                  driven by strong performance from major banking stocks. The
-                  volatility index (INDVIX) spiked 1.50%, suggesting increased
-                  market uncertainty and potential for wider price swings during
-                  the session.
-                </p>
-                <p className="text-gray-700 mb-4">
-                  Among individual stocks, UNIONBANK emerged as the top gainer
-                  with a 2.46% increase, followed by INDUSINDBK at 2.34%. The
-                  banking sector continues to attract investor attention amid
-                  expectations of policy support and improved credit growth.
-                </p>
-              </section>
-
-              {/* Repeated components as per source request */}
-              <TopGainers />
+              <TopGainers stockmovers={data?.stock_movers} />
 
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
                 <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-5">
@@ -375,7 +684,7 @@ const MarketBlogPost = () => {
                       </span>
                     </div>
                     <div className="text-2xl font-semibold text-green-700 mb-1">
-                      1174
+                      {MarketBreadth?.advancing || 0}
                     </div>
                     <div className="text-xs text-gray-500 font-medium">
                       stocks
@@ -403,7 +712,7 @@ const MarketBlogPost = () => {
                       </span>
                     </div>
                     <div className="text-2xl font-semibold text-red-600 mb-1">
-                      1875
+                      {MarketBreadth?.declining || 0}
                     </div>
                     <div className="text-xs text-gray-500 font-medium">
                       stocks
@@ -431,7 +740,7 @@ const MarketBlogPost = () => {
                       </span>
                     </div>
                     <div className="text-2xl font-semibold text-red-600 mb-1">
-                      0.626
+                      {MarketBreadth?.advance_decline_ratio || 0}
                     </div>
                     <div className="text-xs text-gray-500 font-medium">
                       ratio
@@ -439,7 +748,14 @@ const MarketBlogPost = () => {
                   </div>
                 </div>
               </section>
-              <TopSectors />
+              <TopSectors sectors={data?.sector_performance} />
+              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Final Conclusion
+                </h2>
+                <p className="mb-4 text-gray-700">{data.overall_conclusion}</p>
+              </section>
+
               <div className="w-full max-w-6xl mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-8 text-gray-900">
                   About Author
@@ -532,6 +848,4 @@ const MarketBlogPost = () => {
       </div>
     </div>
   );
-};
-
-export default MarketBlogPost;
+}

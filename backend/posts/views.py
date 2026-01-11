@@ -27,7 +27,7 @@ from .serializers import (
     SectorPerformanceSerializer,
     SectorAnalysisSerializer
 )
-class MarketReportViewSet(viewsets.ReadOnlyModelViewSet):
+class MarketReportViewSet(viewsets.ModelViewSet):
     queryset = MarketReport.objects.all().order_by("-report_date")
     serializer_class = MarketReportDetailSerializer
     lookup_field = "slug"

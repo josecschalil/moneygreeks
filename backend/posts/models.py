@@ -72,9 +72,14 @@ class InstitutionalFlow(models.Model):
         choices=[("FII", "FII"), ("DII", "DII")]
     )
 
-    cash_market = models.DecimalField(max_digits=12, decimal_places=2)
-    futures = models.DecimalField(max_digits=12, decimal_places=2)
-    options = models.DecimalField(max_digits=12, decimal_places=2)
+    date = models.DateField()
+    buy_value = models.DecimalField(max_digits=12, decimal_places=2)
+    sell_value = models.DecimalField(max_digits=12, decimal_places=2)
+    net_value = models.DecimalField(max_digits=12, decimal_places=2)
+    trend = models.CharField(
+        max_length=10,
+        choices=[("up", "Up"), ("down", "Down")]
+    )
 
 class InstitutionalFlowAnalysis(models.Model):
     report = models.OneToOneField(
