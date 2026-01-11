@@ -9,8 +9,7 @@ async function fetchPreMarketData() {
   }
   return res.json();
 }
-const imageLink =
-  "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a";
+
 const demoData = {
   premarket: [
     {
@@ -119,7 +118,7 @@ const demoData = {
 export default async function BlogPage() {
   const premarketData = await fetchPreMarketData();
   const latestPremarket = premarketData[0];
-  const olderPremarkets = premarketData.slice(0);
+  const olderPremarkets = premarketData.slice(0, 6);
 
   return (
     <main className="bg-white min-h-screen">
@@ -150,7 +149,7 @@ export default async function BlogPage() {
                 {/* Image Section */}
                 <div className="relative h-96 md:h-auto overflow-hidden">
                   <Image
-                    src={imageLink}
+                    src={latestPremarket.image_url}
                     alt={latestPremarket.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
@@ -232,7 +231,7 @@ export default async function BlogPage() {
               </p>
             </div>
             <Link
-              href="/blog/premarket"
+              href="/pre-market-archive"
               className="hidden sm:flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-full font-medium hover:bg-gray-800 transition-colors"
             >
               View Archive
@@ -254,11 +253,11 @@ export default async function BlogPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {olderPremarkets.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`}>
+              <Link key={post.id} href={`/market-data/${post.slug}`}>
                 <article className="group h-full">
                   <div className="relative h-64 rounded-2xl overflow-hidden mb-6 bg-gray-100">
                     <Image
-                      src={imageLink}
+                      src={post.image_url}
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"

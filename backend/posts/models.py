@@ -4,9 +4,8 @@ class MarketReport(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     report_date = models.DateField(unique=True)
-
+    image_url = models.URLField(max_length=1000,blank=True,null=True)
     overall_conclusion = models.TextField()
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

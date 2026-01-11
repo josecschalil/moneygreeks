@@ -134,4 +134,5 @@ class ReportListSerializer(serializers.ModelSerializer):
             "slug",
             "report_date",
             "overall_conclusion",
+            "image_url",
         ]
