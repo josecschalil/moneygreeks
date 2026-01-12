@@ -11,9 +11,11 @@ from .models import (
     StockMoverAnalysis,
     MarketBreadth,
     SectorPerformance,
-    SectorAnalysis
+    SectorAnalysis,
+    BlogPost
 )
 from .serializers import (
+    BlogPostSerializer,
     MarketReportDetailSerializer,
     GlobalMarketIndexSerializer,
     GlobalMarketAnalysisSerializer,
@@ -68,4 +70,8 @@ class SectorAnalysisViewSet(viewsets.ModelViewSet):
 class MarketReportListViewSet(viewsets.ModelViewSet):
     queryset = MarketReport.objects.all().order_by("-report_date")
     serializer_class = ReportListSerializer
+    lookup_field = "slug"
+class BlogPostDetailView(viewsets.ModelViewSet):
+    queryset = BlogPost.objects.all()
+    serializer_class = BlogPostSerializer
     lookup_field = "slug"

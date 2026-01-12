@@ -151,3 +151,35 @@ class SectorPerformance(models.Model):
     pe = models.DecimalField(max_digits=6, decimal_places=2)
     pb = models.DecimalField(max_digits=6, decimal_places=2)
     div_yield = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class BlogPost(models.Model):
+    CATEGORY_CHOICES = [
+        ("technology", "Technology"),
+        ("finance", "Finance"),
+        ("education", "Education"),
+    ]
+
+    title = models.CharField(max_length=255)
+    subtitle = models.TextField(blank=True)
+
+    slug = models.SlugField(unique=True, max_length=255)
+
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES
+    )
+
+    featured_image = models.URLField()
+
+    content = models.TextField(
+        help_text="Plain text content from Django TextField"
+    )
+
+    created_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.title

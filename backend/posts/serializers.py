@@ -11,7 +11,8 @@ from .models import (
     StockMoverAnalysis,
     MarketBreadth,
     SectorPerformance,
-    SectorAnalysis
+    SectorAnalysis,
+    BlogPost
 )
 class GlobalMarketIndexSerializer(serializers.ModelSerializer):
     class Meta:
@@ -136,3 +137,21 @@ class ReportListSerializer(serializers.ModelSerializer):
             "overall_conclusion",
             "image_url",
         ]
+
+
+class BlogPostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlogPost
+        fields = [
+            "title",
+            "subtitle",
+            "slug",
+            "category",
+            "featured_image",
+            "content",
+            "created_at",
+         
+        ]
+
+  

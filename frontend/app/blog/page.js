@@ -9,7 +9,15 @@ async function fetchPreMarketData() {
   }
   return res.json();
 }
-
+async function fetchBlogPostData() {
+  const res = await fetch("http://127.0.0.1:8000/blog-post/", {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch blog post data");
+  }
+  return res.json();
+}
 const demoData = {
   premarket: [
     {
@@ -117,6 +125,8 @@ const demoData = {
 
 export default async function BlogPage() {
   const premarketData = await fetchPreMarketData();
+  const blogPostData = await fetchBlogPostData();
+  const blogPosts = blogPostData.slice(0, 3);
   const latestPremarket = premarketData[0];
   const olderPremarkets = premarketData.slice(0, 6);
 
@@ -318,7 +328,7 @@ export default async function BlogPage() {
               </p>
             </div>
             <Link
-              href="/blog/insights"
+              href="/blog-archive"
               className="hidden sm:flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-900 text-gray-900 rounded-full font-medium hover:bg-gray-900 hover:text-white transition-all"
             >
               Explore All
@@ -339,12 +349,12 @@ export default async function BlogPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {demoData.featured.map((post, index) => (
-              <Link key={post.id} href={`/blog/${post.slug}`}>
+            {blogPosts.map((post, index) => (
+              <Link key={post.slug} href={`/blog-post/${post.slug}`}>
                 <article className="group h-full">
                   <div className="relative h-72 rounded-2xl overflow-hidden mb-6 bg-gray-100">
                     <Image
-                      src={post.cover_image}
+                      src={post.featured_image}
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -364,7 +374,7 @@ export default async function BlogPage() {
                     </h3>
 
                     <p className="text-gray-600 leading-relaxed">
-                      {post.excerpt}
+                      {post.subtitle}
                     </p>
 
                     <div className="pt-2">
