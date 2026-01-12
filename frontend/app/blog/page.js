@@ -1,5 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 async function fetchPreMarketData() {
   const res = await fetch("http://127.0.0.1:8000/report-list/", {
     cache: "no-store",
@@ -182,7 +190,7 @@ export default async function BlogPage() {
                         />
                       </svg>
                       <span className="text-sm font-semibold text-gray-900">
-                        {latestPremarket.report_date}
+                        {formatDate(latestPremarket.report_date)}
                       </span>
                     </span>
                   </div>
@@ -276,8 +284,8 @@ export default async function BlogPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <span className="text-sm font-medium text-gray-500 pb-2">
-                      {post.report_date}
+                    <span className="text-sm font-medium text-gray-500 pb-6">
+                      {formatDate(post.report_date)}
                     </span>
 
                     <h3 className="text-xl font-bold text-gray-900 leading-tight group-hover:text-gray-600 transition-colors">

@@ -11,6 +11,13 @@ interface GlobalMarketIndex {
   change: number;
   change_percent: number;
 }
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 export interface InstitutionalActivity {
   id: number;
   institution_type: "FII" | "DII" | string;
@@ -113,7 +120,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                   </div>
                   <div className="flex items-center gap-1">
                     <Calendar size={16} />
-                    <time>{metadata.publishDate}</time>
+                    <time>{formatDate(metadata.publishDate)}</time>
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock size={16} />

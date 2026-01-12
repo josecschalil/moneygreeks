@@ -10,7 +10,7 @@ async function fetchBlogPostData() {
   return res.json();
 }
 
-export default async function BlogPage() {
+export default async function BlogArchivePage() {
   const blogPostData = await fetchBlogPostData();
   const blogPosts = blogPostData.slice(0, 3);
 
