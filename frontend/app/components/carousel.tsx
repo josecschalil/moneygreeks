@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,7 +19,15 @@ export default function HeroCarousel() {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Fetch data and build slides
+  /* 🔹 Touch tracking */
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const SWIPE_THRESHOLD = 60;
+
+  /* =========================
+     Fetch Slides
+  ========================== */
   useEffect(() => {
     async function loadSlides() {
       try {
@@ -32,7 +40,6 @@ export default function HeroCarousel() {
         const blogs = await blogRes.json();
 
         const generatedSlides: Slide[] = [
-          // Slide 1 — Pre-Market Report
           {
             id: 1,
             image: reports[0]?.image_url,
@@ -42,8 +49,6 @@ export default function HeroCarousel() {
             slug: reports[0]?.slug,
             type: "report",
           },
-
-          // Slide 2 & 3 — Blog Posts
           ...blogs.slice(0, 2).map((post: any, index: number) => ({
             id: index + 2,
             image: post.featured_image,
@@ -64,6 +69,9 @@ export default function HeroCarousel() {
     loadSlides();
   }, []);
 
+  /* =========================
+     Slide Controls
+  ========================== */
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
@@ -72,17 +80,52 @@ export default function HeroCarousel() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  // Auto-slide
+  /* =========================
+     Auto Slide
+  ========================== */
   useEffect(() => {
     if (!slides.length) return;
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
   }, [slides]);
 
+  /* =========================
+     Swipe Handlers
+  ========================== */
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+
+    const distance = touchStartX.current - touchEndX.current;
+
+    if (distance > SWIPE_THRESHOLD) {
+      nextSlide(); // swipe left
+    }
+
+    if (distance < -SWIPE_THRESHOLD) {
+      prevSlide(); // swipe right
+    }
+
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   if (!slides.length) return null;
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-white">
+    <div
+      className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-white"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {slides.map((slide, index) => {
         const href =
           slide.type === "report"
@@ -95,7 +138,7 @@ export default function HeroCarousel() {
             href={href}
             className={`absolute inset-0 transition-opacity duration-700 lg:m-4 lg:rounded-lg overflow-hidden cursor-pointer ${
               index === currentSlide
-                ? "opacity-100 pointer-events-auto z-10"
+                ? "opacity-100 z-10"
                 : "opacity-0 pointer-events-none z-0"
             }`}
           >
@@ -105,7 +148,7 @@ export default function HeroCarousel() {
                 src={slide.image}
                 alt={slide.title}
                 fill
-                style={{ objectFit: "cover" }}
+                className="object-cover"
                 priority={index === 0}
                 sizes="100vw"
               />
@@ -113,17 +156,17 @@ export default function HeroCarousel() {
             </div>
 
             {/* Content */}
-            <div className="relative h-full max-w-7xl px-6 pt-6 sm:px-8 lg:px-12 flex items-center">
+            <div className="relative h-full max-w-7xl px-6 sm:px-8 lg:px-12 flex items-center">
               <div className="max-w-2xl text-white">
-                <span className="text-sm font-medium uppercase tracking-wider">
+                <span className="text-sm uppercase tracking-wider">
                   {slide.tag}
                 </span>
 
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                   {slide.title}
                 </h1>
 
-                <p className="text-base sm:text-lg text-gray-200 leading-relaxed">
+                <p className="text-base sm:text-lg text-gray-200">
                   {slide.description}
                 </p>
               </div>
@@ -132,19 +175,19 @@ export default function HeroCarousel() {
         );
       })}
 
-      {/* Navigation Arrows */}
+      {/* 🔹 Arrows (Desktop only) */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 hover:bg-black/30 flex items-center justify-center z-20"
+        className="hidden md:flex absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 items-center justify-center z-20"
       >
-        <ChevronLeft className="w-6 h-6 text-white" />
+        <ChevronLeft className="text-white" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 hover:bg-black/30 flex items-center justify-center z-20"
+        className="hidden md:flex absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 items-center justify-center z-20"
       >
-        <ChevronRight className="w-6 h-6 text-white" />
+        <ChevronRight className="text-white" />
       </button>
 
       {/* Dots */}

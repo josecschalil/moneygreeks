@@ -1,7 +1,9 @@
+"use client";
 import React from "react";
 import { TrendingUp, Activity, Globe, Users, ArrowRight } from "lucide-react";
-
+import NewsletterModal from "../components/NewsLetterModal";
 export default function AboutUs() {
+  const [showNewsletterModal, setShowNewsletterModal] = React.useState(false);
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
@@ -28,11 +30,16 @@ export default function AboutUs() {
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
-            <button className="bg-slate-900 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
-              Explore Platform
-            </button>
-            <button className="bg-white text-slate-900 px-8 py-3.5 rounded-lg font-semibold border-2 border-slate-200 hover:border-slate-300 transition-all">
-              Watch Demo
+            <a href="/">
+              <button className="bg-slate-900 text-white px-8 py-3.5 rounded-lg font-semibold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
+                Explore Platform
+              </button>
+            </a>
+            <button
+              className="bg-white text-slate-900 px-8 py-3.5 rounded-lg font-semibold border-2 border-slate-200 hover:border-slate-300 transition-all"
+              onClick={() => setShowNewsletterModal(true)}
+            >
+              Subscribe Newsletter
             </button>
           </div>
         </div>
@@ -310,15 +317,24 @@ export default function AboutUs() {
             market insights and analysis
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <button className="bg-slate-900 text-white px-10 py-4 rounded-xl text-lg font-semibold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl">
+            <button
+              className="bg-slate-900 text-white px-10 py-4 rounded-xl text-lg font-semibold hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl"
+              onClick={() => setShowNewsletterModal(true)}
+            >
               Subscribe Newsletter
             </button>
-            <button className="bg-white text-slate-900 px-10 py-4 rounded-xl text-lg font-semibold border-2 border-slate-200 hover:border-slate-300 transition-all">
-              Explore Now
-            </button>
+            <a href="/">
+              <button className="bg-white text-slate-900 px-10 py-4 rounded-xl text-lg font-semibold border-2 border-slate-200 hover:border-slate-300 transition-all">
+                Explore Now
+              </button>
+            </a>
           </div>
         </div>
       </section>
+      <NewsletterModal
+        isOpen={showNewsletterModal}
+        onClose={() => setShowNewsletterModal(false)}
+      />
     </div>
   );
 }
