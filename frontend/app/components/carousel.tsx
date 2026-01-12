@@ -1,40 +1,68 @@
 "use client";
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+
+type Slide = {
+  id: number;
+  image: string;
+  tag: string;
+  title: string;
+  description: string;
+  slug: string;
+  type: "report" | "blog";
+};
+
 export default function HeroCarousel() {
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slides = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=1200&q=80",
-      tag: "Featured",
-      title:
-        "Breaking Into Product Design: Advice from Untitled Founder, Frankie",
-      description:
-        "Let's get one thing out of the way: you don't need a fancy Bachelor's Degree to get into Product Design. We sat down with Frankie Sullivan to talk about gatekeeping in product design and how anyone can get into this growing industry.",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80",
-      tag: "Trending",
-      title: "Building Better User Experiences: A Guide to Modern Design",
-      description:
-        "Discover the principles and practices that leading designers use to create exceptional user experiences. Learn how to apply these insights to your own projects.",
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=80",
-      tag: "Spotlight",
-      title: "The Future of Remote Work: Insights from Industry Leaders",
-      description:
-        "Explore how companies are adapting to the new era of remote work and what it means for the future of collaboration and productivity in tech.",
-    },
-  ];
+  // Fetch data and build slides
+  useEffect(() => {
+    async function loadSlides() {
+      try {
+        const [reportRes, blogRes] = await Promise.all([
+          fetch("http://127.0.0.1:8000/report-list/", { cache: "no-store" }),
+          fetch("http://127.0.0.1:8000/blog-post/", { cache: "no-store" }),
+        ]);
+
+        const reports = await reportRes.json();
+        const blogs = await blogRes.json();
+
+        const generatedSlides: Slide[] = [
+          // Slide 1 — Pre-Market Report
+          {
+            id: 1,
+            image: reports[0]?.image_url,
+            tag: "Pre-Market Report",
+            title: reports[0]?.title,
+            description: reports[0]?.overall_conclusion,
+            slug: reports[0]?.slug,
+            type: "report",
+          },
+
+          // Slide 2 & 3 — Blog Posts
+          ...blogs.slice(0, 2).map((post: any, index: number) => ({
+            id: index + 2,
+            image: post.featured_image,
+            tag: "Blog",
+            title: post.title,
+            description: post.subtitle,
+            slug: post.slug,
+            type: "blog",
+          })),
+        ];
+
+        setSlides(generatedSlides);
+      } catch (error) {
+        console.error("Carousel data fetch error:", error);
+      }
+    }
+
+    loadSlides();
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -44,88 +72,90 @@ export default function HeroCarousel() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
+  // Auto-slide
   useEffect(() => {
+    if (!slides.length) return;
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides]);
+
+  if (!slides.length) return null;
 
   return (
     <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-white">
-      {/* Slides */}
-      {slides.map((slide, index) => (
-        <div
-          key={slide.id}
-          className={`absolute inset-0 transition-opacity duration-700 lg:m-4 lg:rounded-lg overflow-hidden ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          {/* Background Image */}
-          <div className="absolute inset-0 z-0 ">
-            <Image
-              src={slide.image}
-              alt={slide.title}
-              fill // <--- Must be present for container-based sizing
-              style={{ objectFit: "cover" }} // <--- Replace 'object-cover' class
-              priority={index === 0} // Optional: Helps with Largest Contentful Paint (LCP)
-              sizes="100vw" // Tells the browser the image will span the full viewport width
-            />
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/30"></div>
-          </div>
+      {slides.map((slide, index) => {
+        const href =
+          slide.type === "report"
+            ? `/market-data/${slide.slug}`
+            : `/blog-post/${slide.slug}`;
 
-          {/* Content */}
-          <div className="relative h-full max-w-7xl lg:bottom-0 px-6 pt-6 sm:px-8 lg:px-12 flex items-center">
-            <div className="max-w-2xl text-white">
-              {/* Tag */}
-              <div className="inline-block mb-4">
-                <span className="text-sm font-medium tracking-wider uppercase">
+        return (
+          <Link
+            key={slide.id}
+            href={href}
+            className={`absolute inset-0 transition-opacity duration-700 lg:m-4 lg:rounded-lg overflow-hidden cursor-pointer ${
+              index === currentSlide
+                ? "opacity-100 pointer-events-auto z-10"
+                : "opacity-0 pointer-events-none z-0"
+            }`}
+          >
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                style={{ objectFit: "cover" }}
+                priority={index === 0}
+                sizes="100vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/30" />
+            </div>
+
+            {/* Content */}
+            <div className="relative h-full max-w-7xl px-6 pt-6 sm:px-8 lg:px-12 flex items-center">
+              <div className="max-w-2xl text-white">
+                <span className="text-sm font-medium uppercase tracking-wider">
                   {slide.tag}
                 </span>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                  {slide.title}
+                </h1>
+
+                <p className="text-base sm:text-lg text-gray-200 leading-relaxed">
+                  {slide.description}
+                </p>
               </div>
-
-              {/* Title */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                {slide.title}
-              </h1>
-
-              {/* Description */}
-              <p className="text-base sm:text-lg text-gray-200 leading-relaxed">
-                {slide.description}
-              </p>
             </div>
-          </div>
-        </div>
-      ))}
+          </Link>
+        );
+      })}
 
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-transparent bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition-all group"
-        aria-label="Previous slide"
+        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 hover:bg-black/30 flex items-center justify-center z-20"
       >
         <ChevronLeft className="w-6 h-6 text-white" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute right-4 sm:right-8   top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-transparent  bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition-all group"
-        aria-label="Next slide"
+        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/20 hover:bg-black/30 flex items-center justify-center z-20"
       >
         <ChevronRight className="w-6 h-6 text-white" />
       </button>
 
-      {/* Dots Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+      {/* Dots */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
             className={`h-2 rounded-full transition-all ${
-              index === currentSlide
-                ? "w-8 bg-white"
-                : "w-2 bg-white bg-opacity-50 hover:bg-opacity-75"
+              index === currentSlide ? "w-8 bg-white" : "w-2 bg-white/50"
             }`}
-            aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
