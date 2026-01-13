@@ -1,4 +1,6 @@
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
 from .models import (
     MarketReport,
     GlobalMarketIndex,
@@ -7,6 +9,7 @@ from .models import (
     IndianMarketAnalysis,
     InstitutionalFlow,
     InstitutionalFlowAnalysis,
+    NewsletterSubscriber,
     StockMover,
     StockMoverAnalysis,
     MarketBreadth,
@@ -23,6 +26,7 @@ from .serializers import (
     IndianMarketAnalysisSerializer,
     InstitutionalFlowSerializer,
     InstitutionalFlowAnalysisSerializer,
+    NewsletterSubscriberSerializer,
     ReportListSerializer,
     StockMoverSerializer,
     StockMoverAnalysisSerializer,
@@ -75,3 +79,33 @@ class BlogPostDetailView(viewsets.ModelViewSet):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
     lookup_field = "slug"
+class NewsletterSubscriberViewSet(viewsets.ModelViewSet):
+    queryset = NewsletterSubscriber.objects.all()
+    serializer_class = NewsletterSubscriberSerializer
+    http_method_names = ["get", "post"]
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data["email"]
+
+        subscriber, created = NewsletterSubscriber.objects.get_or_create(
+            email=email
+        )
+
+        if not created:
+            return Response(
+                {
+                    "message": "You are already subscribed to our newsletter.",
+                    "status": "already_subscribed",
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        return Response(
+            {
+                "message": "Successfully subscribed to newsletter.",
+                "status": "subscribed",
+            },
+            status=status.HTTP_201_CREATED,
+        )

@@ -22,5 +22,5 @@ router.register("sector-performance", SectorPerformanceViewSet)
 router.register("sector-analysis", SectorAnalysisViewSet)
 router.register("blog-post", BlogPostDetailView, basename="blog-post")
 router.register("report-list", MarketReportListViewSet, basename="report-list")
-
+router.register(r"newsletter-subscribe", NewsletterSubscriberViewSet, basename="newsletter-subscribe")
 urlpatterns = router.urls

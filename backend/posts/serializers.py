@@ -7,6 +7,7 @@ from .models import (
     IndianMarketAnalysis,
     InstitutionalFlow,
     InstitutionalFlowAnalysis,
+    NewsletterSubscriber,
     StockMover,
     StockMoverAnalysis,
     MarketBreadth,
@@ -154,4 +155,24 @@ class BlogPostSerializer(serializers.ModelSerializer):
          
         ]
 
-  
+class NewsletterSubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsletterSubscriber
+        fields = ("id", "email", "subscribed_at")
+        extra_kwargs = {
+            "email": {
+                "validators": [],  # 🔥 disable unique validator
+            }
+        }
+    def create(self, validated_data):
+        email = validated_data.get("email")
+        email = email.strip().lower()
+
+        subscriber, created = NewsletterSubscriber.objects.get_or_create(
+            email=email,
+        )
+
+        if not created :
+            subscriber.save()
+
+        return subscriber

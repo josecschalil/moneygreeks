@@ -6,6 +6,7 @@ export default function NewsletterModal({ isOpen, onClose }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   // Email validation regex
   const validateEmail = (email) => {
@@ -17,14 +18,12 @@ export default function NewsletterModal({ isOpen, onClose }) {
     const value = e.target.value;
     setEmail(value);
 
-    // Clear error when user starts typing
     if (emailError) {
       setEmailError("");
     }
   };
 
   const handleSubmit = async () => {
-    // Validate email before submission
     if (!email) {
       setEmailError("Email is required");
       return;
@@ -36,21 +35,45 @@ export default function NewsletterModal({ isOpen, onClose }) {
     }
 
     setIsLoading(true);
+    setEmailError("");
 
-    // Replace this with your actual API call
-    // Example: await fetch('/api/newsletter', { method: 'POST', body: JSON.stringify({ email }) })
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/newsletter-subscribe/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+          }),
+        }
+      );
 
-    setIsLoading(false);
-    setIsSubmitted(true);
+      const data = await response.json();
 
-    // Reset and close after 3 seconds
-    setTimeout(() => {
-      onClose();
-      setIsSubmitted(false);
-      setEmail("");
-      setEmailError("");
-    }, 3000);
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        setIsSubmitted(true);
+
+        setTimeout(() => {
+          onClose();
+          setIsSubmitted(false);
+          setEmail("");
+          setEmailError("");
+          setSuccessMessage("");
+        }, 3000);
+
+        return;
+      }
+
+      setEmailError(data?.message || "Something went wrong.");
+    } catch (error) {
+      setEmailError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -58,7 +81,11 @@ export default function NewsletterModal({ isOpen, onClose }) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-blue bg-opacity-50 animate-fadeIn"
-      onClick={onClose}
+      onClick={() => {
+        if (!isSubmitted && !isLoading) {
+          onClose();
+        }
+      }}
     >
       <div
         className="bg-white rounded-2xl shadow-2xl max-w-md w-full relative animate-slideUp"
@@ -75,12 +102,10 @@ export default function NewsletterModal({ isOpen, onClose }) {
         {/* Modal Content */}
         {!isSubmitted ? (
           <div className="p-8">
-            {/* Icon */}
             <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-6">
               <Mail className="w-8 h-8 text-white" />
             </div>
 
-            {/* Title & Description */}
             <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
               Subscribe to Our Newsletter
             </h2>
@@ -89,7 +114,6 @@ export default function NewsletterModal({ isOpen, onClose }) {
               inbox weekly.
             </p>
 
-            {/* Email Input */}
             <div className="space-y-4">
               <div>
                 <label
@@ -111,6 +135,7 @@ export default function NewsletterModal({ isOpen, onClose }) {
                     emailError ? "focus:ring-red-500" : "focus:ring-gray-900"
                   } focus:border-transparent outline-none transition-all`}
                 />
+
                 {emailError && (
                   <div className="flex items-center mt-2 text-red-600 text-sm">
                     <AlertCircle className="w-4 h-4 mr-1" />
@@ -153,13 +178,11 @@ export default function NewsletterModal({ isOpen, onClose }) {
               </button>
             </div>
 
-            {/* Privacy Note */}
             <p className="text-xs text-gray-500 text-center mt-4">
               We respect your privacy. Unsubscribe at any time.
             </p>
           </div>
         ) : (
-          // Success State
           <div className="p-8 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="w-8 h-8 text-green-600" />
@@ -167,10 +190,7 @@ export default function NewsletterModal({ isOpen, onClose }) {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               You're All Set!
             </h2>
-            <p className="text-gray-600">
-              Thank you for subscribing. Check your inbox for a confirmation
-              email.
-            </p>
+            <p className="text-gray-600">{successMessage}</p>
           </div>
         )}
       </div>

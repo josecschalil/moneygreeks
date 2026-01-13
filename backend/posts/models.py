@@ -183,3 +183,21 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+class NewsletterSubscriber(models.Model):
+    email = models.EmailField(
+        unique=True,
+        max_length=254,
+        help_text="Subscriber email address"
+    )
+    subscribed_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        ordering = ["-subscribed_at"]
+        verbose_name = "Newsletter Subscriber"
+        verbose_name_plural = "Newsletter Subscribers"
