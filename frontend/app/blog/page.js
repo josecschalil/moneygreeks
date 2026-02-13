@@ -208,7 +208,7 @@ export default async function BlogPage() {
                     {latestPremarket.title}
                   </h1>
 
-                  <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                  <p className="text-gray-600 text-lg leading-relaxed mb-8 line-clamp-4">
                     {latestPremarket.overall_conclusion}
                   </p>
 
@@ -409,10 +409,8 @@ export default async function BlogPage() {
           </div>
         </section>
 
-        {/* ================= DIVIDER ================= */}
         <div className="border-t border-gray-200"></div>
 
-        {/* ================= EDUCATIONAL ================= */}
         <section>
           <div className="flex items-end justify-between mb-10">
             <div>
@@ -424,7 +422,7 @@ export default async function BlogPage() {
               </p>
             </div>
             <Link
-              href="/blog/education"
+              href="#"
               className="hidden sm:flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-900 text-gray-900 rounded-full font-medium hover:bg-gray-900 hover:text-white transition-all"
             >
               All Lessons
@@ -446,7 +444,7 @@ export default async function BlogPage() {
 
           <div className="space-y-6">
             {demoData.educational.map((post, index) => (
-              <Link key={post.id} href={`/blog/${post.slug}`}>
+              <Link key={post.id} href="#">
                 <article className="group flex flex-col sm:flex-row gap-6 p-8 rounded-2xl border-2 border-gray-200 hover:border-gray-900 transition-all duration-300 bg-white hover:shadow-lg">
                   <div className="relative w-full sm:w-56 h-44 sm:h-36 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
                     <Image
