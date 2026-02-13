@@ -63,18 +63,15 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* PAGE GRID */}
-      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-        {/* ================= MAIN CONTENT ================= */}
+      <div className="max-w-7xl mx-auto px-4 py-2 md:py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         <main className="lg:col-span-3">
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            {/* HEADER */}
-            <header className="px-6 pt-8 pb-6 border-b">
+            <header className="px-6 pt-2 pb-6 border-b md:pt-8">
               <span className="inline-block px-4 py-1.5 bg-gray-100 rounded-full text-sm font-medium text-gray-700">
                 {post.category}
               </span>
 
-              <h1 className="text-4xl font-bold text-gray-900 mt-4 leading-tight">
+              <h1 className="text-3xl font-bold text-gray-900 mt-4 leading-tight">
                 {post.title}
               </h1>
 
