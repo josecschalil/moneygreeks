@@ -1,8 +1,16 @@
-import React from "react";
 import { ArrowUp, ArrowDown, Clock, Calendar, User } from "lucide-react";
 import TopGainers from "@/app/components/topGainers";
 import TopSectors from "@/app/components/topSectors";
 interface GlobalMarketIndex {
+  id: number;
+  index_name: string;
+  prev_close: number;
+  trend: "up" | "down";
+  open_price: number;
+  change: number;
+  change_percent: number;
+}
+interface IndianMarketIndex {
   id: number;
   index_name: string;
   prev_close: number;
@@ -90,12 +98,12 @@ export default async function MarketBlogPost({ params }: PageProps) {
               </a>
             </li>
             <li className="before:content-['›'] before:mx-2">
-              <a href="/streetview" className="hover:text-blue-600">
-                Streetview
+              <a href="/" className="hover:text-blue-600">
+                Moneygreeks
               </a>
             </li>
             <li className="before:content-['›'] before:mx-2 text-blue-600 font-medium">
-              Streetopen
+              pre-market-data
             </li>
           </ol>
         </div>
@@ -318,13 +326,6 @@ export default async function MarketBlogPost({ params }: PageProps) {
                 </div>
               </section>
 
-              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Global Market Sentiments Explained in Detail:
-                </h2>
-                <p className="mb-4 text-gray-700">{globalAnalysis.analysis}</p>
-              </section>
-
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
                 <div className="flex items-center justify-between mb-5 md:mb-6">
                   <h2 className="text-lg md:text-xl font-semibold text-gray-800">
@@ -362,7 +363,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                       </tr>
                     </thead>
                     <tbody>
-                      {IndianIndices.map((index: GlobalMarketIndex) => (
+                      {IndianIndices.map((index: IndianMarketIndex) => (
                         <tr
                           key={index.id}
                           className="border-b border-gray-100/80 hover:bg-gray-50/50 transition-colors duration-200"
@@ -419,7 +420,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
 
                 {/* Mobile Card View */}
                 <div className="md:hidden space-y-2.5">
-                  {IndianIndices.map((index: GlobalMarketIndex) => (
+                  {IndianIndices.map((index: IndianMarketIndex) => (
                     <div
                       key={index.id}
                       className="relative bg-white rounded-xl p-4 border border-gray-200/70 hover:border-gray-300 hover:shadow-md transition-all duration-300"
@@ -490,13 +491,6 @@ export default async function MarketBlogPost({ params }: PageProps) {
                     </div>
                   ))}
                 </div>
-              </section>
-
-              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Indian Market Sentiments Explained in Detail:
-                </h2>
-                <p className="mb-4 text-gray-700">{IndianAnalysis.analysis}</p>
               </section>
 
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
@@ -661,7 +655,12 @@ export default async function MarketBlogPost({ params }: PageProps) {
                   ))}
                 </div>
               </section>
-
+              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                  Market Sentiments Explained in Detail:
+                </h2>
+                <p className="mb-4 text-gray-700">{globalAnalysis.analysis}</p>
+              </section>
               <TopGainers stockmovers={data?.stock_movers} />
 
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
@@ -793,60 +792,115 @@ export default async function MarketBlogPost({ params }: PageProps) {
             </article>
           </main>
 
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-900">
-                  Streetview Live
+          <aside className="lg:col-span-1 space-y-6">
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-gray-700">
+                  Sponsored
                 </h3>
-                <span className="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
-                  LIVE
-                </span>
+                <span className="text-xs text-gray-400">Ad</span>
               </div>
-              <div className="bg-gray-900 rounded-lg h-48 flex items-center justify-center">
-                <p className="text-gray-400">Live Chart Placeholder</p>
+
+              <div className="border border-gray-200 rounded-lg overflow-hidden flex justify-center">
+                <iframe
+                  title="Ad Placeholder 300x250"
+                  className="w-[300px] h-[250px]"
+                  srcDoc={`
+          <html>
+            <body style="margin:0;display:flex;align-items:center;justify-content:center;background:#f9fafb;font-family:sans-serif;">
+              <div style="text-align:center;color:#6b7280;">
+                <strong>300 × 250</strong><br/>
+                Google Ad Placeholder
               </div>
-              <button className="w-full mt-4 text-blue-600 font-medium hover:text-blue-700">
-                View
-              </button>
+            </body>
+          </html>
+        `}
+                />
+              </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-gray-900">
-                  Market Closing Bell
+            <div className="bg-white rounded-lg shadow-sm p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-gray-700">
+                  Sponsored
                 </h3>
-                <span className="text-xs text-gray-500">January 05, 2026</span>
+                <span className="text-xs text-gray-400">Ad</span>
               </div>
-              <div className="bg-gray-900 rounded-lg h-48 flex items-center justify-center">
-                <p className="text-gray-400">Closing Chart Placeholder</p>
+
+              <div className="border border-gray-200 rounded-lg overflow-hidden flex justify-center">
+                <iframe
+                  title="Ad Placeholder 300x600"
+                  className="w-[300px] h-[600px]"
+                  srcDoc={`
+          <html>
+            <body style="margin:0;display:flex;align-items:center;justify-content:center;background:#f3f4f6;font-family:sans-serif;">
+              <div style="text-align:center;color:#6b7280;">
+                <strong>300 × 600</strong><br/>
+                Google Ad Placeholder
               </div>
-              <button className="w-full mt-4 text-blue-600 font-medium hover:text-blue-700">
-                View All
-              </button>
+            </body>
+          </html>
+        `}
+                />
+              </div>
             </div>
 
+            {/* Info / FAQ Section (unchanged) */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">
-                Know More
+                Pre-Market Insights
               </h3>
+
               <div className="space-y-3">
                 {[
-                  "What is Streetqazm, and how does it work?",
-                  "How accurate are your research calls?",
-                  "Can I change my subscription plan later?",
-                  "What is a Research Call?",
-                ].map((question, index) => (
-                  <button
+                  {
+                    q: "What are the key global market cues for today?",
+                    a: "Global markets are showing mixed signals. US indices closed with volatility, while Asian markets are trading cautiously, suggesting a muted to slightly positive opening.",
+                  },
+                  {
+                    q: "How is the Indian market expected to open?",
+                    a: "Pre-market indicators suggest a marginal gap-up opening, though early volatility is expected during the first 30 minutes of trade.",
+                  },
+                  {
+                    q: "What does the pre-market index data indicate?",
+                    a: "Index movements indicate strong price action compared to previous closes. These levels are indicative and may adjust after market open.",
+                  },
+                  {
+                    q: "What is the trend in institutional money flow?",
+                    a: "Institutional data shows higher selling activity compared to buying, indicating cautious participation from FIIs and DIIs.",
+                  },
+                  {
+                    q: "Which stocks are in focus today?",
+                    a: "Stocks with significant pre-market price changes and higher volumes are expected to remain active during intraday trade.",
+                  },
+                  {
+                    q: "What does the market breadth suggest?",
+                    a: "The advance-decline ratio indicates a balanced market, suggesting selective stock-specific action rather than broad-based movement.",
+                  },
+                  {
+                    q: "Which sectors are showing early strength?",
+                    a: "Select sectors are showing strong pre-market momentum, indicating potential sector rotation during the trading session.",
+                  },
+                  {
+                    q: "What should be the trading approach for today?",
+                    a: "Traders are advised to focus on price action, respect key levels, and manage risk carefully due to expected volatility.",
+                  },
+                ].map((item, index) => (
+                  <div
                     key={index}
-                    className="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 flex items-center justify-between group"
+                    className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition"
                   >
-                    <span className="text-sm text-gray-700">{question}</span>
-                    <span className="text-gray-400 group-hover:text-gray-600">
-                      +
-                    </span>
-                  </button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-800">
+                        {item.q}
+                      </span>
+                      <span className="text-gray-400">+</span>
+                    </div>
+
+                    <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+                      {item.a}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
