@@ -19,15 +19,11 @@ export default function HeroCarousel() {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  /* 🔹 Touch tracking */
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
   const SWIPE_THRESHOLD = 60;
 
-  /* =========================
-     Fetch Slides
-  ========================== */
   useEffect(() => {
     async function loadSlides() {
       try {
@@ -69,9 +65,6 @@ export default function HeroCarousel() {
     loadSlides();
   }, []);
 
-  /* =========================
-     Slide Controls
-  ========================== */
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
@@ -80,18 +73,12 @@ export default function HeroCarousel() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  /* =========================
-     Auto Slide
-  ========================== */
   useEffect(() => {
     if (!slides.length) return;
     const timer = setInterval(nextSlide, 5000);
     return () => clearInterval(timer);
   }, [slides]);
 
-  /* =========================
-     Swipe Handlers
-  ========================== */
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -106,11 +93,11 @@ export default function HeroCarousel() {
     const distance = touchStartX.current - touchEndX.current;
 
     if (distance > SWIPE_THRESHOLD) {
-      nextSlide(); // swipe left
+      nextSlide();
     }
 
     if (distance < -SWIPE_THRESHOLD) {
-      prevSlide(); // swipe right
+      prevSlide();
     }
 
     touchStartX.current = null;
@@ -136,13 +123,12 @@ export default function HeroCarousel() {
           <Link
             key={slide.id}
             href={href}
-            className={`absolute inset-0 transition-opacity duration-700 lg:m-4 lg:rounded-lg overflow-hidden cursor-pointer ${
+            className={`absolute inset-0 transition-opacity duration-700 lg:mx-2 lg:my-2 lg:rounded-lg overflow-hidden cursor-pointer ${
               index === currentSlide
                 ? "opacity-100 z-10"
                 : "opacity-0 pointer-events-none z-0"
             }`}
           >
-            {/* Background Image */}
             <div className="absolute inset-0">
               <Image
                 src={slide.image}
@@ -155,7 +141,6 @@ export default function HeroCarousel() {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/30" />
             </div>
 
-            {/* Content */}
             <div className="relative h-full max-w-7xl px-6 sm:px-8 lg:px-12 flex items-center">
               <div className="max-w-2xl text-white">
                 <span className="text-sm uppercase tracking-wider">
@@ -166,7 +151,7 @@ export default function HeroCarousel() {
                   {slide.title}
                 </h1>
 
-                <p className="text-base sm:text-lg text-gray-200">
+                <p className="text-base sm:text-lg text-gray-200 line-clamp-3">
                   {slide.description}
                 </p>
               </div>
