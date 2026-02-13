@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MarketReport
+from .models import BlogPost, MarketReport
 from .models import (
     GlobalMarketAnalysis,
     IndianMarketAnalysis,
@@ -91,7 +91,11 @@ class SectorPerformanceAdmin(admin.ModelAdmin):
 @admin.register(MarketBreadth)
 class MarketBreadthAdmin(admin.ModelAdmin):
     readonly_fields = [f.name for f in MarketBreadth._meta.fields]
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ("title", "created_at")
 
+    
 @admin.register(NewsletterSubscriber)
 class NewsletterSubscriberAdmin(admin.ModelAdmin):
     list_display = ("email", "subscribed_at")
