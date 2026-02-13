@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { User, Calendar, Clock } from "lucide-react";
+import RecommendedPosts from "../../components/recommended";
 
 /* -------------------- DATA FETCH -------------------- */
 async function getBlogPost(slug) {
@@ -202,6 +203,7 @@ export default async function BlogPostPage({ params }) {
           </div>
         </aside>
       </div>
+      <RecommendedPosts />
     </div>
   );
 }

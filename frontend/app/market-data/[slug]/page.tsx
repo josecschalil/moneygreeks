@@ -1,6 +1,7 @@
 import { ArrowUp, ArrowDown, Clock, Calendar, User } from "lucide-react";
 import TopGainers from "@/app/components/topGainers";
 import TopSectors from "@/app/components/topSectors";
+import RecommendedPosts from "@/app/components/recommended";
 interface GlobalMarketIndex {
   id: number;
   index_name: string;
@@ -906,6 +907,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
             </div>
           </aside>
         </div>
+        <RecommendedPosts />
       </div>
     </div>
   );

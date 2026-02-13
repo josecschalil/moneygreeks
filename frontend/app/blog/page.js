@@ -141,7 +141,6 @@ export default async function BlogPage() {
   return (
     <main className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-24">
-        {/* ================= HERO - LATEST PREMARKET ================= */}
         <section>
           <div className="mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full border border-gray-200 mb-4">
