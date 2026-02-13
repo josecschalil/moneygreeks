@@ -103,6 +103,7 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "slug",
+            "image_url",
             "report_date",
             "created_at",
 

@@ -68,7 +68,7 @@ export default function TopGainersTabs({ gainers, losers }) {
           <tbody>
             {data.map((stock) => (
               <tr
-                key={stock.symbol}
+                key={stock.id}
                 className="py-3.5 px-3 text-left text-gray-600 text-sm"
               >
                 <td className="py-3 px-3 font-medium">{stock.symbol}</td>
