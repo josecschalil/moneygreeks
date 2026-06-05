@@ -11,6 +11,7 @@ from .models import (
     StockMover,
     StockMoverAnalysis,
     MarketBreadth,
+    OptionChainSummary,
     SectorPerformance,
     SectorAnalysis,
     BlogPost
@@ -79,6 +80,14 @@ class SectorAnalysisSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectorAnalysis
         fields = "__all__"
+
+
+class OptionChainSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OptionChainSummary
+        fields = "__all__"
+
+
 class MarketReportDetailSerializer(serializers.ModelSerializer):
     global_indices = GlobalMarketIndexSerializer(many=True, read_only=True)
     global_analysis = GlobalMarketAnalysisSerializer(read_only=True)
@@ -96,6 +105,7 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
 
     sector_performance = SectorPerformanceSerializer(many=True, read_only=True)
     sector_analysis = SectorAnalysisSerializer(read_only=True)
+    option_chain_summaries = OptionChainSummarySerializer(many=True, read_only=True)
 
     class Meta:
         model = MarketReport
@@ -105,6 +115,9 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
             "slug",
             "image_url",
             "report_date",
+            "status",
+            "quality_score",
+            "report_type",
             "created_at",
 
             "global_indices",
@@ -123,6 +136,7 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
 
             "sector_performance",
             "sector_analysis",
+            "option_chain_summaries",
 
             "overall_conclusion",
         ]
@@ -136,6 +150,9 @@ class ReportListSerializer(serializers.ModelSerializer):
             "title",
             "slug",
             "report_date",
+            "status",
+            "quality_score",
+            "report_type",
             "overall_conclusion",
             "image_url",
         ]

@@ -1,11 +1,43 @@
 from django.db import models
 
 class MarketReport(models.Model):
+    STATUS_DRAFT = "draft"
+    STATUS_PUBLISHED = "published"
+    STATUS_FAILED = "failed"
+    STATUS_CHOICES = [
+        (STATUS_DRAFT, "Draft"),
+        (STATUS_PUBLISHED, "Published"),
+        (STATUS_FAILED, "Failed"),
+    ]
+    REPORT_TYPE_FULL = "full"
+    REPORT_TYPE_STANDARD = "standard"
+    REPORT_TYPE_LIMITED = "limited"
+    REPORT_TYPE_FAILED = "failed"
+    REPORT_TYPE_CHOICES = [
+        (REPORT_TYPE_FULL, "Full"),
+        (REPORT_TYPE_STANDARD, "Standard"),
+        (REPORT_TYPE_LIMITED, "Limited"),
+        (REPORT_TYPE_FAILED, "Failed"),
+    ]
+
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     report_date = models.DateField(unique=True)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_DRAFT,
+    )
     image_url = models.URLField(max_length=1000,blank=True,null=True)
     overall_conclusion = models.TextField()
+    quality_score = models.PositiveSmallIntegerField(default=0)
+    report_type = models.CharField(
+        max_length=20,
+        choices=REPORT_TYPE_CHOICES,
+        default=REPORT_TYPE_LIMITED,
+    )
+    quality_notes = models.JSONField(blank=True, null=True)
+    raw_data = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -22,8 +54,8 @@ class GlobalMarketIndex(models.Model):
     index_name = models.CharField(max_length=100)
     prev_close = models.DecimalField(max_digits=10, decimal_places=2)
     open_price = models.DecimalField(max_digits=10, decimal_places=2)
-    change = models.DecimalField(max_digits=10, decimal_places=2)
-    change_percent = models.DecimalField(max_digits=6, decimal_places=2)
+    change = models.DecimalField(max_digits=10, decimal_places=4)
+    change_percent = models.DecimalField(max_digits=6, decimal_places=4)
     trend = models.CharField(
         max_length=10,
         choices=[("up", "Up"), ("down", "Down")]
@@ -151,6 +183,24 @@ class SectorPerformance(models.Model):
     pe = models.DecimalField(max_digits=6, decimal_places=2)
     pb = models.DecimalField(max_digits=6, decimal_places=2)
     div_yield = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class OptionChainSummary(models.Model):
+    report = models.ForeignKey(
+        MarketReport,
+        on_delete=models.CASCADE,
+        related_name="option_chain_summaries"
+    )
+
+    symbol = models.CharField(max_length=20)
+    expiry = models.CharField(max_length=20, blank=True)
+    pcr = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    max_call_oi_strike = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    max_call_oi = models.PositiveIntegerField(default=0)
+    max_put_oi_strike = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    max_put_oi = models.PositiveIntegerField(default=0)
+    underlying_value = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    analysis = models.TextField(blank=True)
 
 
 class BlogPost(models.Model):

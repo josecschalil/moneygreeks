@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { User, Calendar, Clock } from "lucide-react";
-import RecommendedPosts from "../../components/recommended";
+import RecommendedPosts from "@/app/components/recommended";
 
 /* -------------------- DATA FETCH -------------------- */
 async function getBlogPost(slug) {

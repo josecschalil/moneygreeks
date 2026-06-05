@@ -2,6 +2,8 @@ import { ArrowUp, ArrowDown, Clock, Calendar, User } from "lucide-react";
 import TopGainers from "@/app/components/topGainers";
 import TopSectors from "@/app/components/topSectors";
 import RecommendedPosts from "@/app/components/recommended";
+import { notFound } from "next/navigation";
+import Link from "next/link";
 interface GlobalMarketIndex {
   id: number;
   index_name: string;
@@ -20,6 +22,18 @@ interface IndianMarketIndex {
   change: number;
   change_percent: number;
 }
+interface OptionChainSummary {
+  id: number;
+  symbol: string;
+  expiry: string;
+  pcr: string | number | null;
+  max_call_oi_strike: string | number | null;
+  max_call_oi: number;
+  max_put_oi_strike: string | number | null;
+  max_put_oi: number;
+  underlying_value: string | number | null;
+  analysis: string;
+}
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -27,6 +41,219 @@ function formatDate(dateStr: string) {
     year: "numeric",
   });
 }
+
+function formatMarketNumber(value: string | number | null) {
+  if (value === null || value === undefined || value === "") {
+    return "-";
+  }
+  const numericValue = Number(value);
+  if (Number.isNaN(numericValue)) {
+    return value;
+  }
+  return numericValue.toLocaleString("en-IN", {
+    maximumFractionDigits: 2,
+  });
+}
+
+function getPcrView(value: string | number | null) {
+  const pcr = Number(value);
+  if (Number.isNaN(pcr)) {
+    return {
+      label: "Unclear",
+      className: "bg-gray-50 text-gray-700 border-gray-200",
+    };
+  }
+  if (pcr >= 1.2) {
+    return {
+      label: "Put heavy",
+      className: "bg-green-50 text-green-700 border-green-200",
+    };
+  }
+  if (pcr <= 0.8) {
+    return {
+      label: "Call heavy",
+      className: "bg-red-50 text-red-700 border-red-200",
+    };
+  }
+  return {
+    label: "Balanced",
+    className: "bg-blue-50 text-blue-700 border-blue-200",
+  };
+}
+
+function getDistanceFromSpot(
+  strike: string | number | null,
+  underlying: string | number | null,
+) {
+  const strikeValue = Number(strike);
+  const underlyingValue = Number(underlying);
+  if (
+    Number.isNaN(strikeValue) ||
+    Number.isNaN(underlyingValue) ||
+    underlyingValue <= 0
+  ) {
+    return "";
+  }
+  const distance = Math.abs(((strikeValue - underlyingValue) / underlyingValue) * 100);
+  return `${formatMarketNumber(distance)}% from spot`;
+}
+
+function getConclusionView(text: string) {
+  const fallback =
+    "The market setup is being prepared from the latest available data. Traders should wait for opening confirmation and manage risk carefully.";
+  const source = String(text || fallback).trim();
+  const disclaimer =
+    "This report is for market preparation and education only, not a direct buy or sell recommendation.";
+  const body = source.replace(disclaimer, "").trim();
+  const readableBody = body
+    .replace(/\s+(Sector rotation is important today\.)/g, "\n\n$1")
+    .replace(/\s+(The safer approach is)/g, "\n\n$1");
+  const paragraphs = readableBody
+    .split(/\n\s*\n/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return {
+    paragraphs: paragraphs.length ? paragraphs : [fallback],
+    disclaimer: source.includes(disclaimer) ? disclaimer : "",
+  };
+}
+
+function getOpeningBriefing({
+  globalIndices,
+  indianIndices,
+  marketBreadth,
+  institutionalFlows,
+  optionChainSummaries,
+}: {
+  globalIndices: GlobalMarketIndex[];
+  indianIndices: IndianMarketIndex[];
+  marketBreadth?: {
+    advancing?: number;
+    declining?: number;
+    advance_decline_ratio?: string | number;
+  };
+  institutionalFlows: InstitutionalActivity[];
+  optionChainSummaries: OptionChainSummary[];
+}) {
+  const giftNifty = globalIndices.find((item) =>
+    item.index_name?.toLowerCase().includes("gift"),
+  );
+  const indiaVix = indianIndices.find((item) =>
+    item.index_name?.toLowerCase().includes("vix"),
+  );
+  const niftyOptions =
+    optionChainSummaries.find((item) => item.symbol?.toUpperCase() === "NIFTY") ||
+    optionChainSummaries[0];
+  const fiiNet = Number(
+    institutionalFlows.find((item) =>
+      String(item.institution_type).toUpperCase().includes("FII"),
+    )?.net_value,
+  );
+  const diiNet = Number(
+    institutionalFlows.find((item) =>
+      String(item.institution_type).toUpperCase().includes("DII"),
+    )?.net_value,
+  );
+  const giftChange = Number(giftNifty?.change_percent);
+  const vixChange = Number(indiaVix?.change_percent);
+  const breadthRatio = Number(marketBreadth?.advance_decline_ratio);
+
+  let score = 0;
+  if (!Number.isNaN(giftChange)) score += giftChange > 0.15 ? 1 : giftChange < -0.15 ? -1 : 0;
+  if (!Number.isNaN(breadthRatio)) score += breadthRatio >= 1.2 ? 1 : breadthRatio < 0.9 ? -1 : 0;
+  if (!Number.isNaN(fiiNet) && !Number.isNaN(diiNet)) {
+    score += fiiNet > 0 && diiNet > 0 ? 1 : fiiNet < 0 && diiNet < 0 ? -1 : 0;
+  }
+  if (!Number.isNaN(vixChange)) score += vixChange < -3 ? 1 : vixChange > 3 ? -1 : 0;
+
+  const stance =
+    score >= 2
+      ? "Constructive, but confirmation-first"
+      : score <= -2
+        ? "Cautious, risk control first"
+        : "Selective, wait for range break";
+  const stanceClass =
+    score >= 2
+      ? "border-green-200 bg-green-50 text-green-800"
+      : score <= -2
+        ? "border-red-200 bg-red-50 text-red-800"
+        : "border-amber-200 bg-amber-50 text-amber-800";
+
+  const drivers = [
+    {
+      label: "Global Cue",
+      value: giftNifty
+        ? `${giftNifty.index_name}: ${formatMarketNumber(giftNifty.change_percent)}%`
+        : "GIFT Nifty unavailable",
+      detail:
+        !Number.isNaN(giftChange) && giftChange < -0.15
+          ? "Opening cue is soft. Let price reclaim the opening range before trusting long trades."
+          : !Number.isNaN(giftChange) && giftChange > 0.15
+            ? "Opening cue is supportive. Still avoid chasing the first move without follow-through."
+            : "Global cue is flat to mixed, so stock and sector selection matter more.",
+    },
+    {
+      label: "Market Internals",
+      value: Number.isNaN(breadthRatio)
+        ? "Breadth unavailable"
+        : `A/D ratio: ${formatMarketNumber(breadthRatio)}`,
+      detail:
+        !Number.isNaN(breadthRatio) && breadthRatio < 0.9
+          ? "Breadth is weak. Broad-market longs need extra confirmation."
+          : !Number.isNaN(breadthRatio) && breadthRatio >= 1.2
+            ? "Breadth is supportive. Pullbacks may find better participation."
+            : "Breadth is balanced. Expect selective movement rather than a clean broad trend.",
+    },
+    {
+      label: "Risk Gauge",
+      value: indiaVix
+        ? `India VIX: ${formatMarketNumber(indiaVix.open_price)} (${formatMarketNumber(indiaVix.change_percent)}%)`
+        : "India VIX unavailable",
+      detail:
+        !Number.isNaN(vixChange) && vixChange > 3
+          ? "Volatility is rising. Keep position size smaller and respect stops."
+          : !Number.isNaN(vixChange) && vixChange < -3
+            ? "Volatility is cooling. Intraday swings may be more orderly."
+            : "Volatility is not giving a strong warning signal yet.",
+    },
+  ];
+
+  const levels = niftyOptions
+    ? {
+        putWall: formatMarketNumber(niftyOptions.max_put_oi_strike),
+        callWall: formatMarketNumber(niftyOptions.max_call_oi_strike),
+        putDistance: getDistanceFromSpot(
+          niftyOptions.max_put_oi_strike,
+          niftyOptions.underlying_value,
+        ),
+        callDistance: getDistanceFromSpot(
+          niftyOptions.max_call_oi_strike,
+          niftyOptions.underlying_value,
+        ),
+        pcr: formatMarketNumber(niftyOptions.pcr),
+        expiry: niftyOptions.expiry || "-",
+      }
+    : null;
+
+  return {
+    stance,
+    stanceClass,
+    drivers,
+    levels,
+    flow:
+      Number.isNaN(fiiNet) || Number.isNaN(diiNet)
+        ? "Institutional flow is unavailable."
+        : fiiNet < 0 && diiNet > 0
+          ? `FII net ${formatMarketNumber(fiiNet)} vs DII net ${formatMarketNumber(diiNet)}: domestic support is absorbing foreign selling.`
+          : fiiNet > 0 && diiNet > 0
+            ? "Both FII and DII flows are positive, which supports dips if price confirms."
+            : fiiNet < 0 && diiNet < 0
+              ? "Both FII and DII flows are negative, so failed bounces deserve caution."
+              : "Institutional flow is mixed; price action should lead the decision.",
+  };
+}
+
 export interface InstitutionalActivity {
   id: number;
   institution_type: "FII" | "DII" | string;
@@ -41,15 +268,19 @@ export interface InstitutionalActivity {
 async function getMarketData(slug: string) {
   console.log("Fetching data for slug:", slug);
 
-  const res = await fetch(`http://127.0.0.1:8000/reports/${slug}/`, {
-    cache: "no-store",
-  });
+  try {
+    const res = await fetch(`http://127.0.0.1:8000/reports/${slug}/`, {
+      cache: "no-store",
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch market data");
+    if (!res.ok) {
+      notFound();
+    }
+
+    return res.json();
+  } catch {
+    notFound();
   }
-
-  return res.json();
 }
 
 type PageProps = {
@@ -85,8 +316,20 @@ export default async function MarketBlogPost({ params }: PageProps) {
     ? data.institutional_flows
     : [];
   const globalAnalysis = data?.global_analysis;
-  const IndianAnalysis = data?.indian_analysis;
   const MarketBreadth = data?.market_breadth;
+  const optionChainSummaries: OptionChainSummary[] = Array.isArray(
+    data?.option_chain_summaries,
+  )
+    ? data.option_chain_summaries
+    : [];
+  const conclusionView = getConclusionView(data?.overall_conclusion);
+  const openingBriefing = getOpeningBriefing({
+    globalIndices,
+    indianIndices: IndianIndices,
+    marketBreadth: MarketBreadth,
+    institutionalFlows: FIIDII_DATA,
+    optionChainSummaries,
+  });
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -94,14 +337,14 @@ export default async function MarketBlogPost({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
             <li>
-              <a href="/" className="hover:text-blue-600">
+              <Link href="/" className="hover:text-blue-600">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="before:content-['›'] before:mx-2">
-              <a href="/" className="hover:text-blue-600">
+              <Link href="/" className="hover:text-blue-600">
                 Moneygreeks
-              </a>
+              </Link>
             </li>
             <li className="before:content-['›'] before:mx-2 text-blue-600 font-medium">
               pre-market-data
@@ -136,6 +379,100 @@ export default async function MarketBlogPost({ params }: PageProps) {
                     <span>5 min read</span>
                   </div>
                 </div>
+
+                <section className="rounded-lg border border-gray-200 bg-white shadow-sm">
+                  <div className="border-b border-gray-200 px-4 py-4 md:px-5">
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                          Pre-Open Briefing
+                        </p>
+                        <h2 className="mt-1 text-xl font-semibold text-gray-900">
+                          {openingBriefing.stance}
+                        </h2>
+                      </div>
+                      <span
+                        className={`w-fit rounded-md border px-3 py-1 text-xs font-semibold ${openingBriefing.stanceClass}`}
+                      >
+                        Opening read
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 divide-y divide-gray-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+                    {openingBriefing.drivers.map((driver) => (
+                      <div key={driver.label} className="p-4 md:p-5">
+                        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                          {driver.label}
+                        </p>
+                        <p className="mt-2 text-sm font-semibold text-gray-900">
+                          {driver.value}
+                        </p>
+                        <p className="mt-2 text-sm leading-6 text-gray-600">
+                          {driver.detail}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-0 border-t border-gray-200 md:grid-cols-[1.1fr_1fr]">
+                    <div className="p-4 md:p-5">
+                      <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                        Institutional Read
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-gray-700">
+                        {openingBriefing.flow}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-gray-200 p-4 md:border-l md:border-t-0 md:p-5">
+                      <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                        Expiry OI Context
+                      </p>
+                      {openingBriefing.levels ? (
+                        <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                          <div className="rounded-md bg-green-50 px-2 py-2">
+                            <p className="text-[11px] font-medium text-green-700">
+                              Put OI Wall
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-green-800">
+                              {openingBriefing.levels.putWall}
+                            </p>
+                            <p className="mt-1 text-[11px] text-green-700">
+                              {openingBriefing.levels.putDistance}
+                            </p>
+                          </div>
+                          <div className="rounded-md bg-blue-50 px-2 py-2">
+                            <p className="text-[11px] font-medium text-blue-700">
+                              PCR
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-blue-800">
+                              {openingBriefing.levels.pcr}
+                            </p>
+                          </div>
+                          <div className="rounded-md bg-red-50 px-2 py-2">
+                            <p className="text-[11px] font-medium text-red-700">
+                              Call OI Wall
+                            </p>
+                            <p className="mt-1 text-sm font-semibold text-red-800">
+                              {openingBriefing.levels.callWall}
+                            </p>
+                            <p className="mt-1 text-[11px] text-red-700">
+                              {openingBriefing.levels.callDistance}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="mt-2 text-sm text-gray-600">
+                          Options levels are not available for this report.
+                        </p>
+                      )}
+                      <p className="mt-3 text-xs leading-5 text-gray-500">
+                        These are expiry OI walls, not direct intraday support or resistance. Use them only as context.
+                      </p>
+                    </div>
+                  </div>
+                </section>
               </header>
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
                 <div className="flex items-center justify-between mb-5 md:mb-6">
@@ -160,7 +497,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                           Prev Close
                         </th>
                         <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
-                          Open
+                          LTP
                         </th>
                         <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
                           Change
@@ -243,7 +580,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                           </h3>
                           <div className="flex items-center gap-2">
                             <span className="text-xs text-gray-500">
-                              Open: {index.open_price}
+                              LTP: {index.open_price}
                             </span>
                           </div>
                         </div>
@@ -350,7 +687,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                           Prev Close
                         </th>
                         <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
-                          Open
+                          LTP
                         </th>
                         <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
                           Change
@@ -433,7 +770,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                           </h3>
                           <div className="flex items-center gap-2">
                             <span className="text-xs text-gray-500">
-                              Open: {index.open_price}
+                              LTP: {index.open_price}
                             </span>
                           </div>
                         </div>
@@ -660,13 +997,195 @@ export default async function MarketBlogPost({ params }: PageProps) {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   Market Sentiments Explained in Detail:
                 </h2>
-                <p className="mb-4 text-gray-700">{globalAnalysis.analysis}</p>
+                <p className="mb-4 text-gray-700">
+                  {globalAnalysis?.analysis ||
+                    "Market sentiment is being prepared from the latest available data. Traders should verify global cues and wait for opening confirmation before taking a directional view."}
+                </p>
               </section>
+              {optionChainSummaries.length > 0 && (
+                <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
+                  <div className="flex items-center justify-between mb-5 md:mb-6">
+                    <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+                      Options Setup
+                    </h2>
+                    <span className="text-xs font-medium text-gray-500">
+                      Expiry OI walls
+                    </span>
+                  </div>
+
+                  <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b border-gray-200/80">
+                          <th className="text-left py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                            Index
+                          </th>
+                          <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                            Underlying
+                          </th>
+                          <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                            PCR Stance
+                          </th>
+                          <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                            Call OI Wall
+                          </th>
+                          <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                            Put OI Wall
+                          </th>
+                          <th className="text-right py-3 px-3 text-xs font-medium text-gray-500 uppercase tracking-wide">
+                            Expiry
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {optionChainSummaries.map((item) => {
+                          const pcrView = getPcrView(item.pcr);
+                          return (
+                            <tr
+                              key={item.id}
+                              className="border-b border-gray-100/80 hover:bg-gray-50/50 transition-colors duration-200"
+                            >
+                              <td className="py-3.5 px-3 font-medium text-gray-900 text-sm">
+                                {item.symbol}
+                              </td>
+                              <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                                {formatMarketNumber(item.underlying_value)}
+                              </td>
+                              <td className="py-3.5 px-3 text-right">
+                                <span
+                                  className={`inline-flex items-center rounded border px-2 py-0.5 text-xs font-medium ${pcrView.className}`}
+                                >
+                                  {formatMarketNumber(item.pcr)} ·{" "}
+                                  {pcrView.label}
+                                </span>
+                              </td>
+                              <td className="py-3.5 px-3 text-right">
+                                <div className="text-sm font-medium text-red-600">
+                                  {formatMarketNumber(item.max_call_oi_strike)}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  OI {formatMarketNumber(item.max_call_oi)}
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  {getDistanceFromSpot(
+                                    item.max_call_oi_strike,
+                                    item.underlying_value,
+                                  )}
+                                </div>
+                              </td>
+                              <td className="py-3.5 px-3 text-right">
+                                <div className="text-sm font-medium text-green-600">
+                                  {formatMarketNumber(item.max_put_oi_strike)}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  OI {formatMarketNumber(item.max_put_oi)}
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  {getDistanceFromSpot(
+                                    item.max_put_oi_strike,
+                                    item.underlying_value,
+                                  )}
+                                </div>
+                              </td>
+                              <td className="py-3.5 px-3 text-right text-gray-600 text-sm">
+                                {item.expiry || "-"}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="md:hidden space-y-2.5">
+                    {optionChainSummaries.map((item) => {
+                      const pcrView = getPcrView(item.pcr);
+                      return (
+                        <div
+                          key={item.id}
+                          className="bg-white rounded-xl p-4 border border-gray-200/70"
+                        >
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <div>
+                              <h3 className="font-medium text-gray-900 text-base">
+                                {item.symbol}
+                              </h3>
+                              <p className="text-xs text-gray-500">
+                                Underlying:{" "}
+                                {formatMarketNumber(item.underlying_value)}
+                              </p>
+                            </div>
+                            <span
+                              className={`rounded-md border px-2 py-1 text-xs font-medium ${pcrView.className}`}
+                            >
+                              PCR {formatMarketNumber(item.pcr)} ·{" "}
+                              {pcrView.label}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3 text-sm">
+                            <div>
+                            <p className="text-xs text-gray-500">
+                                Call OI Wall
+                              </p>
+                              <p className="font-medium text-red-600">
+                                {formatMarketNumber(item.max_call_oi_strike)}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                OI {formatMarketNumber(item.max_call_oi)}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                {getDistanceFromSpot(
+                                  item.max_call_oi_strike,
+                                  item.underlying_value,
+                                )}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-gray-500">
+                                Put OI Wall
+                              </p>
+                              <p className="font-medium text-green-600">
+                                {formatMarketNumber(item.max_put_oi_strike)}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                OI {formatMarketNumber(item.max_put_oi)}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                {getDistanceFromSpot(
+                                  item.max_put_oi_strike,
+                                  item.underlying_value,
+                                )}
+                              </p>
+                            </div>
+                          </div>
+                          <p className="mt-3 text-xs text-gray-500">
+                            Expiry: {item.expiry || "-"}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-5 space-y-3">
+                    <p className="rounded-md bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
+                      Highest OI strikes can be far from spot. Treat this section as expiry positioning context, not a day-trading level map.
+                    </p>
+                    {optionChainSummaries.map((item) => (
+                      <p
+                        key={`${item.id}-analysis`}
+                        className="text-sm leading-6 text-gray-700"
+                      >
+                        {item.analysis}
+                      </p>
+                    ))}
+                  </div>
+                </section>
+              )}
               <TopGainers stockmovers={data?.stock_movers} />
 
               <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
                 <h2 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-5">
-                  Previous Day's Market Breadth
+                  Previous Day&apos;s Market Breadth
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -756,11 +1275,31 @@ export default async function MarketBlogPost({ params }: PageProps) {
                 </div>
               </section>
               <TopSectors sectors={data?.sector_performance} />
-              <section className="bg-white rounded-lg shadow-sm p-6 mb-8 prose max-w-none">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Final Conclusion
-                </h2>
-                <p className="mb-4 text-gray-700">{data.overall_conclusion}</p>
+              <section className="bg-white rounded-lg shadow-sm p-4 md:p-6 mb-8 border border-gray-200/60">
+                <div className="flex items-center justify-between gap-3 mb-5">
+                  <div>
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                      Final Conclusion
+                    </h2>
+                  </div>
+                </div>
+
+                <div className="space-y-4 border-l-4 border-blue-500 pl-4 md:pl-5">
+                  {conclusionView.paragraphs.map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className="text-base leading-7 text-gray-700"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+
+                {conclusionView.disclaimer && (
+                  <p className="mt-5 rounded-md bg-gray-50 px-3 py-2 text-xs leading-5 text-gray-500">
+                    {conclusionView.disclaimer}
+                  </p>
+                )}
               </section>
 
               <div className="w-full max-w-6xl mx-auto p-4">

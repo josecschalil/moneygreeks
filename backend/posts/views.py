@@ -35,9 +35,14 @@ from .serializers import (
     SectorAnalysisSerializer
 )
 class MarketReportViewSet(viewsets.ModelViewSet):
-    queryset = MarketReport.objects.all().order_by("-report_date")
     serializer_class = MarketReportDetailSerializer
     lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = MarketReport.objects.all().order_by("-report_date")
+        if self.request and self.request.user and self.request.user.is_staff:
+            return queryset
+        return queryset.filter(status=MarketReport.STATUS_PUBLISHED)
 class GlobalMarketIndexViewSet(viewsets.ModelViewSet):
     queryset = GlobalMarketIndex.objects.all()
     serializer_class = GlobalMarketIndexSerializer
@@ -72,9 +77,14 @@ class SectorAnalysisViewSet(viewsets.ModelViewSet):
     queryset = SectorAnalysis.objects.all()
     serializer_class = SectorAnalysisSerializer
 class MarketReportListViewSet(viewsets.ModelViewSet):
-    queryset = MarketReport.objects.all().order_by("-report_date")
     serializer_class = ReportListSerializer
     lookup_field = "slug"
+
+    def get_queryset(self):
+        queryset = MarketReport.objects.all().order_by("-report_date")
+        if self.request and self.request.user and self.request.user.is_staff:
+            return queryset
+        return queryset.filter(status=MarketReport.STATUS_PUBLISHED)
 class BlogPostDetailView(viewsets.ModelViewSet):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer

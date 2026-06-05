@@ -1,0 +1,692 @@
+{
+  "report_date": "2026-06-05",
+  "collected_at": "2026-06-05T23:10:09.793830+00:00",
+  "institutional_flow": [
+    {
+      "category": "DII",
+      "buy_value": 22779.32,
+      "sell_value": 13645.75,
+      "net_value": 9133.57,
+      "trend": "up"
+    },
+    {
+      "category": "FII",
+      "buy_value": 11044.57,
+      "sell_value": 19820.82,
+      "net_value": -8776.25,
+      "trend": "down"
+    }
+  ],
+  "top_gainers": [
+    {
+      "symbol": "ADANIENT",
+      "prev_close": "2972.8",
+      "ltp": "3043",
+      "pct_change": "2.36",
+      "volume": "5617327"
+    },
+    {
+      "symbol": "HINDUNILVR",
+      "prev_close": "2079.4",
+      "ltp": "2121.2",
+      "pct_change": "2.01",
+      "volume": "1822999"
+    },
+    {
+      "symbol": "ADANIPORTS",
+      "prev_close": "1790.9",
+      "ltp": "1826",
+      "pct_change": "1.96",
+      "volume": "1640762"
+    },
+    {
+      "symbol": "BAJFINANCE",
+      "prev_close": "874.4",
+      "ltp": "889.55",
+      "pct_change": "1.73",
+      "volume": "13274646"
+    },
+    {
+      "symbol": "AXISBANK",
+      "prev_close": "1253.3",
+      "ltp": "1273.3",
+      "pct_change": "1.6",
+      "volume": "7825303"
+    },
+    {
+      "symbol": "DRREDDY",
+      "prev_close": "1267.5",
+      "ltp": "1283",
+      "pct_change": "1.22",
+      "volume": "774687"
+    },
+    {
+      "symbol": "CIPLA",
+      "prev_close": "1398.7",
+      "ltp": "1402",
+      "pct_change": "1.18",
+      "volume": "1050391"
+    },
+    {
+      "symbol": "SBILIFE",
+      "prev_close": "1764.9",
+      "ltp": "1785",
+      "pct_change": "1.14",
+      "volume": "715458"
+    },
+    {
+      "symbol": "MAXHEALTH",
+      "prev_close": "966.2",
+      "ltp": "977",
+      "pct_change": "1.12",
+      "volume": "1317243"
+    },
+    {
+      "symbol": "ETERNAL",
+      "prev_close": "254.35",
+      "ltp": "256.75",
+      "pct_change": "0.94",
+      "volume": "34207436"
+    },
+    {
+      "symbol": "TITAN",
+      "prev_close": "4231",
+      "ltp": "4268",
+      "pct_change": "0.87",
+      "volume": "1390200"
+    },
+    {
+      "symbol": "APOLLOHOSP",
+      "prev_close": "8249",
+      "ltp": "8314.5",
+      "pct_change": "0.79",
+      "volume": "187969"
+    },
+    {
+      "symbol": "M&M",
+      "prev_close": "3016.1",
+      "ltp": "3039",
+      "pct_change": "0.76",
+      "volume": "1685633"
+    },
+    {
+      "symbol": "SHRIRAMFIN",
+      "prev_close": "915.8",
+      "ltp": "922.6",
+      "pct_change": "0.74",
+      "volume": "5769377"
+    },
+    {
+      "symbol": "ICICIBANK",
+      "prev_close": "1251.7",
+      "ltp": "1261",
+      "pct_change": "0.74",
+      "volume": "10166393"
+    },
+    {
+      "symbol": "JIOFIN",
+      "prev_close": "235.74",
+      "ltp": "237.29",
+      "pct_change": "0.66",
+      "volume": "12186829"
+    },
+    {
+      "symbol": "NESTLEIND",
+      "prev_close": "1382.9",
+      "ltp": "1391",
+      "pct_change": "0.59",
+      "volume": "1342143"
+    },
+    {
+      "symbol": "ASIANPAINT",
+      "prev_close": "2661.6",
+      "ltp": "2677",
+      "pct_change": "0.58",
+      "volume": "1615011"
+    },
+    {
+      "symbol": "LT",
+      "prev_close": "3942.1",
+      "ltp": "3962.1",
+      "pct_change": "0.51",
+      "volume": "1278243"
+    },
+    {
+      "symbol": "POWERGRID",
+      "prev_close": "284.6",
+      "ltp": "285.4",
+      "pct_change": "0.28",
+      "volume": "6955072"
+    }
+  ],
+  "top_losers": [
+    {
+      "symbol": "WIPRO",
+      "prev_close": "204.32",
+      "ltp": "198.05",
+      "pct_change": "-3.07",
+      "volume": "43539069"
+    },
+    {
+      "symbol": "HINDALCO",
+      "prev_close": "1125.6",
+      "ltp": "1092",
+      "pct_change": "-2.99",
+      "volume": "4546693"
+    },
+    {
+      "symbol": "TRENT",
+      "prev_close": "2837.6",
+      "ltp": "2770",
+      "pct_change": "-2.38",
+      "volume": "1346639"
+    },
+    {
+      "symbol": "TCS",
+      "prev_close": "2241",
+      "ltp": "2196",
+      "pct_change": "-2.01",
+      "volume": "5019717"
+    },
+    {
+      "symbol": "COALINDIA",
+      "prev_close": "481.65",
+      "ltp": "472.05",
+      "pct_change": "-1.99",
+      "volume": "9592529"
+    },
+    {
+      "symbol": "TATASTEEL",
+      "prev_close": "210.57",
+      "ltp": "206.8",
+      "pct_change": "-1.79",
+      "volume": "35802398"
+    },
+    {
+      "symbol": "NTPC",
+      "prev_close": "366.4",
+      "ltp": "360.75",
+      "pct_change": "-1.54",
+      "volume": "10277061"
+    },
+    {
+      "symbol": "TATACONSUM",
+      "prev_close": "1149.3",
+      "ltp": "1131.8",
+      "pct_change": "-1.52",
+      "volume": "998276"
+    },
+    {
+      "symbol": "ONGC",
+      "prev_close": "267.55",
+      "ltp": "264.3",
+      "pct_change": "-1.21",
+      "volume": "7493239"
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "prev_close": "381.5",
+      "ltp": "376.95",
+      "pct_change": "-1.19",
+      "volume": "10129597"
+    },
+    {
+      "symbol": "BHARTIARTL",
+      "prev_close": "1818.9",
+      "ltp": "1798",
+      "pct_change": "-1.15",
+      "volume": "3926715"
+    },
+    {
+      "symbol": "HCLTECH",
+      "prev_close": "1168.3",
+      "ltp": "1155.1",
+      "pct_change": "-1.13",
+      "volume": "1971395"
+    },
+    {
+      "symbol": "JSWSTEEL",
+      "prev_close": "1301.1",
+      "ltp": "1286.6",
+      "pct_change": "-1.11",
+      "volume": "1618038"
+    },
+    {
+      "symbol": "EICHERMOT",
+      "prev_close": "7110",
+      "ltp": "7050",
+      "pct_change": "-0.84",
+      "volume": "422329"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "prev_close": "754.2",
+      "ltp": "748.2",
+      "pct_change": "-0.8",
+      "volume": "22116568"
+    },
+    {
+      "symbol": "INDIGO",
+      "prev_close": "4508.8",
+      "ltp": "4473.6",
+      "pct_change": "-0.78",
+      "volume": "788870"
+    },
+    {
+      "symbol": "ULTRACEMCO",
+      "prev_close": "10997",
+      "ltp": "10919",
+      "pct_change": "-0.71",
+      "volume": "424664"
+    },
+    {
+      "symbol": "BAJAJFINSV",
+      "prev_close": "1709.8",
+      "ltp": "1700",
+      "pct_change": "-0.57",
+      "volume": "1414054"
+    },
+    {
+      "symbol": "TMPV",
+      "prev_close": "399.7",
+      "ltp": "397.45",
+      "pct_change": "-0.56",
+      "volume": "9554051"
+    },
+    {
+      "symbol": "RELIANCE",
+      "prev_close": "1303.7",
+      "ltp": "1291.4",
+      "pct_change": "-0.49",
+      "volume": "17785223"
+    }
+  ],
+  "market_breadth": {
+    "advances": 1623,
+    "declines": 1694,
+    "ad_ratio": 0.96
+  },
+  "sectoral_indices": [
+    {
+      "index_name": "NIFTY FINANCIAL SERVICES 25/50",
+      "last": "27327.85",
+      "change": "0.12",
+      "pct_change": 0.12,
+      "pe": "15.87",
+      "pb": "2.72",
+      "dividend_yield": "1.00",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY FMCG",
+      "last": "48302.45",
+      "change": "0.18",
+      "pct_change": 0.18,
+      "pe": "33.23",
+      "pb": "8.36",
+      "dividend_yield": "0.96",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY IT",
+      "last": "29010.30",
+      "change": "-0.99",
+      "pct_change": -0.99,
+      "pe": "19.74",
+      "pb": "5.29",
+      "dividend_yield": "3.10",
+      "trend": "down"
+    },
+    {
+      "index_name": "NIFTY MEDIA",
+      "last": "1502.45",
+      "change": "3.48",
+      "pct_change": 3.48,
+      "pe": "35.66",
+      "pb": "1.58",
+      "dividend_yield": "1.17",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY METAL",
+      "last": "13221.65",
+      "change": "-1.60",
+      "pct_change": -1.6,
+      "pe": "19.65",
+      "pb": "3.36",
+      "dividend_yield": "1.56",
+      "trend": "down"
+    },
+    {
+      "index_name": "NIFTY PHARMA",
+      "last": "24248.05",
+      "change": "0.29",
+      "pct_change": 0.29,
+      "pe": "37.06",
+      "pb": "5.18",
+      "dividend_yield": "0.75",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY PSU BANK",
+      "last": "8259.05",
+      "change": "0.48",
+      "pct_change": 0.48,
+      "pe": "7.98",
+      "pb": "1.18",
+      "dividend_yield": "2.43",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY PRIVATE BANK",
+      "last": "26299.25",
+      "change": "0.23",
+      "pct_change": 0.23,
+      "pe": "17.28",
+      "pb": "2.09",
+      "dividend_yield": "0.61",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY REALTY",
+      "last": "768.90",
+      "change": "0.56",
+      "pct_change": 0.56,
+      "pe": "33.72",
+      "pb": "3.68",
+      "dividend_yield": "0.39",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY HEALTHCARE INDEX",
+      "last": "15409.35",
+      "change": "0.56",
+      "pct_change": 0.56,
+      "pe": "39.93",
+      "pb": "5.68",
+      "dividend_yield": "0.63",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY CONSUMER DURABLES",
+      "last": "35464.55",
+      "change": "0.12",
+      "pct_change": 0.12,
+      "pe": "63.78",
+      "pb": "11.41",
+      "dividend_yield": "0.40",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY OIL & GAS",
+      "last": "11106.20",
+      "change": "-0.48",
+      "pct_change": -0.48,
+      "pe": "8.71",
+      "pb": "1.50",
+      "dividend_yield": "2.48",
+      "trend": "down"
+    },
+    {
+      "index_name": "NIFTY MIDSMALL HEALTHCARE",
+      "last": "47987.50",
+      "change": "0.45",
+      "pct_change": 0.45,
+      "pe": "43.07",
+      "pb": "5.90",
+      "dividend_yield": "0.39",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY FINANCIAL SERVICES EX-BANK",
+      "last": "30138.30",
+      "change": "0.18",
+      "pct_change": 0.18,
+      "pe": "21.51",
+      "pb": "4.13",
+      "dividend_yield": "0.68",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY MIDSMALL FINANCIAL SERVICES",
+      "last": "21389.75",
+      "change": "-0.36",
+      "pct_change": -0.36,
+      "pe": "27.65",
+      "pb": "3.16",
+      "dividend_yield": "0.50",
+      "trend": "down"
+    },
+    {
+      "index_name": "NIFTY MIDSMALL IT & TELECOM",
+      "last": "9556.85",
+      "change": "-0.52",
+      "pct_change": -0.52,
+      "pe": "18.86",
+      "pb": "8.94",
+      "dividend_yield": "0.96",
+      "trend": "down"
+    },
+    {
+      "index_name": "NIFTY CHEMICALS",
+      "last": "29126.95",
+      "change": "0.25",
+      "pct_change": 0.25,
+      "pe": "46.66",
+      "pb": "4.27",
+      "dividend_yield": "0.59",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY500 HEALTHCARE",
+      "last": "19963.85",
+      "change": "0.58",
+      "pct_change": 0.58,
+      "pe": "41.89",
+      "pb": "6.00",
+      "dividend_yield": "0.57",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY REITS & REALTY",
+      "last": "1769.25",
+      "change": "0.30",
+      "pct_change": 0.3,
+      "pe": "47.21",
+      "pb": "2.46",
+      "dividend_yield": "3.31",
+      "trend": "up"
+    },
+    {
+      "index_name": "NIFTY CEMENT",
+      "last": "14438.55",
+      "change": "-0.89",
+      "pct_change": -0.89,
+      "pe": "27.21",
+      "pb": "2.26",
+      "dividend_yield": "0.47",
+      "trend": "down"
+    }
+  ],
+  "indian_indices": [
+    {
+      "index_name": "NIFTY 50",
+      "last": "23366.7",
+      "prev_close": "23416.55",
+      "change": "-49.85",
+      "change_percent": -0.21,
+      "trend": "down",
+      "source": "nse"
+    },
+    {
+      "index_name": "NIFTY BANK",
+      "last": "54496.25",
+      "prev_close": "54307.85",
+      "change": "188.4",
+      "change_percent": 0.35,
+      "trend": "up",
+      "source": "nse"
+    },
+    {
+      "index_name": "NIFTY 500",
+      "last": "22465.35",
+      "prev_close": "22497.7",
+      "change": "-32.35",
+      "change_percent": -0.14,
+      "trend": "down",
+      "source": "nse"
+    },
+    {
+      "index_name": "INDIA VIX",
+      "last": "15.79",
+      "prev_close": "15.89",
+      "change": "-0.1",
+      "change_percent": -0.61,
+      "trend": "down",
+      "source": "nse"
+    }
+  ],
+  "global_cues": {
+    "indices": [
+      {
+        "index_name": "GIFT Nifty",
+        "name": "GIFT Nifty",
+        "last": "23091.00",
+        "prev_close": "23447.0",
+        "change": "-356.00",
+        "change_percent": "-1.52",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "2:44 AM",
+        "updated_date": "06 Jun, 2026",
+        "source": "moneycontrol"
+      },
+      {
+        "index_name": "Dow Jones",
+        "name": "Dow Jones",
+        "last": "50866.78",
+        "prev_close": "51561.93",
+        "change": "-695.15",
+        "change_percent": "-1.35",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "1:29 AM",
+        "updated_date": "06 Jun, 2026",
+        "source": "moneycontrol"
+      },
+      {
+        "index_name": "Nasdaq",
+        "name": "Nasdaq",
+        "last": "25709.43",
+        "prev_close": "26830.96",
+        "change": "-1121.53",
+        "change_percent": "-4.18",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "1:29 AM",
+        "updated_date": "06 Jun, 2026",
+        "source": "moneycontrol"
+      },
+      {
+        "index_name": "S&P 500",
+        "name": "S&P 500",
+        "last": "7383.74",
+        "prev_close": "7584.3099999999995",
+        "change": "-200.57",
+        "change_percent": "-2.64",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "1:29 AM",
+        "updated_date": "06 Jun, 2026",
+        "source": "moneycontrol"
+      },
+      {
+        "index_name": "Hang Seng",
+        "name": "Hang Seng",
+        "last": "24961.95",
+        "prev_close": "25253.4",
+        "change": "-291.45",
+        "change_percent": "-1.15",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "1:30 PM",
+        "updated_date": "05 Jun, 2026",
+        "source": "moneycontrol"
+      },
+      {
+        "index_name": "Nikkei 225",
+        "name": "Nikkei 225",
+        "last": "66588.12",
+        "prev_close": "67470.69",
+        "change": "-882.57",
+        "change_percent": "-1.31",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "11:30 AM",
+        "updated_date": "05 Jun, 2026",
+        "source": "moneycontrol"
+      },
+      {
+        "index_name": "KOSPI",
+        "name": "KOSPI",
+        "last": "8160.59",
+        "prev_close": "8639.41",
+        "change": "-478.82",
+        "change_percent": "-5.54",
+        "trend": "down",
+        "market_state": "closed",
+        "market_time": "12:00 PM",
+        "updated_date": "05 Jun, 2026",
+        "source": "moneycontrol"
+      }
+    ],
+    "commodities_currency": []
+  },
+  "option_chain_summary": {
+    "NIFTY": {
+      "expiry": "09-Jun-2026",
+      "pcr": 0.7,
+      "max_call_oi_strike": 24000,
+      "max_call_oi": 265524,
+      "max_put_oi_strike": 22500,
+      "max_put_oi": 157007,
+      "underlying_value": 23366.7
+    },
+    "BANKNIFTY": {
+      "expiry": "09-Jun-2026",
+      "pcr": null,
+      "max_call_oi_strike": null,
+      "max_call_oi": null,
+      "max_put_oi_strike": null,
+      "max_put_oi": null,
+      "underlying_value": 0
+    }
+  },
+  "source_status": {
+    "nse_session": "failed: HTTP Error 403: Forbidden",
+    "nse_fii_dii": "ok",
+    "nse_top_gainers": "ok",
+    "nse_top_losers": "ok",
+    "nse_market_breadth": "ok",
+    "nse_sectoral_indices": "ok",
+    "nse_indian_indices": "ok",
+    "nse_option_chain": "ok",
+    "moneycontrol_global_indices": "ok",
+    "google_finance_context": "empty"
+  },
+  "_meta": {
+    "collector": "PremarketDataCollector",
+    "source_status": {
+      "nse_session": "failed: HTTP Error 403: Forbidden",
+      "nse_fii_dii": "ok",
+      "nse_top_gainers": "ok",
+      "nse_top_losers": "ok",
+      "nse_market_breadth": "ok",
+      "nse_sectoral_indices": "ok",
+      "nse_indian_indices": "ok",
+      "nse_option_chain": "ok",
+      "moneycontrol_global_indices": "ok",
+      "google_finance_context": "empty"
+    }
+  }
+}

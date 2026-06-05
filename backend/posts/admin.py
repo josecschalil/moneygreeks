@@ -13,29 +13,46 @@ from .models import (
     SectorPerformance,
     MarketBreadth,
     NewsletterSubscriber,
+    OptionChainSummary,
 )
 
 @admin.register(MarketReport)
 class MarketReportAdmin(admin.ModelAdmin):
-    list_display = ("title", "report_date", "created_at")
-    list_filter = ("report_date",)
+    list_display = ("title", "report_date", "status", "report_type", "quality_score", "created_at")
+    list_filter = ("status", "report_type", "report_date")
     search_fields = ("title", "slug")
     prepopulated_fields = {"slug": ("title",)}
     ordering = ("-report_date",)
+    actions = ("mark_as_published", "mark_as_draft")
 
     readonly_fields = ("created_at", "updated_at")
 
     fieldsets = (
         ("Basic Info", {
-            "fields": ("title", "slug", "report_date")
+            "fields": ("title", "slug", "report_date", "status", "image_url")
+        }),
+        ("Quality", {
+            "fields": ("quality_score", "report_type", "quality_notes")
         }),
         ("Conclusion", {
             "fields": ("overall_conclusion",)
+        }),
+        ("Source Data", {
+            "classes": ("collapse",),
+            "fields": ("raw_data",)
         }),
         ("Timestamps", {
             "fields": ("created_at", "updated_at")
         }),
     )
+
+    @admin.action(description="Mark selected reports as published")
+    def mark_as_published(self, request, queryset):
+        queryset.update(status=MarketReport.STATUS_PUBLISHED)
+
+    @admin.action(description="Mark selected reports as draft")
+    def mark_as_draft(self, request, queryset):
+        queryset.update(status=MarketReport.STATUS_DRAFT)
 @admin.register(GlobalMarketAnalysis)
 class GlobalMarketAnalysisAdmin(admin.ModelAdmin):
     list_display = ("report",)
@@ -91,6 +108,16 @@ class SectorPerformanceAdmin(admin.ModelAdmin):
 @admin.register(MarketBreadth)
 class MarketBreadthAdmin(admin.ModelAdmin):
     readonly_fields = [f.name for f in MarketBreadth._meta.fields]
+
+
+@admin.register(OptionChainSummary)
+class OptionChainSummaryAdmin(admin.ModelAdmin):
+    list_display = ("symbol", "report", "expiry", "pcr", "max_call_oi_strike", "max_put_oi_strike")
+    list_filter = ("symbol", "expiry")
+    search_fields = ("symbol", "report__title")
+    readonly_fields = [f.name for f in OptionChainSummary._meta.fields]
+
+
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ("title", "created_at")
