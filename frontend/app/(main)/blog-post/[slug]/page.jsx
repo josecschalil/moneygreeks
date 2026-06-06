@@ -55,11 +55,31 @@ export default async function BlogPostPage({ params }) {
 
   const post = await getBlogPost(slug);
 
-  const formattedDate = new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(post.created_at));
+  // Format date deterministically from YYYY-MM-DD to avoid timezone differences
+  function formatDate(dateStr) {
+    if (!dateStr) return dateStr;
+    const parts = String(dateStr).split("-");
+    if (parts.length < 3) return dateStr;
+    const [year, month, day] = parts.map((p) => parseInt(p, 10));
+    if (!year || !month || !day) return dateStr;
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    return `${monthNames[month - 1]} ${day}, ${year}`;
+  }
+
+  const formattedDate = formatDate(post.created_at);
 
   return (
     <div className="min-h-screen bg-gray-50">

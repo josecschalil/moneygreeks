@@ -18,11 +18,26 @@ type BlogPost = {
   author: Author;
 };
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  if (!dateStr) return dateStr;
+  const parts = String(dateStr).split("-");
+  if (parts.length < 3) return dateStr;
+  const [year, month, day] = parts.map((p) => parseInt(p, 10));
+  if (!year || !month || !day) return dateStr;
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return `${day} ${monthNames[month - 1]} ${year}`;
 }
 
 /* =========================
