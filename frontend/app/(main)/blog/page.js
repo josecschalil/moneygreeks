@@ -171,14 +171,29 @@ const glossary = [
 ];
 
 function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  if (Number.isNaN(date.getTime())) return dateStr;
+  if (!dateStr) return dateStr;
+  // Parse YYYY-MM-DD (or ISO-like) without relying on Date parsing
+  const parts = String(dateStr).split("-");
+  if (parts.length < 3) return dateStr;
+  const [year, month, day] = parts.map((p) => parseInt(p, 10));
+  if (!year || !month || !day) return dateStr;
 
-  return date.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  return `${day} ${monthNames[month - 1]} ${year}`;
 }
 
 async function fetchJson(path, fallback) {
