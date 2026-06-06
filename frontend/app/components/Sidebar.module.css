@@ -1,0 +1,243 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 260px;
+  flex-shrink: 0;
+}
+
+/* ── Tablet: sidebar goes full-width in 2-col grid ── */
+@media (max-width: 960px) {
+  .sidebar {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+/* ── Mobile: single column ── */
+@media (max-width: 560px) {
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.cardTitle {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+/* Institutional Activity */
+.activityRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.activityName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.activitySub {
+  font-size: 10px;
+  color: #9ca3af;
+  margin-top: 1px;
+}
+
+.activityRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.activityAmount {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.red { color: #dc2626; }
+.green { color: #16a34a; }
+
+.badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+}
+
+.badgeRed {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.badgeGreen {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 8px 0;
+}
+
+.viewLink {
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.viewLink:hover { text-decoration: underline; }
+
+/* Economic Calendar */
+.calendarRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 4px 0;
+}
+
+.dateBlock {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 4px 8px;
+  text-align: center;
+  min-width: 40px;
+  flex-shrink: 0;
+}
+
+.month {
+  font-size: 9px;
+  font-weight: 600;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+}
+
+.day {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.1;
+}
+
+.calendarInfo { flex: 1; }
+
+.calendarEvent {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.calendarMeta {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* IPO Center */
+.ipoBox {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.ipoTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.ipoName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.ipoGmp {
+  font-size: 12px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.ipoStatus { margin-bottom: 8px; }
+
+.openBadge {
+  background: #16a34a;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+}
+
+.ipoMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.viewAllBtn {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: center;
+}
+
+.viewAllBtn:hover { background: #f3f4f6; }
+
+/* Trending Tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.tag:hover { background: #e5e7eb; }

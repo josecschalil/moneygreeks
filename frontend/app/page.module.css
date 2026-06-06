@@ -1,0 +1,77 @@
+/* ─────────────────────────────────────────────
+   .mi  =  MarketInsight scoped root
+   All resets live here instead of globals.css
+   so nothing leaks into the host project.
+───────────────────────────────────────────── */
+.mi *,
+.mi *::before,
+.mi *::after {
+  box-sizing: border-box;
+
+}
+
+.mi {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #111827;
+  background: #ffffff;
+}
+
+.mi a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.mi button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+.mi ul {
+  list-style: none;
+}
+
+/* ── Layout ── */
+.main {
+  padding: 24px 0 0 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.layout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.premiumBannerWrap {
+  margin-top: 20px;
+}
+
+/* ── Tablet (≤ 960px): sidebar drops below main content ── */
+@media (max-width: 960px) {
+  .layout {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 700px) {
+  .container { padding: 0 16px; }
+  .main { padding: 16px 0 0; }
+  .layout { gap: 16px; }
+  .premiumBannerWrap { margin-top: 16px; }
+}

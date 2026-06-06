@@ -1,0 +1,182 @@
+/* ── Navbar ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+  font-family: Georgia, serif;
+  flex-shrink: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+}
+
+.navLink {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  white-space: nowrap;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s;
+}
+
+.navLink:hover { color: #111827; }
+
+.navLink.active {
+  color: #111827;
+  border-bottom: 2px solid #111827;
+  font-weight: 600;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 12px;
+  background: #f9fafb;
+  color: #9ca3af;
+  font-size: 12px;
+  width: 220px;
+  cursor: text;
+}
+
+.searchPlaceholder {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.loginBtn {
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.loginBtn:hover {
+  background: #111827;
+  color: #fff;
+}
+
+/* Hamburger — hidden on desktop */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px;
+  margin-left: auto;
+  cursor: pointer;
+  background: none;
+  border: none;
+  flex-shrink: 0;
+}
+
+.bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #374151;
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.bar1Open { transform: translateY(7px) rotate(45deg); }
+.bar2Open { opacity: 0; }
+.bar3Open { transform: translateY(-7px) rotate(-45deg); }
+
+.mobileActions { display: none; }
+
+/* ── Tablet (≤ 900px) ── */
+@media (max-width: 900px) {
+  .inner { gap: 16px; }
+  .searchBox { width: 160px; }
+  .nav { gap: 14px; }
+  .navLink { font-size: 12px; }
+}
+
+/* ── Mobile (≤ 700px) ── */
+@media (max-width: 700px) {
+  .hamburger { display: flex; }
+  .right { display: none; }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    z-index: 100;
+    padding: 8px 0 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  .navOpen { display: flex; }
+
+  .navLink {
+    padding: 12px 24px;
+    width: 100%;
+    border-bottom: none;
+    font-size: 14px;
+  }
+
+  .navLink.active {
+    border-bottom: none;
+    border-left: 3px solid #111827;
+    padding-left: 21px;
+  }
+
+  .mobileActions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 24px 0;
+    width: 100%;
+  }
+
+  .mobileActions .searchBox { width: 100%; }
+  .mobileActions .loginBtn { width: 100%; text-align: center; }
+}

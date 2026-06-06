@@ -1,0 +1,130 @@
+.banner {
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a1929 0%, #0f2a1e 50%, #0a1929 100%);
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-height: 200px;
+  margin-top: 32px;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  padding: 36px 40px;
+  max-width: 500px;
+}
+
+.tag {
+  font-size: 10px;
+  font-weight: 700;
+  color: #4ade80;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  font-family: Georgia, serif;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.desc {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.cta:hover { background: #15803d; }
+
+.visual {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  overflow: hidden;
+}
+
+.chartOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #0a1929 0%, transparent 100%);
+  z-index: 1;
+}
+
+.circleGlow {
+  position: absolute;
+  right: 20%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 2px solid rgba(74,222,128,0.2);
+  box-shadow:
+    0 0 40px rgba(74,222,128,0.1),
+    0 0 80px rgba(74,222,128,0.05),
+    inset 0 0 40px rgba(74,222,128,0.05);
+}
+
+.chartLines {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 0 20px 0 40px;
+  opacity: 0.4;
+}
+
+.chartLine {
+  flex: 1;
+  background: linear-gradient(to top, #4ade80 0%, #22c55e 50%, transparent 100%);
+  border-radius: 2px 2px 0 0;
+  min-width: 8px;
+}
+
+/* ── Tablet ── */
+@media (max-width: 700px) {
+  .visual { width: 35%; }
+  .content { padding: 28px 24px; max-width: 65%; }
+  .title { font-size: 22px; }
+  .desc { font-size: 12px; margin-bottom: 16px; }
+}
+
+/* ── Mobile: hide decorative visual, full-width content ── */
+@media (max-width: 520px) {
+  .banner { min-height: unset; }
+  .visual { display: none; }
+  .content {
+    padding: 24px 20px;
+    max-width: 100%;
+  }
+  .title { font-size: 20px; 
+  margin-top: 24px;}
+}
