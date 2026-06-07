@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { TrendingUp, Activity, Globe, Users, ArrowRight } from "lucide-react";
-import NewsletterModal from "../../components/NewsLetterModal";
+import NewsletterModal from "../components/NewsLetterModal";
 export default function AboutUs() {
   const [showNewsletterModal, setShowNewsletterModal] = React.useState(false);
   return (

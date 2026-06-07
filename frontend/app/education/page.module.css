@@ -1,0 +1,809 @@
+/* =============================================
+   CSS Variables (mirrors Tailwind config)
+   ============================================= */
+:root {
+  --primary: #041627;
+  --on-primary: #ffffff;
+  --primary-container: #1a2b3c;
+  --on-primary-container: #8192a7;
+  --primary-fixed-dim: #b7c8de;
+  --secondary: #006c47;
+  --on-secondary: #ffffff;
+  --secondary-container: #8af5be;
+  --on-secondary-container: #00714b;
+  --secondary-fixed-dim: #71dba6;
+  --tertiary: #051629;
+  --tertiary-fixed-dim: #b7c8e1;
+  --surface: #f7f9fb;
+  --surface-bright: #f7f9fb;
+  --surface-dim: #d8dadc;
+  --surface-variant: #e0e3e5;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f2f4f6;
+  --surface-container: #eceef0;
+  --surface-container-high: #e6e8ea;
+  --surface-container-highest: #e0e3e5;
+  --on-surface: #191c1e;
+  --on-surface-variant: #44474c;
+  --on-background: #191c1e;
+  --background: #f7f9fb;
+  --outline: #74777d;
+  --outline-variant: #c4c6cd;
+  --inverse-surface: #2d3133;
+  --inverse-on-surface: #eff1f3;
+  --error: #ba1a1a;
+  --on-tertiary-container: #8292aa;
+}
+
+/* =============================================
+   Global Reset / Body
+   ============================================= */
+.body {
+  background-color: var(--surface);
+  color: var(--on-background);
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* =============================================
+   Main Layout
+   ============================================= */
+.main {
+  margin-top: 25px;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 64px 48px;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 48px;
+  margin-top: 32px;
+}
+
+/* =============================================
+   Ad Placeholders
+   ============================================= */
+.adTopWrapper {
+  padding-bottom: 24px;
+  padding-top: 16px;
+}
+
+.adPlaceholder {
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--surface-container-high);
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.adPlaceholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--surface-dim) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.5;
+}
+
+.adTopWrapper .adPlaceholder {
+  height: 100px;
+}
+
+.adLabel {
+  position: relative;
+  z-index: 10;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--outline);
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.adLabelCenter {
+  text-align: center;
+  padding: 0 32px;
+}
+
+.adMid {
+  margin-bottom: 0;
+}
+
+.adMidInner {
+  height: 140px;
+}
+
+.adSidebar {
+  height: 450px;
+}
+
+/* =============================================
+   Hero Section
+   ============================================= */
+.hero {
+  padding: 32px 0 24px;
+  border-bottom: 1px solid var(--surface-variant);
+  margin-bottom: 8px;
+}
+
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 560px;
+}
+
+.heroEyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.heroTitle {
+  font-family: "Source Serif 4", serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--primary);
+  margin: 0;
+}
+
+.heroSubtitle {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+/* =============================================
+   Main Content Column
+   ============================================= */
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* =============================================
+   Featured Section
+   ============================================= */
+.featuredSection {
+  margin-bottom: 0;
+}
+
+.featuredCard {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03);
+  height: 400px;
+}
+
+.featuredCard:hover .featuredImg {
+  transform: scale(1.05);
+}
+
+.featuredImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s ease;
+}
+
+.featuredOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--primary), rgba(4, 22, 39, 0.2), transparent);
+}
+
+.featuredContent {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 48px;
+  width: 100%;
+}
+
+.featuredBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  background-color: var(--secondary);
+  color: var(--on-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  margin-bottom: 24px;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.featuredTitle {
+  font-family: "Source Serif 4", serif;
+  font-size: 40px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.featuredDesc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 18px;
+  max-width: 576px;
+  margin-bottom: 24px;
+}
+
+.featuredMeta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+}
+
+/* =============================================
+   Section Headers
+   ============================================= */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--surface-variant);
+  padding-bottom: 12px;
+}
+
+.sectionHeaderLg {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+}
+
+.sectionTitle {
+  font-family: "Source Serif 4", serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.sectionTitleLg {
+  font-size: 28px;
+}
+
+.viewAll {
+  display: flex;
+  align-items: center;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  font-family: "Hanken Grotesk", sans-serif;
+  transition: opacity 0.2s;
+}
+
+.viewAll:hover {
+  opacity: 0.7;
+}
+
+/* =============================================
+   Card Grid
+   ============================================= */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card {
+  background-color: var(--surface-container-lowest);
+  border: 1px solid rgba(196, 198, 205, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0px 12px 32px rgba(4, 22, 39, 0.08);
+  transform: translateY(-4px);
+}
+
+.card:hover .cardImg {
+  transform: scale(1.05);
+}
+
+.cardImgWrapper {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--primary-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImgPlaceholder {
+  background-color: var(--primary-container);
+}
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.cardGrayscale .cardImg {
+  filter: grayscale(1);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.cardGrayscale:hover .cardImg {
+  filter: grayscale(0);
+}
+
+.cardBody {
+  padding: 16px;
+}
+
+.cardTag {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  margin-bottom: 8px;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.cardTitle {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 15px;
+  line-height: 1.35;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--outline);
+  font-size: 11px;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+/* =============================================
+   Options List Items
+   ============================================= */
+.listGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.listItem {
+  background-color: var(--surface-container-lowest);
+  border: 1px solid rgba(196, 198, 205, 0.2);
+  border-radius: 16px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.listItem:hover {
+  box-shadow: 0px 12px 32px rgba(4, 22, 39, 0.08);
+  transform: translateY(-4px);
+}
+
+.listItem:hover .listTitle {
+  color: var(--secondary);
+}
+
+.listItem:hover .listChevron {
+  transform: translateX(4px);
+}
+
+.listItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.listIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  background-color: rgba(0, 108, 71, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.listTitle {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 18px;
+  margin-bottom: 4px;
+  transition: color 0.2s;
+}
+
+.listDesc {
+  color: var(--on-surface-variant);
+  font-size: 14px;
+}
+
+.listItemRight {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.listMeta {
+  color: var(--outline);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  font-family: "Hanken Grotesk", sans-serif;
+  white-space: nowrap;
+}
+
+.listChevron {
+  color: var(--outline);
+  transition: transform 0.2s;
+}
+
+/* =============================================
+   Sidebar
+   ============================================= */
+.sidebar {
+  /* Takes up the second column */
+}
+
+.sidebarSticky {
+  position: sticky;
+  top: 112px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* =============================================
+   Intelligence Briefing Card
+   ============================================= */
+.briefingCard {
+  background-color: var(--surface-container-lowest);
+  border-radius: 16px;
+  padding: 32px;
+  border: 1px solid rgba(196, 198, 205, 0.3);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.briefingTitle {
+  font-family: "Source Serif 4", serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 32px;
+}
+
+.briefingList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.briefingItem {
+  cursor: pointer;
+}
+
+.briefingItem a {
+  display: block;
+  text-decoration: none;
+}
+
+.briefingItem:hover .briefingItemTitle {
+  color: var(--secondary);
+}
+
+.briefingTag {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--secondary);
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.briefingItemTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.35;
+  margin-top: 8px;
+  transition: color 0.2s;
+}
+
+.briefingTime {
+  font-size: 12px;
+  color: var(--outline);
+  margin-top: 8px;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+/* =============================================
+   Newsletter Card
+   ============================================= */
+.newsletter {
+  background-color: var(--primary);
+  border-radius: 16px;
+  padding: 32px;
+  color: var(--on-primary);
+}
+
+.newsletterTitle {
+  font-family: "Source Serif 4", serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--on-primary);
+}
+
+.newsletterDesc {
+  font-size: 14px;
+  color: var(--on-primary-container);
+  margin-bottom: 24px;
+}
+
+.newsletterForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.newsletterInput {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #ffffff;
+  outline: none;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.newsletterInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.newsletterInput:focus {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.newsletterBtn {
+  background-color: var(--on-primary);
+  color: var(--primary);
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 9999px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  font-family: "Hanken Grotesk", sans-serif;
+  transition: background-color 0.2s;
+}
+
+.newsletterBtn:hover {
+  background-color: var(--secondary-container);
+}
+
+/* =============================================
+   Responsive
+   ============================================= */
+@media (max-width: 1024px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .nav {
+    padding: 0 24px;
+  }
+
+  .navLinks {
+    display: none;
+  }
+
+  .main {
+    padding: 0 24px 48px;
+  }
+
+  .footer {
+    padding: 48px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 32px;
+  }
+
+  .featuredTitle {
+    font-size: 26px;
+  }
+
+  .featuredContent {
+    padding: 24px;
+  }
+
+  .featuredCard {
+    height: 320px;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .listItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 24px;
+  }
+
+  .listMeta {
+    display: none;
+  }
+
+  .searchWrapper {
+    display: none;
+  }
+
+  .footerTop {
+    flex-direction: column;
+  }
+
+  .footerLinks {
+    gap: 32px;
+  }
+}
+/* =============================================
+   Options Card (Square)
+   ============================================= */
+.optionCard {
+  background-color: var(--surface-container-lowest);
+  border: 1px solid rgba(196, 198, 205, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.optionCard:hover {
+  box-shadow: 0px 12px 32px rgba(4, 22, 39, 0.08);
+  transform: translateY(-4px);
+}
+
+.optionCard:hover .optionCardTitle {
+  color: var(--secondary);
+}
+
+.optionCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.optionCardIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: rgba(0, 108, 71, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.optionCardTime {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--outline);
+  font-family: "Hanken Grotesk", sans-serif;
+  white-space: nowrap;
+}
+
+.optionCardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.optionCardTitle {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  margin-top: 6px;
+  transition: color 0.2s;
+}
+
+.optionCardDesc {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.optionCardFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  flex-shrink: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--surface-variant);
+}
+
+.optionCardArrow {
+  font-size: 20px;
+  color: var(--secondary);
+  font-weight: 600;
+}
