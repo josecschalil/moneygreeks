@@ -495,12 +495,6 @@
   transition: transform 0.2s;
 }
 
-/* =============================================
-   Sidebar
-   ============================================= */
-.sidebar {
-  /* Takes up the second column */
-}
 
 .sidebarSticky {
   position: sticky;
