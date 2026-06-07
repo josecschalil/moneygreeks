@@ -1,250 +1,211 @@
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BarChart3,
-  BookOpen,
-  CalendarDays,
-  CheckCircle2,
-  ClipboardCheck,
-  Clock3,
-  Flame,
-  Gauge,
-  Landmark,
-  LineChart,
-  Newspaper,
-  PieChart,
-  ShieldCheck,
-  Target,
-  TrendingDown,
-  TrendingUp,
-  WalletCards,
-} from "lucide-react";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
 
-const fallbackPremarket = [
+// ─── Demo / Fallback Data ────────────────────────────────────────────────────
+
+const demoPremarket = [
   {
-    id: 1,
-    title: "Pre-Market Report: Nifty, Bank Nifty and Global Cues",
-    slug: "pre-market-report-nifty-bank-nifty-global-cues",
+    id: 101,
+    title: "Opening Gap Analysis: Global Spillovers",
+    slug: "opening-gap-analysis-global-spillovers",
     report_date: "2026-06-04",
-    image_url: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a",
     overall_conclusion:
-      "Start the session with a neutral-to-positive bias while tracking overnight global cues, FII/DII flows, India VIX, and the first 30-minute opening range before taking directional trades.",
+      "Identifying key support levels for Nifty 50 as global cues remain mixed. Our analysts provide a technical breakdown ahead of the opening bell, highlighting critical resistance zones and potential breakout points.",
+    report_type: "Premarket",
+    read_time: 8,
   },
   {
-    id: 2,
-    title: "Opening Bell Setup: Watch Support, Resistance and Volume",
-    slug: "opening-bell-support-resistance-volume",
+    id: 102,
+    title: "Pre-Open Checklist: Key Levels to Watch",
+    slug: "pre-open-checklist-key-levels",
     report_date: "2026-06-03",
-    image_url: "https://images.unsplash.com/photo-1642790106117-e829e14a795f",
     overall_conclusion:
       "Index strength remains stock-specific. Prefer clean breakouts with volume confirmation and keep position size light near event risk.",
+    report_type: "Premarket",
+    read_time: 5,
   },
   {
-    id: 3,
-    title: "Weekly Options Map: Key Strikes and Expiry Risk",
-    slug: "weekly-options-map-expiry-risk",
+    id: 103,
+    title: "Nifty Bank: Pre-Market Bias and Range",
+    slug: "nifty-bank-pre-market-bias-range",
     report_date: "2026-06-02",
-    image_url: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f",
     overall_conclusion:
-      "Options data suggests a defined range. Avoid chasing late moves and monitor unwinding at heavy call and put writing zones.",
+      "Banking index is approaching a key confluence zone. Watch for participation from PSU banks before taking directional bets.",
+    report_type: "Premarket",
+    read_time: 6,
+  },
+  {
+    id: 104,
+    title: "European Market Open: Currency Impacts",
+    slug: "european-market-open-currency-impacts",
+    report_date: "2026-06-01",
+    overall_conclusion:
+      "Currency volatility continues to weigh on export-heavy sectors. Watch the DXY and crude oil correlation closely.",
+    report_type: "Premarket",
+    read_time: 7,
+  },
+  {
+    id: 105,
+    title: "Asian Cues and Domestic Triggers",
+    slug: "asian-cues-domestic-triggers",
+    report_date: "2026-05-30",
+    overall_conclusion:
+      "Asian markets opened mixed. Domestic triggers include RBI minutes and quarterly earnings from large-cap financials.",
+    report_type: "Premarket",
+    read_time: 6,
   },
 ];
 
-const fallbackPosts = [
+const demoPostmarket = [
   {
-    id: 11,
-    slug: "how-to-build-a-trading-day-routine",
-    title: "How to Build a Trading Day Routine",
-    subtitle:
-      "A practical routine for scanning news, index structure, sector rotation, watchlists, entries, exits and post-market review.",
-    category: "Trading Process",
-    featured_image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
-    created_at: "2026-06-01",
+    id: 201,
+    title: "Daily Closing Pulse: SENSEX & NIFTY Analysis",
+    slug: "daily-closing-pulse-sensex-nifty",
+    report_date: "2026-06-04",
+    overall_conclusion:
+      "Global indices witnessed a minor pullback as treasury yields hit a 3-month high. Local markets remained resilient with mid-caps showing significant strength in auto and healthcare sectors.",
+    report_type: "Post-Market",
+    read_time: 10,
   },
   {
-    id: 12,
-    slug: "risk-management-rules-for-intraday-traders",
-    title: "Risk Management Rules for Intraday Traders",
-    subtitle:
-      "Position sizing, stop-loss discipline, daily loss limits and trade journaling rules that keep traders in the game.",
-    category: "Risk",
-    featured_image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f",
-    created_at: "2026-05-29",
+    id: 202,
+    title: "Sectoral Rotation Post Close: What Moved and Why",
+    slug: "sectoral-rotation-post-close",
+    report_date: "2026-06-03",
+    overall_conclusion:
+      "IT and pharma outperformed while metals saw profit booking. FII activity turned net buyers for the second consecutive session.",
+    report_type: "Post-Market",
+    read_time: 8,
   },
   {
-    id: 13,
-    slug: "fii-dii-data-explained",
-    title: "FII and DII Data Explained",
-    subtitle:
-      "How institutional flows affect market sentiment, index direction, sector leadership and short-term volatility.",
-    category: "Market Basics",
-    featured_image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40",
-    created_at: "2026-05-26",
+    id: 203,
+    title: "Post-Market Wrap: Breadth and Volume Study",
+    slug: "post-market-wrap-breadth-volume",
+    report_date: "2026-06-02",
+    overall_conclusion:
+      "Advance-decline ratio favoured bulls at 2:1. Delivery volumes in large caps suggest institutional accumulation near support.",
+    report_type: "Post-Market",
+    read_time: 7,
   },
   {
-    id: 14,
-    slug: "support-resistance-and-market-structure",
-    title: "Support, Resistance and Market Structure",
-    subtitle:
-      "Learn how traders mark key levels, identify false breakouts and separate clean setups from noisy price action.",
-    category: "Technical Analysis",
-    featured_image: "https://images.unsplash.com/photo-1543286386-2e659306cd6c",
-    created_at: "2026-05-20",
-  },
-];
-
-const marketPulse = [
-  {
-    label: "Global Cues",
-    value: "Mixed",
-    tone: "bg-amber-100 text-amber-800",
-    icon: Landmark,
+    id: 204,
+    title: "Closing Bell: Options OI Shift Analysis",
+    slug: "closing-bell-options-oi-shift",
+    report_date: "2026-06-01",
+    overall_conclusion:
+      "Call unwinding at 22500 and put writing at 22000 suggest a shift in range. Weekly expiry setup points to a bullish bias.",
+    report_type: "Post-Market",
+    read_time: 9,
   },
   {
-    label: "India VIX",
-    value: "Watch",
-    tone: "bg-rose-100 text-rose-800",
-    icon: Gauge,
-  },
-  {
-    label: "Sector Bias",
-    value: "Rotational",
-    tone: "bg-cyan-100 text-cyan-800",
-    icon: PieChart,
-  },
-  {
-    label: "Risk Mode",
-    value: "Selective",
-    tone: "bg-emerald-100 text-emerald-800",
-    icon: ShieldCheck,
+    id: 205,
+    title: "End of Day Review: Momentum and Reversal Signals",
+    slug: "end-of-day-review-momentum-reversal",
+    report_date: "2026-05-30",
+    overall_conclusion:
+      "Several momentum stocks showed reversal candles at key resistance. Watchlist for tomorrow includes mid-cap IT and select PSU banks.",
+    report_type: "Post-Market",
+    read_time: 6,
   },
 ];
 
-const morningChecklist = [
-  "Review overnight US, Asian markets and commodity moves.",
-  "Mark Nifty and Bank Nifty support, resistance and gap zones.",
-  "Check FII/DII flows, India VIX and major corporate actions.",
-  "Shortlist 6-10 liquid stocks from leading and weak sectors.",
-  "Define entry, stop-loss, target and max loss before the bell.",
-];
-
-const toolModules = [
+const trendingAnalysis = [
   {
-    title: "Pre-Market Briefing",
-    text: "A daily opening-bell note covering global cues, indices, flows, volatility and likely trading ranges.",
-    icon: Newspaper,
-    href: "/pre-market-archive",
+    category: "Macro",
+    categoryHex: "#ba1a1a",
+    date: "Jun 4",
+    title: "Interest Rate Trajectory: Fed Signals",
   },
   {
-    title: "Watchlist Builder",
-    text: "Create a focused list from sector leaders, earnings names, high-volume movers and clean chart structures.",
-    icon: Target,
-    href: "#watchlist",
+    category: "Sector Watch",
+    categoryHex: "#006c47",
+    date: "Jun 3",
+    title: "IT Sector Rebound: Earnings Surprise",
   },
   {
-    title: "Risk Desk",
-    text: "Plan position size, daily loss limit, trade count and stop discipline before emotions enter the trade.",
-    icon: ShieldCheck,
-    href: "#risk",
-  },
-  {
-    title: "Learning Tracks",
-    text: "Move from basics to practical execution with guides on options, price action, flows and psychology.",
-    icon: BookOpen,
-    href: "#learn",
+    category: "Weekly Recap",
+    categoryHex: "#041627",
+    date: "Jun 2",
+    title: "Volatility Index Hits Yearly Lows",
   },
 ];
 
-const watchlistIdeas = [
-  {
-    name: "Index Leaders",
-    detail: "Stocks outperforming Nifty with rising volume",
-    icon: TrendingUp,
-  },
-  {
-    name: "Weakness Basket",
-    detail: "Breakdowns below support with poor sector breadth",
-    icon: TrendingDown,
-  },
-  {
-    name: "Event Radar",
-    detail: "Earnings, RBI policy, Fed cues, crude and currency moves",
-    icon: CalendarDays,
-  },
-  {
-    name: "Momentum Scan",
-    detail: "Gap-up strength that holds above VWAP after the open",
-    icon: Flame,
-  },
+const archiveMonths = [
+  { label: "June 2026", count: 12, slug: "#" },
+  { label: "May 2026", count: 30, slug: "#" },
+  { label: "April 2026", count: 28, slug: "#" },
+  { label: "March 2026", count: 31, slug: "#" },
+  { label: "February 2026", count: 26, slug: "#" },
 ];
 
-const strategyPlaybooks = [
-  {
-    name: "Opening Range Breakout",
-    use: "Best when index breadth is strong and the first 15-30 minutes form a tight range.",
-    rule: "Enter only after confirmation, keep stop below range, avoid the first candle chase.",
-  },
-  {
-    name: "Pullback to Level",
-    use: "Useful on trending days when price retests a breakout zone or VWAP with lower selling pressure.",
-    rule: "Wait for rejection, define stop first, and scale only after price moves in favor.",
-  },
-  {
-    name: "Range Fade",
-    use: "Works on low-volatility sessions when price repeatedly rejects well-marked support and resistance.",
-    rule: "Trade smaller, book faster, and step aside if the range breaks with volume.",
-  },
+const navLinks = [
+  { label: "Market Data", href: "/market-data" },
+  { label: "Intelligence Hub", href: "/intelligence-hub" },
+  { label: "Reports", href: "/reports" },
+  { label: "Community", href: "/community" },
 ];
 
-const glossary = [
-  [
-    "Open Interest",
-    "Outstanding derivative contracts that help read participation and possible pressure zones.",
-  ],
-  [
-    "VWAP",
-    "Volume-weighted average price, often used by intraday traders as a fair-value reference.",
-  ],
-  [
-    "Breadth",
-    "The number of advancing versus declining stocks, useful for confirming index strength.",
-  ],
-  [
-    "Gap Zone",
-    "The price area created when the market opens away from the previous close.",
-  ],
-];
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function formatDate(dateStr) {
-  if (!dateStr) return dateStr;
-  // Parse YYYY-MM-DD (or ISO-like) without relying on Date parsing
+  if (!dateStr) return "";
   const parts = String(dateStr).split("-");
   if (parts.length < 3) return dateStr;
   const [year, month, day] = parts.map((p) => parseInt(p, 10));
   if (!year || !month || !day) return dateStr;
-
   const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
     "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
+  return `${monthNames[month - 1]} ${day}`;
+}
 
-  return `${day} ${monthNames[month - 1]} ${year}`;
+function getTypeIcon(type) {
+  if (!type) return "article";
+  const t = type.toLowerCase();
+  if (t.includes("pre")) return "light_mode";
+  if (t.includes("post")) return "dark_mode";
+  if (t.includes("weekly")) return "article";
+  return "article";
+}
+
+function getTypeColor(type) {
+  if (!type) return "#041627";
+  const t = type.toLowerCase();
+  if (t.includes("pre")) return "#006c47";
+  return "#041627";
+}
+
+function truncateText(text, length = 110) {
+  if (!text) return "";
+  if (text.length <= length) return text;
+  return text.substring(0, length).trim() + "...";
+}
+
+// Fill array to minCount using demo items, avoiding id duplicates
+function fillWithDemo(liveData, demoData, minCount) {
+  const result = [...liveData];
+  const existingIds = new Set(result.map((r) => r.id));
+  for (const item of demoData) {
+    if (result.length >= minCount) break;
+    if (!existingIds.has(item.id)) {
+      result.push(item);
+      existingIds.add(item.id);
+    }
+  }
+  return result;
 }
 
 async function fetchJson(path, fallback) {
@@ -258,438 +219,818 @@ async function fetchJson(path, fallback) {
   }
 }
 
+// ─── Metadata ────────────────────────────────────────────────────────────────
+
 export const metadata = {
-  title: "Finance Blog and Trading Day Desk | MoneyGreeks",
+  title: "Market Reports | MarketInsight",
   description:
-    "Daily pre-market reports, trader checklists, market insights, watchlist ideas, risk planning and finance education from MoneyGreeks.",
+    "Institutional-grade daily analysis covering pre-market and post-market movements, macroeconomic catalysts and sector intelligence.",
 };
 
-export default async function BlogPage() {
-  const [premarketData, blogPostData] = await Promise.all([
+// ─── Page ────────────────────────────────────────────────────────────────────
+
+export default async function ReportsPage({ searchParams }) {
+  // Await searchParams for standard compatibility with Next.js 15
+  const params = await searchParams;
+  const query = params?.q || "";
+  const activeFilter = params?.filter || "All";
+
+  // Fetch both endpoints in parallel; fallback to empty so fillWithDemo takes over
+  const [rawPremarket, rawPostmarket] = await Promise.all([
     fetchJson("/report-list/", []),
-    fetchJson("/blog-post/", fallbackPosts),
+    fetchJson("/post-market-list/", []),
   ]);
 
-  const latestPremarket = premarketData[0] || fallbackPremarket[0];
-  const hasPublishedPremarket = premarketData.length > 0;
-  const olderPremarkets = premarketData.slice(1, 4);
-  const blogPosts = blogPostData.slice(0, 4);
+  // Separate fetched data by type
+  const livePremarket = rawPremarket.filter(
+    (r) => !(r.report_type || "").toLowerCase().includes("post"),
+  );
+  const livePostmarket = rawPostmarket.filter((r) =>
+    (r.report_type || "").toLowerCase().includes("post"),
+  );
+
+  // Fill up to 10 each with demo data
+  const premarketList = fillWithDemo(livePremarket, demoPremarket, 10);
+  const postmarketList = fillWithDemo(livePostmarket, demoPostmarket, 10);
+
+  // Combine and SORT all data by newest date
+  const fullList = [...premarketList, ...postmarketList].sort(
+    (a, b) => new Date(b.report_date) - new Date(a.report_date),
+  );
+
+  // Extract featured slots
+  const featuredPremarket =
+    fullList.find(
+      (r) => !(r.report_type || "").toLowerCase().includes("post"),
+    ) || premarketList[0];
+  const featuredPostmarket =
+    fullList.find((r) =>
+      (r.report_type || "").toLowerCase().includes("post"),
+    ) || postmarketList[0];
+
+  // Apply Searching & Filtering logic for the main grid
+  let gridData = fullList;
+  const isFiltering = query !== "" || activeFilter !== "All";
+
+  if (isFiltering) {
+    if (query) {
+      const lowerQ = query.toLowerCase();
+      gridData = gridData.filter(
+        (r) =>
+          (r.title && r.title.toLowerCase().includes(lowerQ)) ||
+          (r.overall_conclusion &&
+            r.overall_conclusion.toLowerCase().includes(lowerQ)) ||
+          (r.report_type && r.report_type.toLowerCase().includes(lowerQ)),
+      );
+    }
+    if (activeFilter !== "All") {
+      gridData = gridData.filter((r) => {
+        const t = (r.report_type || "").toLowerCase();
+        if (activeFilter === "Premarket")
+          return !t.includes("post") && !t.includes("weekly");
+        if (activeFilter === "Post-Market") return t.includes("post");
+        if (activeFilter === "Weekly") return t.includes("weekly");
+        return true;
+      });
+    }
+  } else {
+    // Default view: exclude featured items so they don't duplicate
+    gridData = fullList.filter(
+      (r) => r.id !== featuredPremarket.id && r.id !== featuredPostmarket.id,
+    );
+  }
+
+  // Limit grid results when not filtering to keep layout clean
+  const displayCards = gridData.slice(0, isFiltering ? 20 : 6);
 
   return (
-    <main className="min-h-screen bg-white text-gray-950">
-      <section className="relative overflow-hidden bg-black text-white">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3"
-            alt="Trader desk with financial charts"
-            fill
-            priority
-            className="object-cover opacity-45"
-          />
-          <div className="absolute inset-0 bg-black/55" />
-        </div>
+    <main
+      className="min-h-screen"
+      style={{ backgroundColor: "#f7f9fb", color: "#191c1e" }}
+    >
+      <style>{`
+        .report-card {
+          background-color: #ffffff;
+          border: 1px solid #c4c6cd;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+          cursor: pointer;
+          height: 100%;
+          justify-content: space-between;
+          transition: border-color 0.2s;
+          text-decoration: none;
+        }
+        .report-card:hover { border-color: #041627; }
+        .nav-link-hover:hover { color: #041627; }
+        .read-link:hover { opacity: 0.7; }
+        .trending-item:hover h4 { text-decoration: underline; }
+        .archive-link:hover span:first-child { text-decoration: underline; }
+        .footer-link:hover { color: #041627; }
+        .filter-btn:hover { color: #041627; }
+      `}</style>
 
-        <div className="relative mx-auto grid min-h-[560px] max-w-7xl content-end gap-10 px-6 pb-12 pt-28 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:pb-16">
-          <div className="max-w-3xl">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wide backdrop-blur">
-              <Clock3 size={15} />
-              Start your trading day
-            </div>
-            <h1 className="max-w-4xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-              Finance insights for traders before, during and after the market.
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-gray-100 sm:text-lg">
-              MoneyGreeks can be more than a blog: use it as a daily market desk
-              with pre-market reports, watchlist ideas, risk planning, trading
-              playbooks and finance education in one place.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href={
-                  hasPublishedPremarket
-                    ? `/market-data/${latestPremarket.slug}`
-                    : "/pre-market-archive"
-                }
-                className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-gray-950 transition hover:bg-gray-100"
-              >
-                {hasPublishedPremarket
-                  ? "Read today's briefing"
-                  : "View report archive"}
-                <ArrowRight size={17} />
-              </Link>
-              <Link
-                href="#tools"
-                className="inline-flex items-center gap-2 rounded-lg border border-white/35 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-              >
-                Explore features
-                <BarChart3 size={17} />
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 lg:justify-self-end">
-            {marketPulse.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.label}
-                  className="rounded-lg border border-white/20 bg-white/12 p-5 backdrop-blur"
-                >
-                  <div className="mb-4 flex items-center justify-between gap-4">
-                    <span className="text-sm text-gray-200">{item.label}</span>
-                    <Icon size={20} />
-                  </div>
-                  <p
-                    className={`inline-flex rounded-full px-3 py-1 text-sm font-semibold ${item.tone}`}
-                  >
-                    {item.value}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-gray-200 bg-gray-50">
-        <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
-              Today&apos;s pre-market report
-            </p>
-            <h2 className="mt-3 text-3xl font-bold text-gray-950">
-              {latestPremarket.title}
-            </h2>
-            <p className="mt-4 leading-7 text-gray-600">
-              {latestPremarket.overall_conclusion}
-            </p>
-            <Link
-              href={
-                hasPublishedPremarket
-                  ? `/market-data/${latestPremarket.slug}`
-                  : "/pre-market-archive"
-              }
-              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-gray-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-gray-800"
-            >
-              {hasPublishedPremarket ? "Open report" : "View archive"}
-              <ArrowRight size={17} />
-            </Link>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            {morningChecklist.map((item) => (
-              <div
-                key={item}
-                className="flex gap-3 rounded-lg border border-gray-200 bg-white p-4"
-              >
-                <CheckCircle2
-                  className="mt-0.5 shrink-0 text-emerald-600"
-                  size={20}
-                />
-                <p className="text-sm leading-6 text-gray-700">{item}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="tools" className="mx-auto max-w-7xl px-6 py-16">
-        <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-wide text-cyan-700">
-            Feature-rich finance hub
-          </p>
-          <h2 className="mt-3 text-3xl font-bold text-gray-950 sm:text-4xl">
-            Build the site around trader workflows, not only articles.
-          </h2>
-          <p className="mt-4 leading-7 text-gray-600">
-            A helpful finance blog can combine daily analysis, evergreen
-            education, market data, decision tools and a journal-like routine
-            for repeat visitors.
-          </p>
-        </div>
-
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {toolModules.map((module) => {
-            const Icon = module.icon;
-            return (
-              <Link
-                key={module.title}
-                href={module.href}
-                className="group rounded-lg border border-gray-200 bg-white p-6 transition hover:-translate-y-1 hover:border-gray-950 hover:shadow-lg"
-              >
-                <Icon className="text-gray-950" size={26} />
-                <h3 className="mt-5 text-lg font-bold text-gray-950">
-                  {module.title}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-gray-600">
-                  {module.text}
-                </p>
-                <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-gray-950">
-                  View module
-                  <ArrowRight
-                    className="transition group-hover:translate-x-1"
-                    size={16}
-                  />
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="bg-gray-950 py-16 text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-amber-300">
-              Latest analysis
-            </p>
-            <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
-              Market insights and recent briefs
-            </h2>
-            <p className="mt-4 leading-7 text-gray-300">
-              Blend backend-published articles with curated sections that help
-              traders prepare, execute and review.
-            </p>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2">
-            {blogPosts.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog-post/${post.slug}`}
-                className="group overflow-hidden rounded-lg bg-white text-gray-950"
-              >
-                <div className="relative h-44 bg-gray-100">
-                  <Image
-                    src={post.featured_image}
-                    alt={post.title}
-                    fill
-                    className="object-cover transition duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-5">
-                  <div className="mb-3 flex items-center justify-between gap-3 text-xs font-semibold uppercase tracking-wide text-gray-500">
-                    <span>{post.category || "Insight"}</span>
-                    <span>{formatDate(post.created_at)}</span>
-                  </div>
-                  <h3 className="text-lg font-bold leading-snug">
-                    {post.title}
-                  </h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">
-                    {post.subtitle || post.content}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="watchlist"
-        className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-2"
-      >
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-rose-700">
-            Watchlist engine
-          </p>
-          <h2 className="mt-3 text-3xl font-bold text-gray-950 sm:text-4xl">
-            Help traders narrow the market before the opening bell.
-          </h2>
-          <p className="mt-4 leading-7 text-gray-600">
-            The biggest value is focus. A daily blog can point users toward the
-            sectors, price levels and event risks that deserve attention.
-          </p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            {watchlistIdeas.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={item.name}
-                  className="rounded-lg border border-gray-200 p-5"
-                >
-                  <Icon size={23} className="text-rose-700" />
-                  <h3 className="mt-4 font-bold text-gray-950">{item.name}</h3>
-                  <p className="mt-2 text-sm leading-6 text-gray-600">
-                    {item.detail}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div
-          id="risk"
-          className="rounded-lg border border-gray-200 bg-gray-50 p-6"
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 64px" }}>
+        {/* ── Page Header ── */}
+        <section
+          style={{
+            marginBottom: 40,
+            borderBottom: "4px solid #041627",
+            paddingBottom: 20,
+            textAlign: "center",
+          }}
         >
-          <div className="flex items-center gap-3">
-            <WalletCards className="text-emerald-700" size={28} />
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-emerald-700">
-                Risk planner
-              </p>
-              <h3 className="text-2xl font-bold text-gray-950">
-                Before-trade rules
-              </h3>
-            </div>
-          </div>
-          <div className="mt-6 space-y-4">
-            {[
-              [
-                "Capital at risk",
-                "Limit each idea to a fixed percentage of capital.",
-              ],
-              [
-                "Daily stop",
-                "Stop trading after the planned daily loss is hit.",
-              ],
-              [
-                "Trade count",
-                "Avoid overtrading by setting a maximum number of attempts.",
-              ],
-              [
-                "Review note",
-                "Log the setup, mistake, emotion and improvement after market close.",
-              ],
-            ].map(([title, text]) => (
-              <div key={title} className="flex gap-4 rounded-lg bg-white p-4">
-                <ClipboardCheck
-                  className="mt-1 shrink-0 text-emerald-700"
-                  size={20}
-                />
-                <div>
-                  <h4 className="font-semibold text-gray-950">{title}</h4>
-                  <p className="mt-1 text-sm leading-6 text-gray-600">{text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-gray-200 bg-gray-50">
-        <div className="mx-auto max-w-7xl px-6 py-16">
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-cyan-700">
-                Strategy playbooks
-              </p>
-              <h2 className="mt-3 text-3xl font-bold text-gray-950 sm:text-4xl">
-                Turn education into execution rules.
-              </h2>
-            </div>
-            <Link
-              href="/blog-archive"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-950"
-            >
-              Browse all insights
-              <ArrowRight size={17} />
-            </Link>
-          </div>
-
-          <div className="mt-10 grid gap-5 lg:grid-cols-3">
-            {strategyPlaybooks.map((strategy) => (
-              <article
-                key={strategy.name}
-                className="rounded-lg border border-gray-200 bg-white p-6"
-              >
-                <LineChart className="text-cyan-700" size={26} />
-                <h3 className="mt-5 text-xl font-bold text-gray-950">
-                  {strategy.name}
-                </h3>
-                <p className="mt-3 text-sm leading-6 text-gray-600">
-                  {strategy.use}
-                </p>
-                <div className="mt-5 rounded-lg bg-gray-50 p-4 text-sm font-medium leading-6 text-gray-800">
-                  {strategy.rule}
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="learn"
-        className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr]"
-      >
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-amber-700">
-            Learning center
+          <h1
+            style={{
+              fontFamily: "'Source Serif 4', serif",
+              fontSize: 40,
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "#041627",
+              marginBottom: 12,
+              lineHeight: 1.1,
+            }}
+          >
+            Market Reports
+          </h1>
+          <p
+            style={{
+              fontFamily: "'Source Serif 4', serif",
+              fontSize: 15,
+              color: "#44474c",
+              maxWidth: 680,
+              margin: "0 auto",
+              fontStyle: "italic",
+              lineHeight: 1.65,
+            }}
+          >
+            Institutional-grade daily analysis covering pre-market setups,
+            post-market reviews, and macroeconomic catalysts for sophisticated
+            investors.
           </p>
-          <h2 className="mt-3 text-3xl font-bold text-gray-950 sm:text-4xl">
-            Make finance easier to understand.
-          </h2>
-          <p className="mt-4 leading-7 text-gray-600">
-            Add glossary pages, beginner tracks, options explainers, macro notes
-            and short post-market reviews to serve traders at different levels.
-          </p>
-        </div>
+        </section>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {glossary.map(([term, definition]) => (
-            <div key={term} className="rounded-lg border border-gray-200 p-5">
-              <h3 className="font-bold text-gray-950">{term}</h3>
-              <p className="mt-2 text-sm leading-6 text-gray-600">
-                {definition}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {olderPremarkets.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 pb-16">
-          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-wide text-gray-500">
-                Archive
-              </p>
-              <h2 className="mt-2 text-3xl font-bold text-gray-950">
-                Recent pre-market reports
-              </h2>
-            </div>
-            <Link
-              href="/pre-market-archive"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-950"
+        {/* ── Search & Filter ── */}
+        <section
+          style={{
+            marginBottom: 40,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 14,
+            alignItems: "center",
+            borderBottom: "1px solid #c4c6cd",
+            paddingBottom: 20,
+          }}
+        >
+          <form
+            method="GET"
+            style={{ position: "relative", flex: 1, minWidth: 220, margin: 0 }}
+          >
+            {/* Preserve current filter during searches */}
+            <input type="hidden" name="filter" value={activeFilter} />
+            <button
+              type="submit"
+              style={{
+                position: "absolute",
+                left: 14,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                padding: 0,
+                display: "flex",
+                cursor: "pointer",
+              }}
             >
-              View archive
-              <ArrowRight size={17} />
-            </Link>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            {olderPremarkets.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/market-data/${post.slug}`}
-                className="group"
+              <span
+                className="material-symbols-outlined"
+                style={{ color: "#74777d", fontSize: 18 }}
               >
-                <article className="h-full rounded-lg border border-gray-200 bg-white p-5 transition hover:border-gray-950 hover:shadow-lg">
-                  <div className="relative mb-5 h-44 overflow-hidden rounded-lg bg-gray-100">
-                    <Image
-                      src={post.image_url}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <p className="text-sm font-medium text-gray-500">
-                    {formatDate(post.report_date)}
-                  </p>
-                  <h3 className="mt-3 text-lg font-bold leading-snug text-gray-950">
-                    {post.title}
-                  </h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">
-                    {post.overall_conclusion}
-                  </p>
-                </article>
-              </Link>
-            ))}
+                search
+              </span>
+            </button>
+            <input
+              name="q"
+              defaultValue={query}
+              style={{
+                width: "100%",
+                paddingLeft: 42,
+                paddingRight: 14,
+                paddingTop: 10,
+                paddingBottom: 10,
+                border: "none",
+                backgroundColor: "#f2f4f6",
+                borderRadius: 2,
+                fontFamily: "'Source Serif 4', serif",
+                fontStyle: "italic",
+                fontSize: 14,
+                color: "#191c1e",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
+              placeholder="Search reports by keyword, symbol, or date..."
+              type="text"
+            />
+          </form>
+
+          <div style={{ display: "flex", gap: 20 }}>
+            {["All", "Premarket", "Post-Market", "Weekly"].map((f) => {
+              const isActive = activeFilter === f;
+              return (
+                <Link
+                  key={f}
+                  href={`?filter=${f}${query ? `&q=${query}` : ""}`}
+                  className="filter-btn"
+                  style={{
+                    fontFamily: "'Source Serif 4', serif",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    textDecoration: "none",
+                    color: isActive ? "#041627" : "#44474c",
+                    paddingBottom: 3,
+                    borderBottom: isActive
+                      ? "2px solid #041627"
+                      : "2px solid transparent",
+                  }}
+                >
+                  {f}
+                </Link>
+              );
+            })}
           </div>
         </section>
-      )}
+
+        {/* ── Editorial Hero: Premarket | Postmarket | Trending ── */}
+        <section
+          style={{
+            marginBottom: 40,
+            borderBottom: "1px solid #c4c6cd",
+            paddingBottom: 40,
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "5fr 4fr 3fr",
+              gap: 28,
+            }}
+          >
+            {/* Col 1 — Featured Premarket */}
+            <div
+              style={{
+                borderRight: "1px solid #c4c6cd",
+                paddingRight: 28,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginBottom: 14,
+                  borderBottom: "1px solid #c4c6cd",
+                  paddingBottom: 8,
+                }}
+              >
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 16, color: "#006c47" }}
+                >
+                  light_mode
+                </span>
+                <span
+                  style={{
+                    color: "#006c47",
+                    fontFamily: "'Hanken Grotesk', sans-serif",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Premarket Analysis
+                </span>
+                <span
+                  style={{
+                    marginLeft: "auto",
+                    color: "#74777d",
+                    fontFamily: "'Hanken Grotesk', sans-serif",
+                    fontSize: 11,
+                  }}
+                >
+                  {formatDate(featuredPremarket.report_date)}
+                </span>
+              </div>
+              <h2
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 34,
+                  fontWeight: 600,
+                  lineHeight: 1.15,
+                  color: "#041627",
+                  marginBottom: 14,
+                }}
+              >
+                {featuredPremarket.title}
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 15,
+                  color: "#44474c",
+                  lineHeight: 1.7,
+                  marginBottom: 20,
+                  flex: 1,
+                }}
+              >
+                {truncateText(featuredPremarket.overall_conclusion, 160)}
+              </p>
+              <Link
+                href={`/market-data/${featuredPremarket.slug}`}
+                className="read-link"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: "#041627",
+                  fontFamily: "'Hanken Grotesk', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                }}
+              >
+                Read Full Analysis
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 17 }}
+                >
+                  arrow_forward
+                </span>
+              </Link>
+            </div>
+
+            {/* Col 2 — Featured Post-Market */}
+            <div
+              style={{
+                borderRight: "1px solid #c4c6cd",
+                paddingRight: 28,
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginBottom: 14,
+                  borderBottom: "1px solid #c4c6cd",
+                  paddingBottom: 8,
+                }}
+              >
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 16, color: "#041627" }}
+                >
+                  dark_mode
+                </span>
+                <span
+                  style={{
+                    color: "#041627",
+                    fontFamily: "'Hanken Grotesk', sans-serif",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  Post-Market Analysis
+                </span>
+                <span
+                  style={{
+                    marginLeft: "auto",
+                    color: "#74777d",
+                    fontFamily: "'Hanken Grotesk', sans-serif",
+                    fontSize: 11,
+                  }}
+                >
+                  {formatDate(featuredPostmarket.report_date)}
+                </span>
+              </div>
+              <h2
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 24,
+                  fontWeight: 600,
+                  lineHeight: 1.25,
+                  color: "#041627",
+                  marginBottom: 14,
+                }}
+              >
+                {featuredPostmarket.title}
+              </h2>
+              <p
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 14,
+                  color: "#44474c",
+                  lineHeight: 1.7,
+                  marginBottom: 20,
+                  flex: 1,
+                }}
+              >
+                {truncateText(featuredPostmarket.overall_conclusion, 160)}
+              </p>
+              <Link
+                href={`/market-data/${featuredPostmarket.slug}`}
+                className="read-link"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: "#041627",
+                  fontFamily: "'Hanken Grotesk', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                }}
+              >
+                Read Full Analysis
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 17 }}
+                >
+                  arrow_forward
+                </span>
+              </Link>
+            </div>
+
+            {/* Col 3 — Trending */}
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <h3
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 16,
+                  color: "#041627",
+                  marginBottom: 20,
+                  borderBottom: "1px solid #c4c6cd",
+                  paddingBottom: 8,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                }}
+              >
+                Trending Analysis
+              </h3>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 18 }}
+              >
+                {trendingAnalysis.map((item, i) => (
+                  <div
+                    key={item.title}
+                    className="trending-item"
+                    style={{
+                      cursor: "pointer",
+                      borderTop: i > 0 ? "1px solid #c4c6cd" : "none",
+                      paddingTop: i > 0 ? 14 : 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        marginBottom: 4,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "'Hanken Grotesk', sans-serif",
+                          fontSize: 10,
+                          fontWeight: 700,
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          color: item.categoryHex,
+                        }}
+                      >
+                        {item.category}
+                      </span>
+                      <span style={{ color: "#74777d", fontSize: 11 }}>•</span>
+                      <span
+                        style={{
+                          color: "#74777d",
+                          fontFamily: "'Hanken Grotesk', sans-serif",
+                          fontSize: 11,
+                        }}
+                      >
+                        {item.date}
+                      </span>
+                    </div>
+                    <h4
+                      style={{
+                        fontFamily: "'Source Serif 4', serif",
+                        fontSize: 15,
+                        color: "#041627",
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      {item.title}
+                    </h4>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Recent Dispatches + Sidebar ── */}
+        <section
+          style={{ display: "grid", gridTemplateColumns: "3fr 1fr", gap: 40 }}
+        >
+          {/* Cards Grid */}
+          <div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-end",
+                marginBottom: 24,
+                borderBottom: "2px solid #041627",
+                paddingBottom: 7,
+              }}
+            >
+              <h3
+                style={{
+                  fontFamily: "'Source Serif 4', serif",
+                  fontSize: 20,
+                  color: "#041627",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {isFiltering ? "Search Results" : "Recent Dispatches"}
+              </h3>
+              <Link
+                href="/pre-market-archive"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 3,
+                  color: "#041627",
+                  fontFamily: "'Hanken Grotesk', sans-serif",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                }}
+              >
+                All Reports
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 14 }}
+                >
+                  north_east
+                </span>
+              </Link>
+            </div>
+
+            {displayCards.length > 0 ? (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: 18,
+                  alignItems: "stretch",
+                }}
+              >
+                {displayCards.map((report) => {
+                  const typeColor = getTypeColor(report.report_type);
+                  const typeIcon = getTypeIcon(report.report_type);
+                  return (
+                    <Link
+                      key={report.id}
+                      href={`/market-data/${report.slug}`}
+                      className="report-card"
+                    >
+                      <div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            marginBottom: 12,
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: "50%",
+                              backgroundColor: "#eceef0",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: 14, color: typeColor }}
+                            >
+                              {typeIcon}
+                            </span>
+                          </div>
+                          <span
+                            style={{
+                              fontFamily: "'Hanken Grotesk', sans-serif",
+                              fontSize: 11,
+                              color: "#74777d",
+                            }}
+                          >
+                            {formatDate(report.report_date)}
+                          </span>
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: "'Hanken Grotesk', sans-serif",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            letterSpacing: "0.1em",
+                            textTransform: "uppercase",
+                            color: typeColor,
+                            marginBottom: 7,
+                          }}
+                        >
+                          {report.report_type || "Premarket"}
+                        </div>
+                        <h5
+                          style={{
+                            fontFamily: "'Source Serif 4', serif",
+                            fontSize: 16,
+                            color: "#041627",
+                            lineHeight: 1.3,
+                            marginBottom: 10,
+                          }}
+                        >
+                          {report.title}
+                        </h5>
+
+                        <p
+                          style={{
+                            fontFamily: "'Source Serif 4', serif",
+                            fontSize: 13,
+                            color: "#44474c",
+                            lineHeight: 1.5,
+                            marginBottom: 16,
+                          }}
+                        >
+                          {truncateText(report.overall_conclusion, 100)}
+                        </p>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          color: "#74777d",
+                          marginTop: "auto",
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontFamily: "'Hanken Grotesk', sans-serif",
+                            fontSize: 11,
+                          }}
+                        >
+                          {report.read_time
+                            ? `${report.read_time} min read`
+                            : "5 min read"}
+                        </span>
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: 18, color: "#041627" }}
+                        >
+                          arrow_forward
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div
+                style={{
+                  padding: "60px 0",
+                  textAlign: "center",
+                  color: "#74777d",
+                }}
+              >
+                <span
+                  className="material-symbols-outlined"
+                  style={{ fontSize: 32, marginBottom: 10 }}
+                >
+                  search_off
+                </span>
+                <p
+                  style={{
+                    fontFamily: "'Source Serif 4', serif",
+                    fontSize: 16,
+                  }}
+                >
+                  No reports matched your search criteria.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Archive Sidebar */}
+          <aside style={{ borderLeft: "1px solid #c4c6cd", paddingLeft: 28 }}>
+            <h3
+              style={{
+                fontFamily: "'Source Serif 4', serif",
+                fontSize: 16,
+                color: "#041627",
+                marginBottom: 20,
+                borderBottom: "1px solid #c4c6cd",
+                paddingBottom: 8,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+            >
+              Archives
+            </h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {archiveMonths.map((month) => (
+                <li
+                  key={month.label}
+                  style={{
+                    borderBottom: "1px solid #c4c6cd",
+                    paddingBottom: 8,
+                    marginBottom: 10,
+                  }}
+                >
+                  <Link
+                    href={month.slug}
+                    className="archive-link"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      textDecoration: "none",
+                      color: "#191c1e",
+                      fontFamily: "'Source Serif 4', serif",
+                      fontSize: 15,
+                    }}
+                  >
+                    <span>{month.label}</span>
+                    <span
+                      style={{
+                        fontFamily: "'Hanken Grotesk', sans-serif",
+                        fontSize: 11,
+                        color: "#74777d",
+                      }}
+                    >
+                      {month.count}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/pre-market-archive"
+              style={{
+                marginTop: 20,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+                color: "#041627",
+                fontFamily: "'Hanken Grotesk', sans-serif",
+                fontSize: 12,
+                fontWeight: 600,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+              }}
+            >
+              Search Full Archive
+              <span
+                className="material-symbols-outlined"
+                style={{ fontSize: 14 }}
+              >
+                search
+              </span>
+            </Link>
+          </aside>
+        </section>
+      </div>
     </main>
   );
 }

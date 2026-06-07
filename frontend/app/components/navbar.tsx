@@ -4,7 +4,7 @@ import styles from "./Navbar.module.css";
 
 const navLinks = [
   { label: "Markets", href: "/" },
-  { label: "News", href: "/news" },
+  { label: "News", href: "/news-today" },
   { label: "Reports", href: "/blog" },
   { label: "Education", href: "/education" },
   { label: "Threads", href: "/threads" },
