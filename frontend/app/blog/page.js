@@ -328,9 +328,108 @@ export default async function ReportsPage({ searchParams }) {
         .archive-link:hover span:first-child { text-decoration: underline; }
         .footer-link:hover { color: #041627; }
         .filter-btn:hover { color: #041627; }
+
+        .report-card {
+    background-color: #ffffff;
+    border: 1px solid #c4c6cd;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    height: 100%;
+    justify-content: space-between;
+    transition: border-color 0.2s;
+    text-decoration: none;
+  }
+
+  .report-card:hover { border-color: #041627; }
+  .nav-link-hover:hover { color: #041627; }
+  .read-link:hover { opacity: 0.7; }
+  .trending-item:hover h4 { text-decoration: underline; }
+  .archive-link:hover span:first-child { text-decoration: underline; }
+  .footer-link:hover { color: #041627; }
+  .filter-btn:hover { color: #041627; }
+
+  .page-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 64px;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr 3fr;
+    gap: 28px;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 40px;
+  }
+
+  .reports-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  @media (max-width: 1024px) {
+    .page-container {
+      padding: 32px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .reports-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-container {
+      padding: 24px 16px;
+    }
+
+    .reports-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-group {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .mobile-center {
+      text-align: center;
+    }
+
+    .mobile-stack {
+      border-right: none !important;
+      border-bottom: 1px solid #c4c6cd;
+      padding-right: 0 !important;
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+    }
+
+    .mobile-sidebar {
+      border-left: none !important;
+      border-top: 1px solid #c4c6cd;
+      padding-left: 0 !important;
+      padding-top: 24px;
+    }
+  }
       `}</style>
 
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 64px" }}>
+      <div className="page-container">
         {/* ── Page Header ── */}
         <section
           style={{
@@ -343,7 +442,7 @@ export default async function ReportsPage({ searchParams }) {
           <h1
             style={{
               fontFamily: "'Source Serif 4', serif",
-              fontSize: 40,
+              fontSize: "clamp(28px, 6vw, 40px)",
               fontWeight: 700,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
@@ -471,15 +570,10 @@ export default async function ReportsPage({ searchParams }) {
             paddingBottom: 40,
           }}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "5fr 4fr 3fr",
-              gap: 28,
-            }}
-          >
+          <div className="hero-grid">
             {/* Col 1 — Featured Premarket */}
             <div
+              className="mobile-stack"
               style={{
                 borderRight: "1px solid #c4c6cd",
                 paddingRight: 28,
@@ -529,7 +623,7 @@ export default async function ReportsPage({ searchParams }) {
               <h2
                 style={{
                   fontFamily: "'Source Serif 4', serif",
-                  fontSize: 34,
+                  fontSize: "clamp(22px, 5vw, 34px)",
                   fontWeight: 600,
                   lineHeight: 1.15,
                   color: "#041627",
@@ -578,6 +672,7 @@ export default async function ReportsPage({ searchParams }) {
 
             {/* Col 2 — Featured Post-Market */}
             <div
+              className="mobile-stack"
               style={{
                 borderRight: "1px solid #c4c6cd",
                 paddingRight: 28,
@@ -627,7 +722,7 @@ export default async function ReportsPage({ searchParams }) {
               <h2
                 style={{
                   fontFamily: "'Source Serif 4', serif",
-                  fontSize: 24,
+                  fontSize: "clamp(22px, 5vw, 34px)",
                   fontWeight: 600,
                   lineHeight: 1.25,
                   color: "#041627",
@@ -752,9 +847,7 @@ export default async function ReportsPage({ searchParams }) {
         </section>
 
         {/* ── Recent Dispatches + Sidebar ── */}
-        <section
-          style={{ display: "grid", gridTemplateColumns: "3fr 1fr", gap: 40 }}
-        >
+        <section className="content-grid">
           {/* Cards Grid */}
           <div>
             <div
@@ -804,14 +897,7 @@ export default async function ReportsPage({ searchParams }) {
             </div>
 
             {displayCards.length > 0 ? (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: 18,
-                  alignItems: "stretch",
-                }}
-              >
+              <div className="reports-grid">
                 {displayCards.map((report) => {
                   const typeColor = getTypeColor(report.report_type);
                   const typeIcon = getTypeIcon(report.report_type);
@@ -952,7 +1038,13 @@ export default async function ReportsPage({ searchParams }) {
           </div>
 
           {/* Archive Sidebar */}
-          <aside style={{ borderLeft: "1px solid #c4c6cd", paddingLeft: 28 }}>
+          <aside
+            className="mobile-sidebar"
+            style={{
+              borderLeft: "1px solid #c4c6cd",
+              paddingLeft: 28,
+            }}
+          >
             <h3
               style={{
                 fontFamily: "'Source Serif 4', serif",
