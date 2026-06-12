@@ -1,0 +1,43 @@
+{
+  "title": "Volume Profile Masterclass",
+  "author": "Jose C S",
+  "authorDesignation": "Founder & Lead Educator",
+  "date": "2026-06-07",
+  "category": "Volume",
+  "keyHighlights": [
+    "Volume Profile displays trading activity over a specific time period at specific price levels.",
+    "The Point of Control (POC) represents the price level with the highest volume concentration.",
+    "High Volume Nodes (HVNs) act as magnets and support/resistance zones, while Low Volume Nodes (LVNs) act as rejection areas."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Traditional volume indicators display trading volume over time, at the bottom of the chart. Volume Profile, however, displays volume horizontally, revealing the exact price levels where the most significant buying and selling occurred."
+    },
+    {
+      "type": "h1",
+      "text": "The Anatomy of Volume Profile"
+    },
+    {
+      "type": "paragraph",
+      "text": "The main component of the profile is the Value Area (VA), which contains 70% of the traded volume. Within this area, the Point of Control (POC) stands out as the fairest price level where buyers and sellers agreed on transaction volumes. Prices often consolidate around the POC before launching directional moves."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      "caption": "Horizontal volume bars highlight the high-volume consolidation zones and low-volume gap areas."
+    },
+    {
+      "type": "h1",
+      "text": "Trading High and Low Volume Nodes"
+    },
+    {
+      "type": "paragraph",
+      "text": "High Volume Nodes (HVNs) show price acceptance and act as strong support and resistance levels. On the other hand, Low Volume Nodes (LVNs) indicate price rejection; prices tend to move through LVN zones quickly. Traders use these thin profiles to set profit targets and identify break points."
+    },
+    {
+      "type": "paragraph",
+      "text": "Integrating horizontal volume profiles into your trading routine shifts your perspective from basic price patterns to structural market auction analysis, significantly increasing execution accuracy."
+    }
+  ]
+}

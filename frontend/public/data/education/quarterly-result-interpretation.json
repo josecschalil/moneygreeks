@@ -1,0 +1,43 @@
+{
+  "title": "Quarterly Result Interpretation",
+  "author": "Victoria Sterling",
+  "authorDesignation": "Head of Equity Analysis",
+  "date": "2026-06-03",
+  "category": "Earnings",
+  "keyHighlights": [
+    "Look beyond top-line revenue and bottom-line net income to analyze operating cash flows.",
+    "Evaluate operating margins and compare them against historical and industry peer averages.",
+    "Pay close attention to management's forward-looking guidance and inventory cycles."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Every quarter, publicly traded companies release their financial reports. For serious investors, these reports are a treasure trove of information—provided you know how to read between the lines and ignore public relations spin."
+    },
+    {
+      "type": "h1",
+      "text": "Analyzing Profitability and Operating Margins"
+    },
+    {
+      "type": "paragraph",
+      "text": "A company can grow its revenues while losing profitability. To gauge true health, evaluate the operating margin (Operating Income / Net Sales). A expanding margin suggests that the business is scaling efficiently, while a contracting margin suggests rising costs or pricing pressure."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+      "caption": "Comparative analysis of balance sheet structures and cash flows is key to selecting value investments."
+    },
+    {
+      "type": "h1",
+      "text": "Cash Flow vs. Accrual Earnings"
+    },
+    {
+      "type": "paragraph",
+      "text": "Net income can be adjusted through accounting methods, but cash flow is harder to manipulate. Compare Net Income to Cash Flow from Operations. If net income rises while operating cash flow drops, it could indicate aggressive revenue recognition, signaling potential inventory build-ups or collection issues."
+    },
+    {
+      "type": "paragraph",
+      "text": "Always combine quarterly report numbers with the transcript of the management earnings call to understand capital allocation plans and forward growth expectations."
+    }
+  ]
+}

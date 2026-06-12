@@ -1,0 +1,52 @@
+{
+  "title": "Pre-Market Setup: Nifty Prepares for Expiry Day Volatility",
+  "report_date": "2026-06-12",
+  "overall_conclusion": "The market setup is constructive. GIFT Nifty is trading in the green. Domestic support is absorbing foreign selling. Sector rotation is important today. The safer approach is to wait for the first 30 minutes to confirm range breakout.",
+  "global_analysis": {
+    "analysis": "US markets showed mixed sessions as investors digest jobs data. European indices closed with minor losses. GIFT Nifty is trading flat, indicating a neutral opening for domestic markets."
+  },
+  "global_indices": [
+    { "id": 1, "index_name": "GIFT Nifty", "prev_close": 23447.0, "open_price": 23512.0, "change": 65.0, "change_percent": 0.28, "trend": "up" },
+    { "id": 2, "index_name": "Dow Jones", "prev_close": 51561.9, "open_price": 51710.0, "change": 148.1, "change_percent": 0.29, "trend": "up" },
+    { "id": 3, "index_name": "Nasdaq", "prev_close": 26830.9, "open_price": 26915.0, "change": 84.1, "change_percent": 0.31, "trend": "up" }
+  ],
+  "indian_indices": [
+    { "id": 1, "index_name": "NIFTY 50", "prev_close": 23416.55, "open_price": 23395.2, "change": -21.35, "change_percent": -0.09, "trend": "down" },
+    { "id": 2, "index_name": "NIFTY BANK", "prev_close": 54307.85, "open_price": 54496.25, "change": 188.4, "change_percent": 0.35, "trend": "up" },
+    { "id": 3, "index_name": "INDIA VIX", "prev_close": 15.89, "open_price": 15.79, "change": -0.1, "change_percent": -0.61, "trend": "down" }
+  ],
+  "institutional_flows": [
+    { "id": 1, "institution_type": "DII", "date": "2026-06-12", "buy_value": "22779.32", "sell_value": "13645.75", "net_value": "9133.57", "trend": "up" },
+    { "id": 2, "institution_type": "FII", "date": "2026-06-12", "buy_value": "11044.57", "sell_value": "19820.82", "net_value": "-8776.25", "trend": "down" }
+  ],
+  "market_breadth": {
+    "advancing": 1623,
+    "declining": 1694,
+    "advance_decline_ratio": 0.96
+  },
+  "option_chain_summaries": [
+    {
+      "id": 1,
+      "symbol": "NIFTY",
+      "expiry": "18-Jun-2026",
+      "pcr": 0.75,
+      "max_call_oi_strike": "23500.00",
+      "max_call_oi": 265524,
+      "max_put_oi_strike": "23200.00",
+      "max_put_oi": 157007,
+      "underlying_value": "23366.70",
+      "analysis": "Nifty option chain shows major call concentration at 23,500, acting as immediate resistance wall. Heavy put writing is seen at 23,200, which serves as a key psychological support zone."
+    }
+  ],
+  "stock_movers": [
+    { "id": 1, "category": "gainer", "symbol": "ADANIENT", "prev_close": "2972.80", "open_price": "3043.00", "change_percent": "2.36", "volume": "5.6M" },
+    { "id": 2, "category": "gainer", "symbol": "AXISBANK", "prev_close": "1253.30", "open_price": "1273.30", "change_percent": "1.60", "volume": "7.8M" },
+    { "id": 3, "category": "loser", "symbol": "WIPRO", "prev_close": "204.32", "open_price": "198.05", "change_percent": "-3.07", "volume": "43.5M" },
+    { "id": 4, "category": "loser", "symbol": "HINDALCO", "prev_close": "1125.60", "open_price": "1092.00", "change_percent": "-2.99", "volume": "4.5M" }
+  ],
+  "sector_performance": [
+    { "id": 1, "category": "gainer", "sector_name": "NIFTY PHARMA", "prev_close": "24178.00", "change": "70.05", "change_percent": "0.29", "pe": "37.06", "pb": "5.18", "div_yield": "0.75" },
+    { "id": 2, "category": "gainer", "sector_name": "NIFTY PRIVATE BANK", "prev_close": "26239.00", "change": "60.25", "change_percent": "0.23", "pe": "17.28", "pb": "2.09", "div_yield": "0.61" },
+    { "id": 3, "category": "loser", "sector_name": "NIFTY IT", "prev_close": "29300.00", "change": "-289.70", "change_percent": "-0.99", "pe": "19.74", "pb": "5.29", "div_yield": "3.10" }
+  ]
+}

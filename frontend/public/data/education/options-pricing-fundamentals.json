@@ -1,0 +1,43 @@
+{
+  "title": "Options Pricing Fundamentals",
+  "author": "Jose C S",
+  "authorDesignation": "Founder & Lead Educator",
+  "date": "2026-06-03",
+  "category": "Beginner",
+  "keyHighlights": [
+    "Option premium is split into two components: Intrinsic Value and Extrinsic Value.",
+    "Time decay (Theta) reduces the value of options premiums as the expiration date approaches.",
+    "Implied Volatility (IV) directly impacts extrinsic value by reflecting market uncertainty."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "For beginner traders, option prices can seem random and confusing. However, options pricing is governed by clear mathematical formulas that balance spot prices, strike levels, remaining time, and implied volatility."
+    },
+    {
+      "type": "h1",
+      "text": "Intrinsic vs. Extrinsic Value"
+    },
+    {
+      "type": "paragraph",
+      "text": "Intrinsic value is the tangible value an option would have if it were exercised immediately. Extrinsic value, also known as time value, represents the premium buyers pay for the possibility that the option will gain value before expiration. It depends on time remaining and market volatility."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&q=80",
+      "caption": "Options pricing calculator screens displaying volatility parameters and pricing models."
+    },
+    {
+      "type": "h1",
+      "text": "Theta: The Cost of Time"
+    },
+    {
+      "type": "paragraph",
+      "text": "Options are wasting assets. Every day that passes reduces the option's time value. This decay is measured by Theta, which accelerates during the final 30 days before expiration. Buyers must be right about price direction and timing to overcome time decay."
+    },
+    {
+      "type": "paragraph",
+      "text": "Understanding these basic components is critical before risking capital in derivative contracts, helping you select the right strikes and expirations for your market outlook."
+    }
+  ]
+}

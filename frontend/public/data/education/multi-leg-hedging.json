@@ -1,0 +1,43 @@
+{
+  "title": "Multi-Leg Hedging Strategies",
+  "author": "Jose C S",
+  "authorDesignation": "Founder & Lead Educator",
+  "date": "2026-05-30",
+  "category": "Intermediate",
+  "keyHighlights": [
+    "Multi-leg strategies combine calls and puts at different strikes to define risk parameters.",
+    "Iron condors and credit spreads allow traders to collect income in sideways consolidation markets.",
+    "Hedging costs should be calculated as a percentage of total portfolio yield to maintain efficiency."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Single option positions are highly sensitive to directional price movement and time decay. Multi-leg strategies allow you to offset these sensitivities by combining multiple option contracts, creating risk-defined positions."
+    },
+    {
+      "type": "h1",
+      "text": "The Logic of Spreads"
+    },
+    {
+      "type": "paragraph",
+      "text": "A spread involves buying one option and selling another option of the same type on the same underlying asset. In a Bull Call Spread, you buy an in-the-money call and sell an out-of-the-money call. The sold option reduces the total cost of the trade and hedges against minor time decay, defining both max profit and max loss."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      "caption": "Multi-leg options trading terminal showing delta-neutral structures and probability profit curves."
+    },
+    {
+      "type": "h1",
+      "text": "Income Generation in Range-Bound Markets"
+    },
+    {
+      "type": "paragraph",
+      "text": "When the market index consolidates, you can sell volatility using an Iron Condor. This strategy combines a Bear Call Spread and a Bull Put Spread, collecting premium as long as the underlying index price remains within the outer boundaries until expiration."
+    },
+    {
+      "type": "paragraph",
+      "text": "By structuring multi-leg option profiles, intermediate traders can navigate various market environments—whether bullish, bearish, or sideways—with complete risk control."
+    }
+  ]
+}

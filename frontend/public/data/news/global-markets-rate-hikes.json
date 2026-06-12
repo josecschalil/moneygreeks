@@ -1,0 +1,43 @@
+{
+  "title": "Global Markets Brace as Central Banks Signal Aggressive Rate Hikes",
+  "author": "Sarah Jenkins",
+  "authorDesignation": "Chief Global Macro Reporter",
+  "date": "2026-06-12",
+  "category": "Macro",
+  "keyHighlights": [
+    "Federal Reserve suggests two additional 25bps interest rate hikes by year-end.",
+    "Bond yields spikes globally, with the US 2-year Treasury breaking above 5.1%.",
+    "Equity indexes face selling pressure as discount rate expectations shift higher."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Global financial markets are experiencing elevated volatility today as policy statements from central banks suggest a prolonged period of higher interest rates. The coordinated stance of major monetary authorities reflects a persistent focus on inflation, despite cooling consumer spending metrics."
+    },
+    {
+      "type": "h1",
+      "text": "Federal Reserve's Hawkish Guidance"
+    },
+    {
+      "type": "paragraph",
+      "text": "The Federal Reserve's latest meeting minutes surprised markets with a hawkish tone. Policy makers indicated that core inflation remains above target levels, making further tightening necessary to achieve a stable long-term rate. This projection dashed expectations of rate cuts in the immediate quarters."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&q=80",
+      "caption": "Bond markets reacted instantly to the hawkish central bank statements, pushing yields to multi-month highs."
+    },
+    {
+      "type": "h1",
+      "text": "Global Bond Market Sell-off"
+    },
+    {
+      "type": "paragraph",
+      "text": "Sovereign debt markets experienced a sharp sell-off, causing yields to rise. The yield on the 10-year US Treasury index broke past key resistance levels, while European benchmark yields reached peaks not seen since the previous quarter's rate adjustments. High yields reduce the attractiveness of equities."
+    },
+    {
+      "type": "paragraph",
+      "text": "Portfolio managers are rotating capital into short-duration cash equivalents and high-quality defensive sectors like consumer staples and utilities, preparing for potential earnings margin contractions across highly leveraged businesses."
+    }
+  ]
+}

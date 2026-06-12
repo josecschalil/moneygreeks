@@ -4,6 +4,8 @@ import TopSectors from "@/app/components/topSectors";
 import RecommendedPosts from "@/app/components/recommended";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import fs from "fs";
+import path from "path";
 interface GlobalMarketIndex {
   id: number;
   index_name: string;
@@ -273,14 +275,25 @@ async function getMarketData(slug: string) {
       cache: "no-store",
     });
 
-    if (!res.ok) {
-      notFound();
+    if (res.ok) {
+      return await res.json();
     }
-
-    return res.json();
-  } catch {
-    notFound();
+  } catch (error) {
+    console.warn("Backend reports endpoint unavailable. Trying local premarket file fallback.");
   }
+
+  // Fallback: Read local file from frontend/public/data/premarket/[slug].json
+  try {
+    const filePath = path.join(process.cwd(), "public", "data", "premarket", `${slug}.json`);
+    if (fs.existsSync(filePath)) {
+      const fileContent = fs.readFileSync(filePath, "utf8");
+      return JSON.parse(fileContent);
+    }
+  } catch (err) {
+    console.error("Failed to read local premarket file fallback:", err);
+  }
+
+  notFound();
 }
 
 type PageProps = {

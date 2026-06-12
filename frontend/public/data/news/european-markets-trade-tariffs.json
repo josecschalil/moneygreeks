@@ -1,0 +1,43 @@
+{
+  "title": "European Markets React to New Trade Tariffs",
+  "author": "Elena Rostova",
+  "authorDesignation": "Macroeconomic Strategist",
+  "date": "2026-06-09",
+  "category": "Macro",
+  "keyHighlights": [
+    "Euro Stoxx 50 declined by 1.6% following the trade policy announcements.",
+    "Export-dependent sectors, including automotive and manufacturing, led the market losses.",
+    "Economists warn of inflationary pressures if import duties remain active for more than six months."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "European equity indices closed lower today as market participants reacted to the sudden announcement of new cross-border trade tariffs. The trade policies, aimed at protecting domestic industrial sectors, have sparked fears of retaliatory measures and heightened international trade tensions."
+    },
+    {
+      "type": "h1",
+      "text": "Export Sectors Suffer Steep Declines"
+    },
+    {
+      "type": "paragraph",
+      "text": "Industrial and automotive stocks bore the brunt of the market sell-off. Since European automakers depend heavily on global supply chains and international sales, any disruption in trade agreements directly impacts their operating margins. Shares of leading manufacturers declined by 3% to 5%."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+      "caption": "Trading desks across London and Frankfurt experienced elevated sell volumes in industrial groups."
+    },
+    {
+      "type": "h1",
+      "text": "Long-Term Macroeconomic Implications"
+    },
+    {
+      "type": "paragraph",
+      "text": "Strategists argue that the introduction of import duties will lead to higher consumer prices for imported raw materials, complicating the European Central Bank's inflation management plans. The immediate impact is currency volatility, with the Euro weakening slightly against the US Dollar."
+    },
+    {
+      "type": "paragraph",
+      "text": "Traders are closely watching for official statements from key trading partners. A diplomatic resolution remains possible, which could prompt a relief rally in domestic shares, but for now, risk-off sentiment dominates the European sessions."
+    }
+  ]
+}

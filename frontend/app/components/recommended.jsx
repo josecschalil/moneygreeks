@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 async function fetchBlogPostData() {
-  const res = await fetch("http://127.0.0.1:8000/blog-post/", {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch blog post data");
+  try {
+    const res = await fetch("http://127.0.0.1:8000/blog-post/", {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      return RECOMMENDED_POSTS;
+    }
+    return await res.json();
+  } catch (error) {
+    console.warn("Backend blog-post endpoint unavailable. Using local fallback recommended posts.");
+    return RECOMMENDED_POSTS;
   }
-  return res.json();
 }
 function formatDate(dateStr) {
   if (!dateStr) return dateStr;
@@ -32,12 +37,10 @@ function formatDate(dateStr) {
   ];
   return `${day} ${monthNames[month - 1]} ${year}`;
 }
-const blogPostData = await fetchBlogPostData();
-const blogPostDataSlice = blogPostData.slice(0, 4);
-
 const RECOMMENDED_POSTS = [
   {
     id: 1,
+    slug: "scalable-design-systems",
     title: "The Architecture of Scalable Design Systems",
     category: "Design",
     readTime: "6 min read",
@@ -47,6 +50,7 @@ const RECOMMENDED_POSTS = [
   },
   {
     id: 2,
+    slug: "writing-clean-apis",
     title: "Writing Clean APIs That Developers Actually Love",
     category: "Engineering",
     readTime: "8 min read",
@@ -56,6 +60,7 @@ const RECOMMENDED_POSTS = [
   },
   {
     id: 3,
+    slug: "performance-patterns",
     title: "Performance Patterns in Modern Web Applications",
     category: "Performance",
     readTime: "5 min read",
@@ -65,6 +70,7 @@ const RECOMMENDED_POSTS = [
   },
   {
     id: 4,
+    slug: "accessible-typography",
     title: "The Quiet Craft of Accessible Typography",
     category: "Accessibility",
     readTime: "4 min read",
@@ -74,13 +80,16 @@ const RECOMMENDED_POSTS = [
   },
 ];
 
+const blogPostData = await fetchBlogPostData();
+const blogPostDataSlice = Array.isArray(blogPostData) ? blogPostData.slice(0, 4) : RECOMMENDED_POSTS;
+
 function PostCard({ post }) {
   const [hovered, setHovered] = useState(false);
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap');
 
         .post-card {
           display: flex;
@@ -127,7 +136,7 @@ function PostCard({ post }) {
           background: #ffffff;
           border: 1px solid #e0dbd4;
           border-radius: 2px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Hanken Grotesk', sans-serif;
           font-size: 10px;
           font-weight: 500;
           letter-spacing: 0.1em;
@@ -148,7 +157,7 @@ function PostCard({ post }) {
           display: flex;
           align-items: center;
           gap: 8px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Hanken Grotesk', sans-serif;
           font-size: 11px;
           color: #a09890;
           font-weight: 400;
@@ -164,7 +173,7 @@ function PostCard({ post }) {
         }
 
         .card-title {
-          font-family: 'Playfair Display', Georgia, serif;
+          font-family: 'Source Serif 4', serif;
           font-size: 15px;
           font-weight: 600;
           line-height: 1.45;
@@ -177,7 +186,7 @@ function PostCard({ post }) {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Hanken Grotesk', sans-serif;
           font-size: 11.5px;
           font-weight: 500;
           letter-spacing: 0.06em;
@@ -256,14 +265,14 @@ export default function RecommendedPosts({ posts = blogPostDataSlice }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap');
 
         .rp-section {
           width: 100%;
           max-width: 1120px;
           margin: 0 auto;
           padding: 72px 24px 80px;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Hanken Grotesk', sans-serif;
         }
 
         .rp-header {
@@ -305,7 +314,7 @@ export default function RecommendedPosts({ posts = blogPostDataSlice }) {
         }
 
         .rp-heading {
-          font-family: 'Playfair Display', Georgia, serif;
+          font-family: 'Source Serif 4', serif;
           font-size: clamp(24px, 3vw, 32px);
           font-weight: 700;
           color: #1a1714;
@@ -390,7 +399,7 @@ export default function RecommendedPosts({ posts = blogPostDataSlice }) {
 
         <div className="rp-grid">
           {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
+            <PostCard key={post.slug || post.id || post.title} post={post} />
           ))}
         </div>
       </section>

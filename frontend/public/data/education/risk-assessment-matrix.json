@@ -1,0 +1,43 @@
+{
+  "title": "Risk Assessment Matrix",
+  "author": "Dr. Aris Vance",
+  "authorDesignation": "Director of Quantitative Risk",
+  "date": "2026-06-01",
+  "category": "Risk",
+  "keyHighlights": [
+    "A risk matrix plots trade probability against potential impact to prioritize risk management.",
+    "Diversification and position sizing are the primary tools to manage unsystematic risk.",
+    "Always define your maximum drawdown limit before entering a leverage position."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Many traders fail not because their entries are poor, but because their risk management is non-existent. A structured risk assessment matrix helps you evaluate potential adverse events before they impact your trading account."
+    },
+    {
+      "type": "h1",
+      "text": "Mapping Risk Probability and Impact"
+    },
+    {
+      "type": "paragraph",
+      "text": "A risk matrix is a visual grid. The horizontal axis represents the probability of a risk occurring, and the vertical axis represents the financial impact. By categorizing risks—such as earnings misses, regulatory changes, or sudden liquidity events—you can decide which trades require tight hedging."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?w=800&q=80",
+      "caption": "Quantitative risk dashboards monitor portfolio correlations and beta exposures in real-time."
+    },
+    {
+      "type": "h1",
+      "text": "Systematic vs. Unsystematic Risk"
+    },
+    {
+      "type": "paragraph",
+      "text": "Unsystematic risk is specific to an individual stock, such as a management scandal or product recall, and can be mitigated through diversification. Systematic risk, like interest rate hikes or geopolitical tension, affects the entire market and must be managed using hedging derivatives or cash allocation adjustments."
+    },
+    {
+      "type": "paragraph",
+      "text": "Review your portfolio risk matrix weekly to ensure that your total capital exposure matches your risk tolerance limits, keeping you in the trading game for the long run."
+    }
+  ]
+}

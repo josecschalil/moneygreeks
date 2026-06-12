@@ -1,0 +1,43 @@
+{
+  "title": "Tech Sector Earnings Beat Estimates Despite Supply Chain Woes",
+  "author": "Sarah Jenkins",
+  "authorDesignation": "Senior Tech Reporter",
+  "date": "2026-06-11",
+  "category": "Equities",
+  "keyHighlights": [
+    "Mega-cap tech companies beat consensus EPS estimates by an average of 4.2%.",
+    "Supply chain delays continue to affect hardware delivery timelines, but strong software and cloud growth offset the headwinds.",
+    "Cloud infrastructure revenues surged 22% year-over-year, indicating robust corporate investment in digital tools."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Despite persistent headwinds in the global supply chain, major technology corporations have reported quarterly earnings that exceeded analyst consensus estimates. The resilience of software licensing revenues and a massive acceleration in cloud adoption have successfully mitigated slowdowns in hardware manufacturing and distribution."
+    },
+    {
+      "type": "h1",
+      "text": "Cloud Infrastructure Drives Resilient Growth"
+    },
+    {
+      "type": "paragraph",
+      "text": "The primary growth engine for the quarter was cloud services. Top providers reported a combined cloud revenue growth rate of 22% year-over-year. As businesses continue to automate operations and integrate intelligent software workflows, demand for scalable cloud environments remains at an all-time high."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+      "caption": "Enterprise cloud growth outpaced hardware supply bottlenecks during the recent quarter."
+    },
+    {
+      "type": "h1",
+      "text": "Hardware Delays and Inventory Management"
+    },
+    {
+      "type": "paragraph",
+      "text": "On the hardware front, chip shortages and logistics delays in primary shipping corridors added roughly 14 days to standard delivery cycles. However, improved predictive inventory management models allowed firms to pre-allocate key components, preventing the severe product shortages experienced in previous cycles."
+    },
+    {
+      "type": "paragraph",
+      "text": "Analysts remain cautiously optimistic about the upcoming quarters, noting that while valuation multiples are elevated, underlying cash flow growth remains exceptionally strong, supporting current market levels."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "title": "The Logic of Market Cycles",
+  "author": "David Arnaud",
+  "authorDesignation": "Head of Institutional Execution",
+  "date": "2026-06-05",
+  "category": "Psychology",
+  "keyHighlights": [
+    "Market cycles consist of four distinct phases: Accumulation, Markup, Distribution, and Mark-down.",
+    "Smart money accumulation occurs during periods of maximum retail pessimism.",
+    "Recognizing the transition between markup and distribution prevents chasing late-stage trends."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Markets do not move in a straight line. They move in repeatable cycles driven by changes in corporate earnings, macroeconomic indicators, and the collective psychology of market participants."
+    },
+    {
+      "type": "h1",
+      "text": "The Four Phases of a Market Cycle"
+    },
+    {
+      "type": "paragraph",
+      "text": "Every market cycle transitions through four phases: 1) Accumulation, where institutional players buy assets quietly; 2) Markup, where prices break out and attract retail buyers; 3) Distribution, where institutions sell to late-stage retail buyers; and 4) Mark-down, where selling dominates and prices decline."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&q=80",
+      "caption": "Phases of market auction cycles from low-volatility accumulation to aggressive markup."
+    },
+    {
+      "type": "h1",
+      "text": "Identifying Institutional Sentiment Transitions"
+    },
+    {
+      "type": "paragraph",
+      "text": "The key to survival is aligning with the smart money. During the accumulation phase, news flow is generally negative, but prices stop falling. This divergence indicates that institutions are absorbing sales. Conversely, in distribution, news flow is highly optimistic, but prices fail to make new highs as smart money rotates out of positions."
+    },
+    {
+      "type": "paragraph",
+      "text": "Understanding these cycles prevents the common retail mistake of buying at the absolute peak of distribution or panic selling during the final stages of accumulation."
+    }
+  ]
+}

@@ -50,6 +50,7 @@ export const marketItems = [
 
 export const latestArticles = [
   {
+    slug: "tech-sector-earnings",
     category: "Equities",
     readTime: "5 min read",
     title: "Tech Sector Earnings Beat Estimates Despite Supply Chain Woes",
@@ -59,6 +60,7 @@ export const latestArticles = [
     alt: "Modern corporate glass skyscrapers against a blue sky.",
   },
   {
+    slug: "institutional-adoption-bitcoin",
     category: "Crypto",
     readTime: "8 min read",
     title: "Institutional Adoption Drives Bitcoin Stabilization",
@@ -68,6 +70,7 @@ export const latestArticles = [
     alt: "Physical Bitcoin coin sitting on a stylized circuit board.",
   },
   {
+    slug: "european-markets-trade-tariffs",
     category: "Macro",
     readTime: "6 min read",
     title: "European Markets React to New Trade Tariffs",
@@ -80,6 +83,7 @@ export const latestArticles = [
 
 export const deepDiveArticles = [
   {
+    slug: "algorithmic-edge-ai",
     category: "Data Strategy",
     readTime: "12 min read",
     title: "The Algorithmic Edge: How AI is Reshaping Quant Trading",
@@ -89,6 +93,7 @@ export const deepDiveArticles = [
     alt: "Data analytics dashboard showing various charts and graphs.",
   },
   {
+    slug: "commercial-real-estate-post-hybrid",
     category: "Real Estate",
     readTime: "10 min read",
     title: "Commercial Real Estate in the Post-Hybrid Era",

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import styles from "./Navbar.module.css";
-
+import { usePathname } from "next/navigation";
 const navLinks = [
   { label: "Markets", href: "/" },
   { label: "News", href: "/news-today" },
@@ -11,9 +11,9 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className={styles.navbar}>
@@ -26,7 +26,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className={`${styles.navLink} ${link.label === "Markets" ? styles.active : ""}`}
+              className={`${styles.navLink} ${link.href === pathname || (link.href !== "/" && pathname.startsWith(link.href)) ? styles.active : ""}`}
               onClick={() => setOpen(false)}
             >
               {link.label}

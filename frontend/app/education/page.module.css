@@ -42,7 +42,7 @@
   background-color: var(--surface);
   color: var(--on-background);
   font-family: "Hanken Grotesk", sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -154,7 +154,7 @@
 
 .heroTitle {
   font-family: "Source Serif 4", serif;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -237,7 +237,7 @@
 
 .featuredTitle {
   font-family: "Source Serif 4", serif;
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 16px;
@@ -246,7 +246,7 @@
 
 .featuredDesc {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 18px;
+  font-size: 16px;
   max-width: 576px;
   margin-bottom: 24px;
 }
@@ -294,13 +294,13 @@
 
 .sectionTitle {
   font-family: "Source Serif 4", serif;
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 600;
   color: var(--primary);
 }
 
 .sectionTitleLg {
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .viewAll {
@@ -465,7 +465,7 @@
 .listTitle {
   font-weight: 700;
   color: var(--primary);
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 4px;
   transition: color 0.2s;
 }
@@ -556,7 +556,7 @@
 }
 
 .briefingItemTitle {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--primary);
   line-height: 1.35;
@@ -668,11 +668,11 @@
 
 @media (max-width: 768px) {
   .heroTitle {
-    font-size: 32px;
+    font-size: 24px;
   }
 
   .featuredTitle {
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .featuredContent {

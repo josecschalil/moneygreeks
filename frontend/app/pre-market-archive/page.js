@@ -1,13 +1,45 @@
 import Image from "next/image";
 import Link from "next/link";
-async function fetchPreMarketData() {
-  const res = await fetch("http://127.0.0.1:8000/report-list/", {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch pre-market data");
+const FALLBACK_PREMARKET_DATA = [
+  {
+    id: 1,
+    slug: "nifty-analysis-june-12",
+    title: "Pre-Market Setup: Nifty Prepares for Expiry Day Volatility",
+    report_date: "2026-06-12",
+    overall_conclusion: "Indices are expected to open flat to positive. Volatility index (VIX) rising warrants caution. Focus on key support levels.",
+    image_url: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=800&q=80"
+  },
+  {
+    id: 2,
+    slug: "bank-nifty-june-11",
+    title: "Pre-Market View: Banking Sector Leads Index Consolidation",
+    report_date: "2026-06-11",
+    overall_conclusion: "Bank Nifty faces resistance near 44,000. Institutional flow indicates profit-booking at higher levels. Maintain selective long exposure.",
+    image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"
+  },
+  {
+    id: 3,
+    slug: "global-cues-june-10",
+    title: "Pre-Market Outlook: Mixed Global Cues and Sector Rotation",
+    report_date: "2026-06-10",
+    overall_conclusion: "Flat international sessions suggest range-bound trades today. Mid-cap IT and Pharma sectors continue to show relative strength.",
+    image_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80"
   }
-  return res.json();
+];
+
+async function fetchPreMarketData() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/report-list/", {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      return FALLBACK_PREMARKET_DATA;
+    }
+    return await res.json();
+  } catch (error) {
+    console.warn("Backend report-list unavailable. Using fallback pre-market reports.");
+    return FALLBACK_PREMARKET_DATA;
+  }
 }
 export default async function BlogPage() {
   const premarketData = await fetchPreMarketData();

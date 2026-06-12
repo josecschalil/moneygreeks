@@ -1,0 +1,43 @@
+{
+  "title": "Macro Economic Indicators",
+  "author": "Elena Rostova",
+  "authorDesignation": "Macroeconomic Strategist",
+  "date": "2026-06-02",
+  "category": "Macro",
+  "keyHighlights": [
+    "Macroeconomic indicators are categorized into leading, lagging, and coincident indicators.",
+    "Central banks rely on data points like CPI and PCE to determine monetary interest rates.",
+    "Manufacturing PMIs offer early warnings of economic expansion or contraction."
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Macroeconomic indicators are statistics that reflect the economic health of a country. For long-term investors, monitoring these indicators is necessary to anticipate sector rotations and adjust asset allocations."
+    },
+    {
+      "type": "h1",
+      "text": "Leading vs. Lagging Indicators"
+    },
+    {
+      "type": "paragraph",
+      "text": "Leading indicators, like stock index returns and building permits, suggest future economic activity. Lagging indicators, like unemployment rates and business spending, confirm trends that have already occurred. Successful portfolio builders use leading indicators to position early."
+    },
+    {
+      "type": "image",
+      "url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=800&q=80",
+      "caption": "Yield curve inversions are historically reliable indicators of macroeconomic cycle transitions."
+    },
+    {
+      "type": "h1",
+      "text": "Inflation Metrics and Central Bank Action"
+    },
+    {
+      "type": "paragraph",
+      "text": "The Consumer Price Index (CPI) measures retail price inflation, while the Producer Price Index (PPI) measures wholesale inflation. When these indexes rise, central banks raise interest rates to cool the economy, which increases borrowing costs and shifts capital from risky assets to debt instruments."
+    },
+    {
+      "type": "paragraph",
+      "text": "By understanding the current phase of the macroeconomic business cycle, you can tilt your portfolio towards defensive sectors during contractions or growth sectors during expansions."
+    }
+  ]
+}
