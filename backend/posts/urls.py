@@ -1,3 +1,4 @@
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 from .views import *
 
@@ -20,7 +21,14 @@ router.register("market-breadth", MarketBreadthViewSet)
 
 router.register("sector-performance", SectorPerformanceViewSet)
 router.register("sector-analysis", SectorAnalysisViewSet)
+router.register("option-chain-summaries", OptionChainSummaryViewSet)
 router.register("blog-post", BlogPostDetailView, basename="blog-post")
+router.register("education-categories", EducationCategoryViewSet, basename="education-categories")
 router.register("report-list", MarketReportListViewSet, basename="report-list")
 router.register(r"newsletter-subscribe", NewsletterSubscriberViewSet, basename="newsletter-subscribe")
-urlpatterns = router.urls
+
+urlpatterns = [
+    path("generate-report/", GenerateReportView.as_view(), name="generate-report"),
+    path("sentiment/today/", DailySentimentTodayView.as_view(), name="sentiment-today"),
+    path("sentiment/vote/", DailySentimentVoteView.as_view(), name="sentiment-vote"),
+] + router.urls

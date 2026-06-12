@@ -203,11 +203,30 @@ class OptionChainSummary(models.Model):
     analysis = models.TextField(blank=True)
 
 
+class EducationCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 class BlogPost(models.Model):
     CATEGORY_CHOICES = [
         ("technology", "Technology"),
         ("finance", "Finance"),
         ("education", "Education"),
+        ("news", "News"),
+    ]
+
+    NEWS_PLACEMENT_CHOICES = [
+        ("hero", "Featured Hero"),
+        ("latest", "Latest Intelligence"),
+        ("deep_dive", "Deep Dive Analysis"),
+        ("breaking", "Breaking News"),
+        ("live_feed", "Live Feed"),
+        ("quick_hit", "Quick Hit"),
     ]
 
     title = models.CharField(max_length=255)
@@ -220,11 +239,33 @@ class BlogPost(models.Model):
         choices=CATEGORY_CHOICES
     )
 
-    featured_image = models.URLField()
-
-    content = models.TextField(
-        help_text="Plain text content from Django TextField"
+    news_placement = models.CharField(
+        max_length=50,
+        choices=NEWS_PLACEMENT_CHOICES,
+        null=True,
+        blank=True
     )
+
+    education_category = models.ForeignKey(
+        EducationCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="posts"
+    )
+
+    featured_image = models.URLField(blank=True, null=True)
+
+    author = models.CharField(max_length=255, default="MoneyGreeks Team")
+    author_designation = models.CharField(max_length=255, default="Market Analyst")
+    key_highlights = models.JSONField(default=list, blank=True)
+
+    content = models.JSONField(
+        default=list,
+        help_text="Array of content blocks (h1, paragraph, image)"
+    )
+
+    view_count = models.PositiveIntegerField(default=0)
 
     created_at = models.DateField(auto_now_add=True)
 
@@ -233,7 +274,7 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
-    
+
 class NewsletterSubscriber(models.Model):
     email = models.EmailField(
         unique=True,
@@ -251,3 +292,14 @@ class NewsletterSubscriber(models.Model):
         ordering = ["-subscribed_at"]
         verbose_name = "Newsletter Subscriber"
         verbose_name_plural = "Newsletter Subscribers"
+
+class DailySentiment(models.Model):
+    date = models.DateField(unique=True)
+    bullish_votes = models.PositiveIntegerField(default=0)
+    bearish_votes = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Sentiment for {self.date}"
+
+    class Meta:
+        ordering = ["-date"]

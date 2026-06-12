@@ -81,6 +81,24 @@ export default async function BlogPostPage({ params }) {
 
   const formattedDate = formatDate(post.created_at);
 
+  const renderContent = (content) => {
+    if (typeof content === "string") return <div className="whitespace-pre-line">{content}</div>;
+    if (!Array.isArray(content)) return null;
+    return content.map((block, i) => {
+      switch (block.type) {
+        case "h1": return <h2 key={i} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{block.text}</h2>;
+        case "paragraph": return <p key={i} className="mb-6 leading-relaxed">{block.text}</p>;
+        case "image": return (
+          <figure key={i} className="my-8">
+            <img src={block.url} alt={block.caption || ""} className="w-full rounded-xl shadow-sm" />
+            {block.caption && <figcaption className="text-center text-sm text-gray-500 mt-3">{block.caption}</figcaption>}
+          </figure>
+        );
+        default: return null;
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-2 md:py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
@@ -130,8 +148,8 @@ export default async function BlogPostPage({ params }) {
 
             {/* CONTENT */}
             <div className="px-6 md:px-10 py-10">
-              <div className="whitespace-pre-line space-y-6 text-lg leading-relaxed text-gray-900">
-                {post.content}
+              <div className="text-lg leading-relaxed text-gray-800 font-sans">
+                {renderContent(post.content)}
               </div>
 
               {/* AUTHOR - IMPROVED DESIGN */}

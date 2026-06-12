@@ -7,8 +7,11 @@ import {
 } from "../news-today/data";
 import Icon from "./Icon";
 import SentimentWidget from "./SentimentWidget";
+import Link from "next/link";
 
-function LiveFeed() {
+function LiveFeed({ posts }) {
+  const items = posts?.length ? posts : feedItems;
+
   return (
     <div className={`${styles.card} ${styles.tallPanel} ${styles.feedColumn}`}>
       <div className={styles.denseHeader}>
@@ -20,21 +23,21 @@ function LiveFeed() {
         </button>
       </div>
       <div className={styles.feedBody}>
-        {feedItems.map((item) => (
-          <div className={styles.feedItem} key={`${item.time}-${item.title}`}>
+        {items.map((item, index) => {
+          const content = (
             <div className={styles.feedInner}>
               <div
                 className={`${styles.feedTime} ${item.hot ? styles.hotTime : ""}`}
               >
-                {item.time}
+                {item.time || "JUST IN"}
               </div>
               <div>
                 <h3 className={styles.feedTitle}>{item.title}</h3>
-                <p className={styles.feedText}>{item.body}</p>
+                <p className={styles.feedText}>{item.subtitle || item.body || item.content?.substring(0, 100)}</p>
                 <div className={styles.tagRow}>
-                  {item.tags.map((tag, index) => (
+                  {(item.tags || []).map((tag, tIndex) => (
                     <span
-                      className={`${styles.feedTag} ${index > 0 ? styles.outlineTag : ""}`}
+                      className={`${styles.feedTag} ${tIndex > 0 ? styles.outlineTag : ""}`}
                       key={tag}
                     >
                       {tag}
@@ -43,39 +46,53 @@ function LiveFeed() {
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+
+          return item.slug ? (
+            <Link href={`/news-today/${item.slug}`} className={`${styles.feedItem} hover:bg-gray-50 transition-colors block`} key={item.slug}>
+              {content}
+            </Link>
+          ) : (
+            <div className={styles.feedItem} key={index}>
+              {content}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function QuickHitsColumn() {
+function QuickHitsColumn({ quickHitPosts, breakingPosts }) {
+  const breakingItems = breakingPosts?.length ? breakingPosts : [
+    { title: "Global Markets Brace as Central Banks Signal Aggressive Rate Hikes", subtitle: "Investors navigate heightened volatility as major central banks pivot towards tighter monetary policy." },
+    { title: "Tech Sector Earnings Beat Estimates Despite Supply Chain Woes", subtitle: "Major tech firms report robust quarterly earnings, signaling resilient consumer demand." }
+  ];
+
+  const hits = quickHitPosts?.length ? quickHitPosts : quickHits;
+
   return (
     <div className={styles.middleColumn}>
       <div className={`${styles.card} ${styles.breakingBox}`}>
         <h3 className={`${styles.widgetTitle} ${styles.breakingTitle}`}>
           <Icon name="bolt" /> Breaking
         </h3>
-        <div>
-          <h4 className={styles.smallStoryTitle}>
-            Global Markets Brace as Central Banks Signal Aggressive Rate Hikes
-          </h4>
-          <p className={styles.smallStoryText}>
-            Investors navigate heightened volatility as major central banks
-            pivot towards tighter monetary policy.
-          </p>
-        </div>
-        <div className={styles.storySplit} />
-        <div>
-          <h4 className={styles.smallStoryTitle}>
-            Tech Sector Earnings Beat Estimates Despite Supply Chain Woes
-          </h4>
-          <p className={styles.smallStoryText}>
-            Major tech firms report robust quarterly earnings, signaling
-            resilient consumer demand.
-          </p>
-        </div>
+        {breakingItems.map((story, i) => {
+            const content = (
+              <>
+                {i > 0 && <div className={styles.storySplit} />}
+                <h4 className={styles.smallStoryTitle}>{story.title}</h4>
+                <p className={styles.smallStoryText}>{story.subtitle || story.description}</p>
+              </>
+            );
+            return story.slug ? (
+              <Link href={`/news-today/${story.slug}`} className="block hover:opacity-80 transition-opacity" key={story.slug}>
+                {content}
+              </Link>
+            ) : (
+              <div key={i}>{content}</div>
+            );
+        })}
       </div>
 
       <div className={`${styles.card} ${styles.quickHitsPanel}`}>
@@ -85,19 +102,30 @@ function QuickHitsColumn() {
           </h3>
         </div>
         <div className={styles.quickHitsBody}>
-          {quickHits.map((hit) => (
-            <div className={styles.quickHit} key={`${hit.time}-${hit.type}`}>
-              <div className={styles.quickTop}>
-                <span
-                  className={`${styles.hitType} ${hit.tone === "up" ? styles.up : hit.tone === "down" ? styles.down : ""}`}
-                >
-                  {hit.type}
-                </span>
-                <span className={styles.mutedSmall}>{hit.time}</span>
+          {hits.map((hit, i) => {
+            const content = (
+              <>
+                <div className={styles.quickTop}>
+                  <span
+                    className={`${styles.hitType} ${hit.tone === "up" ? styles.up : hit.tone === "down" ? styles.down : ""}`}
+                  >
+                    {hit.type || "MARKET"}
+                  </span>
+                  <span className={styles.mutedSmall}>{hit.time || "JUST IN"}</span>
+                </div>
+                <p className={styles.hitText}>{hit.title || hit.text}</p>
+              </>
+            );
+            return hit.slug ? (
+              <Link href={`/news-today/${hit.slug}`} className={`${styles.quickHit} hover:bg-gray-50 transition-colors block`} key={hit.slug}>
+                {content}
+              </Link>
+            ) : (
+              <div className={styles.quickHit} key={i}>
+                {content}
               </div>
-              <p className={styles.hitText}>{hit.text}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -171,7 +199,7 @@ function MarketDataColumn() {
   );
 }
 
-export default function AdvancedMarketFeed() {
+export default function AdvancedMarketFeed({ feedPosts, quickHits, breakingPosts }) {
   return (
     <>
       <div className={styles.terminalHeader}>
@@ -181,8 +209,8 @@ export default function AdvancedMarketFeed() {
         </h2>
       </div>
       <section className={styles.denseGrid}>
-        <LiveFeed />
-        <QuickHitsColumn />
+        <LiveFeed posts={feedPosts} />
+        <QuickHitsColumn quickHitPosts={quickHits} breakingPosts={breakingPosts} />
         <MarketDataColumn />
       </section>
     </>

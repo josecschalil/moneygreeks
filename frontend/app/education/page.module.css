@@ -242,13 +242,23 @@
   color: #ffffff;
   margin-bottom: 16px;
   line-height: 1.15;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
 }
 
 .featuredDesc {
   color: rgba(255, 255, 255, 0.8);
   font-size: 16px;
   max-width: 576px;
-  margin-bottom: 24px;
+  margin-bottom: 0px;
+  -webkit-line-clamp:2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
 }
 
 .featuredMeta {

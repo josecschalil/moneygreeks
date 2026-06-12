@@ -8,8 +8,8 @@ export default function ArticleCard({ article }) {
       <article className={`${styles.card} ${styles.articleCard} h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-gray-300`}>
         <div className={`${styles.articleImageWrap} overflow-hidden`}>
           <img 
-            src={article.image} 
-            alt={article.alt} 
+            src={article.featured_image || article.image} 
+            alt={article.title || article.alt} 
             className={`${styles.image} transition-transform duration-500 group-hover:scale-105`} 
           />
         </div>
@@ -21,7 +21,7 @@ export default function ArticleCard({ article }) {
           <h3 className={`${styles.articleTitle} transition-colors duration-200 group-hover:text-blue-600`}>
             {article.title}
           </h3>
-          <p className={styles.articleText}>{article.description}</p>
+          <p className={styles.articleText}>{article.subtitle || article.description}</p>
         </div>
       </article>
     </Link>

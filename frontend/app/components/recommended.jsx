@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 async function fetchBlogPostData() {
   try {
     const res = await fetch("http://127.0.0.1:8000/blog-post/", {
@@ -80,8 +80,7 @@ const RECOMMENDED_POSTS = [
   },
 ];
 
-const blogPostData = await fetchBlogPostData();
-const blogPostDataSlice = Array.isArray(blogPostData) ? blogPostData.slice(0, 4) : RECOMMENDED_POSTS;
+// Removed top level await
 
 function PostCard({ post }) {
   const [hovered, setHovered] = useState(false);
@@ -261,7 +260,15 @@ function PostCard({ post }) {
   );
 }
 
-export default function RecommendedPosts({ posts = blogPostDataSlice }) {
+export default function RecommendedPosts() {
+  const [posts, setPosts] = useState(RECOMMENDED_POSTS);
+
+  useEffect(() => {
+    fetchBlogPostData().then((data) => {
+      setPosts(Array.isArray(data) ? data.slice(0, 4) : RECOMMENDED_POSTS);
+    });
+  }, []);
+
   return (
     <>
       <style>{`

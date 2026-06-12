@@ -23,7 +23,18 @@ interface ArticleData {
   content: ContentBlock[];
 }
 
-function getArticleData(slug: string): ArticleData | null {
+async function getArticleData(slug: string): Promise<ArticleData | null> {
+  try {
+    const res = await fetch(`http://127.0.0.1:8000/blog-post/${slug}/`, {
+      next: { revalidate: 60 }
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (error) {
+    console.warn("Django backend unreachable for news, falling back to local JSON");
+  }
+
   try {
     const filePath = path.join(
       process.cwd(),
@@ -49,7 +60,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getArticleData(slug);
+  const post = await getArticleData(slug);
   if (!post) {
     return {
       title: "News | MoneyGreeks",
@@ -69,7 +80,7 @@ export default async function NewsArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getArticleData(slug);
+  const post = await getArticleData(slug);
 
   if (!post) {
     notFound();
@@ -127,7 +138,7 @@ export default async function NewsArticlePage({
               <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 border-b border-gray-100 pb-6 mb-8 font-sans">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs">
-                    {post.author
+                    {(post.author || "MG")
                       .split(" ")
                       .map((n) => n[0])
                       .join("")}

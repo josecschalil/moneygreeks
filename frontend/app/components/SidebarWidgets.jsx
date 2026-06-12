@@ -1,8 +1,11 @@
 import styles from "../news-today/MarketInsight.module.css";
-import { mostRead } from "../news-today/data";
+import { mostRead as defaultMostRead } from "../news-today/data";
 import SentimentWidget from "./SentimentWidget";
+import Link from "next/link";
 
-export default function SidebarWidgets() {
+export default function SidebarWidgets({ mostRead }) {
+  const displayMostRead = mostRead?.length ? mostRead : defaultMostRead;
+
   return (
     <aside className={styles.sidebar}>
       <SentimentWidget />
@@ -10,12 +13,16 @@ export default function SidebarWidgets() {
       <div className={`${styles.card} ${styles.widget}`}>
         <h3 className={styles.widgetTitle}>Most Read</h3>
         <ol className={styles.mostReadList}>
-          {mostRead.map((item, index) => (
-            <li className={styles.mostReadItem} key={item.title}>
+          {displayMostRead.map((item, index) => (
+            <li className={styles.mostReadItem} key={item.slug || index}>
               <span className={styles.rank}>{index + 1}</span>
               <div>
-                <h4 className={styles.mostReadTitle}>{item.title}</h4>
-                <span className={styles.mutedSmall}>{item.meta}</span>
+                <Link href={`/news-today/${item.slug}`} className="hover:underline">
+                  <h4 className={styles.mostReadTitle}>{item.title}</h4>
+                </Link>
+                <span className={styles.mutedSmall}>
+                  {item.view_count !== undefined ? `${item.view_count} views` : item.meta}
+                </span>
               </div>
             </li>
           ))}

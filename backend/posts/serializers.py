@@ -14,8 +14,16 @@ from .models import (
     OptionChainSummary,
     SectorPerformance,
     SectorAnalysis,
-    BlogPost
+    BlogPost,
+    EducationCategory,
+    DailySentiment
 )
+
+class DailySentimentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DailySentiment
+        fields = "__all__"
+
 class GlobalMarketIndexSerializer(serializers.ModelSerializer):
     class Meta:
         model = GlobalMarketIndex
@@ -119,7 +127,6 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
             "quality_score",
             "report_type",
             "created_at",
-
             "global_indices",
             "global_analysis",
 
@@ -157,20 +164,36 @@ class ReportListSerializer(serializers.ModelSerializer):
             "image_url",
         ]
 
+class EducationCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EducationCategory
+        fields = "__all__"
 
 class BlogPostSerializer(serializers.ModelSerializer):
+    authorDesignation = serializers.CharField(source='author_designation', required=False, allow_blank=True)
+    keyHighlights = serializers.JSONField(source='key_highlights', required=False)
+    date = serializers.DateField(source='created_at', read_only=True)
+    education_category_details = EducationCategorySerializer(source='education_category', read_only=True)
 
     class Meta:
         model = BlogPost
         fields = [
+            "id",
             "title",
             "subtitle",
             "slug",
             "category",
+            "education_category",
+            "education_category_details",
+            "news_placement",
             "featured_image",
             "content",
+            "view_count",
             "created_at",
-         
+            "author",
+            "authorDesignation",
+            "keyHighlights",
+            "date",
         ]
 
 class NewsletterSubscriberSerializer(serializers.ModelSerializer):
@@ -179,7 +202,7 @@ class NewsletterSubscriberSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "subscribed_at")
         extra_kwargs = {
             "email": {
-                "validators": [],  # 🔥 disable unique validator
+                "validators": [],  # disable unique validator
             }
         }
     def create(self, validated_data):

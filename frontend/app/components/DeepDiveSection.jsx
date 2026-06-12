@@ -12,8 +12,8 @@ function DeepArticle({ article }) {
       <article className={`${styles.card} ${styles.deepArticle} transition-all duration-300 hover:shadow-lg hover:border-gray-300`}>
         <div className={`${styles.deepImageWrap} overflow-hidden`}>
           <img 
-            src={article.image} 
-            alt={article.alt} 
+            src={article.featured_image || article.image} 
+            alt={article.title || article.alt} 
             className={`${styles.image} transition-transform duration-500 group-hover:scale-105`} 
           />
         </div>
@@ -25,7 +25,7 @@ function DeepArticle({ article }) {
           <h3 className={`${styles.articleTitle} transition-colors duration-200 group-hover:text-blue-600`}>
             {article.title}
           </h3>
-          <p className={styles.articleText}>{article.description}</p>
+          <p className={styles.articleText}>{article.subtitle || article.description}</p>
           <span className={`${styles.readLink} transition-all duration-200 group-hover:translate-x-1 inline-flex items-center gap-1`}>
             Read Analysis <Icon name="arrow_forward" />
           </span>
@@ -35,18 +35,19 @@ function DeepArticle({ article }) {
   );
 }
 
-export default function DeepDiveSection() {
+export default function DeepDiveSection({ posts, mostRead }) {
+  const displayPosts = posts || deepDiveArticles;
   return (
     <section className={styles.deepGrid}>
       <div className={styles.deepMain}>
         <SectionHeader title="Deep Dive Analysis" />
         <div className={styles.deepColumn}>
-          {deepDiveArticles.map((article) => (
-            <DeepArticle key={article.title} article={article} />
+          {displayPosts.map((article, i) => (
+            <DeepArticle key={article.slug || i} article={article} />
           ))}
         </div>
       </div>
-      <SidebarWidgets />
+      <SidebarWidgets mostRead={mostRead} />
     </section>
   );
 }
