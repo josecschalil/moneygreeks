@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { User, Calendar, Clock, ArrowLeft } from "lucide-react";
 import RecommendedPosts from "@/app/components/recommended";
+import NewsletterSidebarWidget from "@/app/components/NewsletterSidebarWidget";
 
 interface ContentBlock {
   type: "h1" | "paragraph" | "image";
@@ -286,32 +287,7 @@ export default async function NewsArticlePage({
             </div>
 
             {/* Newsletter Subscription Card */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 space-y-4">
-              <div>
-                <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest bg-blue-50 border border-blue-100 px-2 py-0.5 rounded">
-                  Exclusive Reports
-                </span>
-                <h3 className="text-base font-bold mt-2.5 font-serif text-gray-900">
-                  The Alpha Letter
-                </h3>
-                <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-                  Join 15,000+ sophisticated investors receiving weekly
-                  strategic analysis.
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <input
-                  type="email"
-                  placeholder="name@company.com"
-                  className="w-full px-4 py-2.5 rounded-lg bg-gray-50 border border-gray-300 text-sm focus:outline-none focus:border-blue-500 placeholder-gray-400 text-gray-900 transition-colors"
-                />
-
-                <button className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-colors shadow-md">
-                  Subscribe Now
-                </button>
-              </div>
-            </div>
+            <NewsletterSidebarWidget />
             {/* Ad Block 300x600 */}
             <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-4">
               <div className="flex items-center justify-between mb-2">

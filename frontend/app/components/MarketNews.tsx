@@ -1,6 +1,9 @@
 import styles from './MarketNews.module.css'
+import Link from 'next/link'
+import { fetchPostsByCategory } from '../utils/api'
 
-const news = [
+// Fallback data if API is down
+const fallbackNews = [
   {
     category: 'ECONOMY',
     title: "RBI keeps repo rate unchanged at 6.5%; maintains 'withdrawal of accommodation' stance",
@@ -23,20 +26,54 @@ const news = [
   },
 ]
 
-export default function MarketNews() {
+function extractText(content) {
+  if (!content) return "";
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    return content.map(extractText).join(" ");
+  }
+  if (typeof content === "object") {
+    // Attempt to pull out common text fields from block editor structures
+    if (content.text) return content.text;
+    if (content.content) return extractText(content.content);
+    return "";
+  }
+  return String(content);
+}
+
+function truncateText(content, length = 100) {
+  const text = extractText(content);
+  if (!text) return "";
+  if (text.length <= length) return text;
+  return text.substring(0, length).trim() + "...";
+}
+
+export default async function MarketNews() {
+  const liveNews = await fetchPostsByCategory('news')
+
+  // Use live data if available, take top 4
+  const displayNews = liveNews && liveNews.length > 0 
+    ? liveNews.slice(0, 4).map(post => ({
+        category: post.news_placement ? post.news_placement.replace('_', ' ').toUpperCase() : 'MARKET NEWS',
+        title: post.title,
+        excerpt: truncateText(post.summary || post.content, 120),
+        slug: post.slug,
+      }))
+    : fallbackNews
+
   return (
     <section className={styles.section}>
       <div className={styles.header}>
         <h2 className={styles.sectionTitle}>Market News</h2>
-        <a href="#" className={styles.viewAll}>View All →</a>
+        <Link href="/news-today" className={styles.viewAll}>View All →</Link>
       </div>
       <div className={styles.grid}>
-        {news.map((item, i) => (
-          <a key={i} href="#" className={styles.card}>
+        {displayNews.map((item, i) => (
+          <Link key={i} href={item.slug ? `/news-today/${item.slug}` : "/news-today"} className={styles.card} style={{ textDecoration: 'none' }}>
             <div className={styles.category}>{item.category}</div>
             <h3 className={styles.title}>{item.title}</h3>
             <p className={styles.excerpt}>{item.excerpt}</p>
-          </a>
+          </Link>
         ))}
       </div>
     </section>

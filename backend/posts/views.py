@@ -28,7 +28,8 @@ from .models import (
     OptionChainSummary,
     BlogPost,
     EducationCategory,
-    DailySentiment)
+    DailySentiment,
+    Enquiry)
 from django.utils import timezone
 from .services.premarket_data_collector import PremarketDataCollector, archive_premarket_data
 from .services.premarket_report_generator import PremarketReportError, build_report_from_data
@@ -51,7 +52,8 @@ from .serializers import (
     SectorAnalysisSerializer,
     OptionChainSummarySerializer,
     EducationCategorySerializer,
-    DailySentimentSerializer
+    DailySentimentSerializer,
+    EnquirySerializer
 )
 class MarketReportViewSet(viewsets.ModelViewSet):
     serializer_class = MarketReportDetailSerializer
@@ -207,3 +209,8 @@ class DailySentimentVoteView(APIView):
         
         serializer = DailySentimentSerializer(sentiment)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class EnquiryViewSet(viewsets.ModelViewSet):
+    queryset = Enquiry.objects.all()
+    serializer_class = EnquirySerializer
+    http_method_names = ["get", "post", "patch", "delete"]

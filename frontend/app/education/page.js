@@ -1,6 +1,8 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import { fetchPostsByCategory } from "../utils/api";
+import { fetchEducationCategories } from "../utils/api";
+import NewsletterSidebarWidget from "@/app/components/NewsletterSidebarWidget";
 
 export default async function IntelligenceHub() {
   const eduPosts = await fetchPostsByCategory("education") || [];
@@ -196,23 +198,7 @@ export default async function IntelligenceHub() {
               </div>
 
               {/* Newsletter */}
-              <div className={styles.newsletter}>
-                <h5 className={styles.newsletterTitle}>The Alpha Letter</h5>
-                <p className={styles.newsletterDesc}>
-                  Weekly institutional insights delivered directly to your
-                  inbox.
-                </p>
-                <div className={styles.newsletterForm}>
-                  <input
-                    className={styles.newsletterInput}
-                    placeholder="Email address"
-                    type="email"
-                  />
-                  <button className={styles.newsletterBtn}>
-                    Subscribe Now
-                  </button>
-                </div>
-              </div>
+              <NewsletterSidebarWidget />
             </div>
           </aside>
         </div>

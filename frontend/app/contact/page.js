@@ -279,7 +279,9 @@ const INITIAL_FORM = {
 
 const inputStyle = {
   backgroundColor: C.surface,
-  border: `1px solid ${C.outlineVariant}`,
+  borderWidth: "1px",
+  borderStyle: "solid",
+  borderColor: C.outlineVariant,
   borderRadius: "2px",
   padding: "10px 12px", // Slightly increased padding for easier tapping
   color: C.onSurface,
@@ -302,12 +304,32 @@ const InquiryForm = () => {
     setForm((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setForm(INITIAL_FORM);
-    }, 3000);
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/enquiries/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: form.firstName,
+          last_name: form.lastName,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+        }),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setForm(INITIAL_FORM);
+        }, 3000);
+      } else {
+        console.error("Failed to submit inquiry:", await res.text());
+      }
+    } catch (err) {
+      console.error("Failed to submit inquiry:", err);
+    }
   };
 
   const focusStyle = {

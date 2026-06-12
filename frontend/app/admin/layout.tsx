@@ -8,6 +8,8 @@ import {
   BookOpen,
   Newspaper,
   Layers,
+  MessageSquare,
+  Users,
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -63,6 +65,20 @@ export default function AdminLayout({
           >
             <BarChart2 size={20} />
             Pre-Market Reports
+          </Link>
+          <Link
+            href="/admin/enquiries"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
+          >
+            <MessageSquare size={20} />
+            Enquiries
+          </Link>
+          <Link
+            href="/admin/subscribers"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
+          >
+            <Users size={20} />
+            Subscribers
           </Link>
         </nav>
 

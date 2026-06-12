@@ -236,9 +236,10 @@ export default async function ReportsPage({ searchParams }) {
   const activeFilter = params?.filter || "All";
 
   // Fetch both endpoints in parallel; fallback to empty so fillWithDemo takes over
-  const [rawPremarket, rawPostmarket] = await Promise.all([
+  const [rawPremarket, rawPostmarket, rawNews] = await Promise.all([
     fetchJson("/report-list/", []),
     fetchJson("/post-market-list/", []),
+    fetchJson("/blog-post/", []),
   ]);
 
   // Separate fetched data by type
@@ -248,6 +249,17 @@ export default async function ReportsPage({ searchParams }) {
   const livePostmarket = rawPostmarket.filter((r) =>
     (r.report_type || "").toLowerCase().includes("post"),
   );
+
+  // Trending news
+  const liveNews = rawNews.filter((p) => p.category !== "education");
+  const latestNews = liveNews.slice(0, 3).map((news) => ({
+    category: news.category || "News",
+    categoryHex: "#ba1a1a",
+    date: formatDate(news.created_at),
+    title: news.title,
+    slug: news.slug,
+  }));
+  const displayTrending = latestNews.length > 0 ? latestNews : trendingAnalysis;
 
   // Fill up to 10 each with demo data
   const premarketList = fillWithDemo(livePremarket, demoPremarket, 10);
@@ -302,6 +314,24 @@ export default async function ReportsPage({ searchParams }) {
 
   // Limit grid results when not filtering to keep layout clean
   const displayCards = gridData.slice(0, isFiltering ? 20 : 6);
+  
+  // Calculate dynamic archives from the REST of the gridData
+  const restData = gridData.slice(6);
+  const archiveMap = {};
+  restData.forEach((item) => {
+      if (!item.report_date) return;
+      const d = new Date(item.report_date);
+      if (isNaN(d.getTime())) return;
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const key = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+      archiveMap[key] = (archiveMap[key] || 0) + 1;
+  });
+  const dynamicArchives = Object.keys(archiveMap).map(key => ({
+      label: key,
+      count: archiveMap[key],
+      slug: `/blog?filter=All&q=${encodeURIComponent(key)}`
+  }));
+  const displayArchives = dynamicArchives.length > 0 ? dynamicArchives : archiveMonths;
 
   return (
     <main
@@ -788,9 +818,9 @@ export default async function ReportsPage({ searchParams }) {
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 18 }}
               >
-                {trendingAnalysis.map((item, i) => (
+                {displayTrending.map((item, i) => (
                   <div
-                    key={item.title}
+                    key={item.slug || item.title}
                     className="trending-item"
                     style={{
                       cursor: "pointer",
@@ -829,16 +859,31 @@ export default async function ReportsPage({ searchParams }) {
                         {item.date}
                       </span>
                     </div>
-                    <h4
-                      style={{
-                        fontFamily: "'Source Serif 4', serif",
-                        fontSize: 15,
-                        color: "#041627",
-                        lineHeight: 1.35,
-                      }}
-                    >
-                      {item.title}
-                    </h4>
+                    {item.slug ? (
+                      <Link href={`/news-today/${item.slug}`} style={{ textDecoration: "none" }}>
+                        <h4
+                          style={{
+                            fontFamily: "'Source Serif 4', serif",
+                            fontSize: 15,
+                            color: "#041627",
+                            lineHeight: 1.35,
+                          }}
+                        >
+                          {item.title}
+                        </h4>
+                      </Link>
+                    ) : (
+                      <h4
+                        style={{
+                          fontFamily: "'Source Serif 4', serif",
+                          fontSize: 15,
+                          color: "#041627",
+                          lineHeight: 1.35,
+                        }}
+                      >
+                        {item.title}
+                      </h4>
+                    )}
                   </div>
                 ))}
               </div>
@@ -1060,7 +1105,7 @@ export default async function ReportsPage({ searchParams }) {
               Archives
             </h3>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {archiveMonths.map((month) => (
+              {displayArchives.map((month) => (
                 <li
                   key={month.label}
                   style={{

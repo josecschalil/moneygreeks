@@ -2,6 +2,8 @@
 import { useState } from "react";
 import styles from "./Navbar.module.css";
 import { usePathname } from "next/navigation";
+import NewsletterModal from "./NewsLetterModal";
+
 const navLinks = [
   { label: "Markets", href: "/" },
   { label: "News", href: "/news-today" },
@@ -11,8 +13,10 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -51,6 +55,7 @@ export default function Navbar() {
               </span>
             </div>
             <button className={styles.loginBtn}>Login</button>
+            <button className={styles.loginBtn} onClick={() => setIsNewsletterOpen(true)}>Subscribe Newsletter</button>
           </div>
         </nav>
 
@@ -72,7 +77,7 @@ export default function Navbar() {
               Search markets, stocks, news...
             </span>
           </div>
-          <button className={styles.loginBtn}>Subscribe Newsletter</button>
+          <button className={styles.loginBtn} onClick={() => setIsNewsletterOpen(true)}>Subscribe Newsletter</button>
         </div>
 
         {/* Hamburger */}
@@ -86,6 +91,11 @@ export default function Navbar() {
           <span className={`${styles.bar} ${open ? styles.bar3Open : ""}`} />
         </button>
       </div>
+
+      <NewsletterModal 
+        isOpen={isNewsletterOpen} 
+        onClose={() => setIsNewsletterOpen(false)} 
+      />
     </header>
   );
 }

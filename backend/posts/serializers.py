@@ -16,7 +16,8 @@ from .models import (
     SectorAnalysis,
     BlogPost,
     EducationCategory,
-    DailySentiment
+    DailySentiment,
+    Enquiry
 )
 
 class DailySentimentSerializer(serializers.ModelSerializer):
@@ -217,3 +218,8 @@ class NewsletterSubscriberSerializer(serializers.ModelSerializer):
             subscriber.save()
 
         return subscriber
+
+class EnquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Enquiry
+        fields = "__all__"
