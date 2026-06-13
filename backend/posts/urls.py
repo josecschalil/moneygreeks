@@ -27,6 +27,7 @@ router.register("education-categories", EducationCategoryViewSet, basename="educ
 router.register("report-list", MarketReportListViewSet, basename="report-list")
 router.register(r"newsletter-subscribe", NewsletterSubscriberViewSet, basename="newsletter-subscribe")
 router.register("enquiries", EnquiryViewSet, basename="enquiries")
+router.register("post-market-list", PostMarketReportViewSet, basename="post-market-list")
 
 urlpatterns = [
     path("generate-report/", GenerateReportView.as_view(), name="generate-report"),

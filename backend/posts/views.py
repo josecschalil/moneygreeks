@@ -29,7 +29,8 @@ from .models import (
     BlogPost,
     EducationCategory,
     DailySentiment,
-    Enquiry)
+    Enquiry,
+    PostMarketReport)
 from django.utils import timezone
 from .services.premarket_data_collector import PremarketDataCollector, archive_premarket_data
 from .services.premarket_report_generator import PremarketReportError, build_report_from_data
@@ -53,7 +54,8 @@ from .serializers import (
     OptionChainSummarySerializer,
     EducationCategorySerializer,
     DailySentimentSerializer,
-    EnquirySerializer
+    EnquirySerializer,
+    PostMarketReportSerializer
 )
 class MarketReportViewSet(viewsets.ModelViewSet):
     serializer_class = MarketReportDetailSerializer
@@ -214,3 +216,13 @@ class EnquiryViewSet(viewsets.ModelViewSet):
     queryset = Enquiry.objects.all()
     serializer_class = EnquirySerializer
     http_method_names = ["get", "post", "patch", "delete"]
+
+class PostMarketReportViewSet(viewsets.ModelViewSet):
+    queryset = PostMarketReport.objects.filter(is_published=True)
+    serializer_class = PostMarketReportSerializer
+    lookup_field = "slug"
+    http_method_names = ["get", "post", "patch", "delete"]
+
+    def get_queryset(self):
+        # Admin can see all; public only sees published
+        return PostMarketReport.objects.all()

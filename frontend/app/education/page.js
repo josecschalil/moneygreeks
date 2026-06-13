@@ -6,7 +6,20 @@ import NewsletterSidebarWidget from "@/app/components/NewsletterSidebarWidget";
 
 export default async function IntelligenceHub() {
   const eduPosts = await fetchPostsByCategory("education") || [];
-  
+
+  // Fetch latest news for the Intelligence Briefing sidebar widget
+  let latestNews = [];
+  try {
+    const newsRes = await fetch("http://127.0.0.1:8000/blog-post/?category=news", { next: { revalidate: 60 } });
+    if (newsRes.ok) {
+      const newsData = await newsRes.json();
+      const allNews = Array.isArray(newsData) ? newsData : (newsData.results || []);
+      latestNews = allNews.filter(p => p.category === "news").slice(0, 4);
+    }
+  } catch (e) {
+    console.warn("Could not fetch news for briefing widget");
+  }
+
   // Fetch dynamic categories
   let categories = [];
   try {
@@ -170,30 +183,32 @@ export default async function IntelligenceHub() {
                 </span>
               </div>
 
-              {/* Intelligence Briefing */}
+              {/* Intelligence Briefing — live news */}
               <div className={styles.briefingCard}>
                 <h5 className={styles.briefingTitle}>Intelligence Briefing</h5>
                 <ul className={styles.briefingList}>
-                  <li className={styles.briefingItem}>
-                    <a href="#">
-                      <span className={styles.briefingTag}>MACRO TRENDS</span>
-                      <p className={styles.briefingItemTitle}>
-                        Central Bank Policy Shift: Qualitative Implications for
-                        High-Beta Equity
+                  {latestNews.length > 0 ? latestNews.map((post) => (
+                    <li key={post.slug} className={styles.briefingItem}>
+                      <Link href={`/news-today/${post.slug}`}>
+                        <span className={styles.briefingTag}>
+                          {post.news_placement || post.category?.toUpperCase() || "NEWS"}
+                        </span>
+                        <p className={styles.briefingItemTitle}>{post.title}</p>
+                        <p className={styles.briefingTime}>
+                          {post.date
+                            ? new Date(post.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase()
+                            : new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase()
+                          }
+                        </p>
+                      </Link>
+                    </li>
+                  )) : (
+                    <li className={styles.briefingItem}>
+                      <p className={styles.briefingItemTitle} style={{ color: "#9ca3af", fontSize: "0.8rem" }}>
+                        No recent briefings available.
                       </p>
-                      <p className={styles.briefingTime}>2 HOURS AGO</p>
-                    </a>
-                  </li>
-                  <li className={styles.briefingItem}>
-                    <a href="#">
-                      <span className={styles.briefingTag}>TECH ANALYSIS</span>
-                      <p className={styles.briefingItemTitle}>
-                        Unusual Options Activity Detected in the Cloud
-                        Infrastructure Sector
-                      </p>
-                      <p className={styles.briefingTime}>5 HOURS AGO</p>
-                    </a>
-                  </li>
+                    </li>
+                  )}
                 </ul>
               </div>
 

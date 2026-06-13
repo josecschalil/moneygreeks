@@ -5,22 +5,69 @@ export default function AboutPage() {
   return (
     <div className="about-page-wrapper bg-[var(--background)] text-[var(--on-background)] antialiased selection:bg-[var(--primary-fixed)] selection:text-[var(--primary)] min-h-screen flex flex-col">
       <main className="w-full flex-grow">
-        <section className="relative w-full h-[614px] min-h-[500px] flex items-center justify-center overflow-hidden bg-[var(--primary-container)] ">
-          <div className="absolute inset-0 z-0">
-            <img
-              alt="Empowering investors with high-fidelity market intelligence and institutional-grade analysis."
-              className="w-full h-full object-cover opacity-60 object-center"
-              src="https://unsplash.com/photos/9wg5jCEPBsw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8c2t5c2NyYXBlcnN8ZW58MHx8MHx8&force=true&w=1920"
-            />
-          </div>
-          <div className="relative z-10 max-w-[var(--container-max)] mx-auto px-[var(--margin-mobile)] md:px-[var(--margin-desktop)] text-center">
-            <h1 className="font-display text-display-responsive text-[var(--on-primary)] mb-[var(--stack-sm)] max-w-4xl mx-auto drop-shadow-lg">
-              Empowering investors with high-fidelity market intelligence.
-            </h1>
-            <p className="font-body-lg text-body-lg text-[var(--primary-fixed-dim)] max-w-2xl mx-auto mb-[var(--stack-lg)]">
-              Institutional-grade analysis, predictive insights, and unbiased
-              reporting for the modern financial landscape.
-            </p>
+        <section className="relative w-full bg-white border-b border-gray-200">
+          {/* Top thin accent bar */}
+          <div className="w-full h-1 bg-gray-900"></div>
+
+          <div className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24">
+            {/* Editorial top label */}
+            <div className="flex items-center gap-3 mb-10">
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                Est. 2018
+              </span>
+              <span className="block w-12 h-px bg-gray-300"></span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                Mumbai, India
+              </span>
+            </div>
+
+            {/* Asymmetric two-column layout */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
+              {/* Left — big headline */}
+              <div className="md:col-span-7">
+                <h1 className="text-5xl md:text-6xl lg:text-[80px] font-black text-gray-900 leading-[0.95] tracking-tight font-serif">
+                  Built for <br />
+                  <span className="text-gray-400">people who</span> <br />
+                  read the fine print.
+                </h1>
+              </div>
+
+              {/* Right — descriptor + CTA */}
+              <div className="md:col-span-5 space-y-6 pb-2">
+                <p className="text-base text-gray-600 leading-relaxed border-l-2 border-gray-200 pl-5">
+                  MoneyGreeks started as a passion project by a group of traders
+                  tired of noise. No sponsored content. No fluff. Just rigorous
+                  analysis written for people who take their capital seriously.
+                </p>
+                <div className="flex items-center gap-4">
+                  <a
+                    href="/contact"
+                    className="text-sm font-semibold text-gray-500 hover:text-gray-900 underline underline-offset-4 transition-colors"
+                  >
+                    Get in touch
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom stats bar */}
+            <div className="mt-16 pt-8 border-t border-gray-100 grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[
+                { value: "15,000+", label: "Newsletter readers" },
+                { value: "6+ yrs", label: "In the market" },
+                { value: "Daily", label: "Pre-market reports" },
+                { value: "Zero", label: "Sponsored opinions" },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <p className="text-2xl md:text-3xl font-black text-gray-900 font-serif">
+                    {stat.value}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1 uppercase tracking-wider">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

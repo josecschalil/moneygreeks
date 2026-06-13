@@ -246,9 +246,12 @@ export default async function ReportsPage({ searchParams }) {
   const livePremarket = rawPremarket.filter(
     (r) => !(r.report_type || "").toLowerCase().includes("post"),
   );
-  const livePostmarket = rawPostmarket.filter((r) =>
-    (r.report_type || "").toLowerCase().includes("post"),
-  );
+  // Post-market endpoint strictly returns post-market items.
+  // We ensure they have a report_type property so frontend logic works seamlessly.
+  const livePostmarket = rawPostmarket.map((r) => ({
+    ...r,
+    report_type: r.report_type || "Post-Market",
+  }));
 
   // Trending news
   const liveNews = rawNews.filter((p) => p.category !== "education");
@@ -314,24 +317,38 @@ export default async function ReportsPage({ searchParams }) {
 
   // Limit grid results when not filtering to keep layout clean
   const displayCards = gridData.slice(0, isFiltering ? 20 : 6);
-  
+
   // Calculate dynamic archives from the REST of the gridData
   const restData = gridData.slice(6);
   const archiveMap = {};
   restData.forEach((item) => {
-      if (!item.report_date) return;
-      const d = new Date(item.report_date);
-      if (isNaN(d.getTime())) return;
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      const key = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
-      archiveMap[key] = (archiveMap[key] || 0) + 1;
+    if (!item.report_date) return;
+    const d = new Date(item.report_date);
+    if (isNaN(d.getTime())) return;
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const key = `${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+    archiveMap[key] = (archiveMap[key] || 0) + 1;
   });
-  const dynamicArchives = Object.keys(archiveMap).map(key => ({
-      label: key,
-      count: archiveMap[key],
-      slug: `/blog?filter=All&q=${encodeURIComponent(key)}`
+  const dynamicArchives = Object.keys(archiveMap).map((key) => ({
+    label: key,
+    count: archiveMap[key],
+    slug: `/blog?filter=All&q=${encodeURIComponent(key)}`,
   }));
-  const displayArchives = dynamicArchives.length > 0 ? dynamicArchives : archiveMonths;
+  const displayArchives =
+    dynamicArchives.length > 0 ? dynamicArchives : archiveMonths;
 
   return (
     <main
@@ -774,7 +791,7 @@ export default async function ReportsPage({ searchParams }) {
                 {truncateText(featuredPostmarket.overall_conclusion, 160)}
               </p>
               <Link
-                href={`/market-data/${featuredPostmarket.slug}`}
+                href={`/post-market/${featuredPostmarket.slug}`}
                 className="read-link"
                 style={{
                   display: "inline-flex",
@@ -860,7 +877,10 @@ export default async function ReportsPage({ searchParams }) {
                       </span>
                     </div>
                     {item.slug ? (
-                      <Link href={`/news-today/${item.slug}`} style={{ textDecoration: "none" }}>
+                      <Link
+                        href={`/news-today/${item.slug}`}
+                        style={{ textDecoration: "none" }}
+                      >
                         <h4
                           style={{
                             fontFamily: "'Source Serif 4', serif",
@@ -949,7 +969,11 @@ export default async function ReportsPage({ searchParams }) {
                   return (
                     <Link
                       key={report.id}
-                      href={`/market-data/${report.slug}`}
+                      href={
+                        report.report_type.toLowerCase().includes("post")
+                          ? `/post-market/${report.slug}`
+                          : `/market-data/${report.slug}`
+                      }
                       className="report-card"
                     >
                       <div>

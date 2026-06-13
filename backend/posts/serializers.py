@@ -17,13 +17,16 @@ from .models import (
     BlogPost,
     EducationCategory,
     DailySentiment,
-    Enquiry
+    Enquiry,
+    PostMarketReport,
 )
+
 
 class DailySentimentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DailySentiment
         fields = "__all__"
+
 
 class GlobalMarketIndexSerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,18 +103,13 @@ class OptionChainSummarySerializer(serializers.ModelSerializer):
 class MarketReportDetailSerializer(serializers.ModelSerializer):
     global_indices = GlobalMarketIndexSerializer(many=True, read_only=True)
     global_analysis = GlobalMarketAnalysisSerializer(read_only=True)
-
     indian_indices = IndianMarketIndexSerializer(many=True, read_only=True)
     indian_analysis = IndianMarketAnalysisSerializer(read_only=True)
-
     institutional_flows = InstitutionalFlowSerializer(many=True, read_only=True)
     institutional_analysis = InstitutionalFlowAnalysisSerializer(read_only=True)
-
     stock_movers = StockMoverSerializer(many=True, read_only=True)
     stock_mover_analysis = StockMoverAnalysisSerializer(read_only=True)
-
     market_breadth = MarketBreadthSerializer(read_only=True)
-
     sector_performance = SectorPerformanceSerializer(many=True, read_only=True)
     sector_analysis = SectorAnalysisSerializer(read_only=True)
     option_chain_summaries = OptionChainSummarySerializer(many=True, read_only=True)
@@ -119,33 +117,15 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = MarketReport
         fields = [
-            "id",
-            "title",
-            "slug",
-            "image_url",
-            "report_date",
-            "status",
-            "quality_score",
-            "report_type",
-            "created_at",
-            "global_indices",
-            "global_analysis",
-
-            "indian_indices",
-            "indian_analysis",
-
-            "institutional_flows",
-            "institutional_analysis",
-
-            "stock_movers",
-            "stock_mover_analysis",
-
+            "id", "title", "slug", "image_url", "report_date", "status",
+            "quality_score", "report_type", "created_at",
+            "global_indices", "global_analysis",
+            "indian_indices", "indian_analysis",
+            "institutional_flows", "institutional_analysis",
+            "stock_movers", "stock_mover_analysis",
             "market_breadth",
-
-            "sector_performance",
-            "sector_analysis",
+            "sector_performance", "sector_analysis",
             "option_chain_summaries",
-
             "overall_conclusion",
         ]
 
@@ -154,21 +134,16 @@ class ReportListSerializer(serializers.ModelSerializer):
     class Meta:
         model = MarketReport
         fields = [
-            "id",
-            "title",
-            "slug",
-            "report_date",
-            "status",
-            "quality_score",
-            "report_type",
-            "overall_conclusion",
-            "image_url",
+            "id", "title", "slug", "report_date", "status",
+            "quality_score", "report_type", "overall_conclusion", "image_url",
         ]
+
 
 class EducationCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = EducationCategory
         fields = "__all__"
+
 
 class BlogPostSerializer(serializers.ModelSerializer):
     authorDesignation = serializers.CharField(source='author_designation', required=False, allow_blank=True)
@@ -179,23 +154,13 @@ class BlogPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlogPost
         fields = [
-            "id",
-            "title",
-            "subtitle",
-            "slug",
-            "category",
-            "education_category",
-            "education_category_details",
-            "news_placement",
-            "featured_image",
-            "content",
-            "view_count",
-            "created_at",
-            "author",
-            "authorDesignation",
-            "keyHighlights",
-            "date",
+            "id", "title", "subtitle", "slug", "category",
+            "education_category", "education_category_details",
+            "news_placement", "featured_image", "content",
+            "view_count", "created_at", "author",
+            "authorDesignation", "keyHighlights", "date",
         ]
+
 
 class NewsletterSubscriberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -203,23 +168,26 @@ class NewsletterSubscriberSerializer(serializers.ModelSerializer):
         fields = ("id", "email", "subscribed_at")
         extra_kwargs = {
             "email": {
-                "validators": [],  # disable unique validator
+                "validators": [],  # disable unique validator so get_or_create works
             }
         }
+
     def create(self, validated_data):
         email = validated_data.get("email")
         email = email.strip().lower()
-
-        subscriber, created = NewsletterSubscriber.objects.get_or_create(
-            email=email,
-        )
-
-        if not created :
+        subscriber, created = NewsletterSubscriber.objects.get_or_create(email=email)
+        if not created:
             subscriber.save()
-
         return subscriber
+
 
 class EnquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Enquiry
+        fields = "__all__"
+
+
+class PostMarketReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostMarketReport
         fields = "__all__"

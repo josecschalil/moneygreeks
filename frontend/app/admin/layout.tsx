@@ -67,6 +67,13 @@ export default function AdminLayout({
             Pre-Market Reports
           </Link>
           <Link
+            href="/admin/post-market"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
+          >
+            <BarChart2 size={20} />
+            Post-Market Reports
+          </Link>
+          <Link
             href="/admin/enquiries"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
           >
