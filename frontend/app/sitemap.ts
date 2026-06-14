@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://moneygreeks.com";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL as string;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes: MetadataRoute.Sitemap = [

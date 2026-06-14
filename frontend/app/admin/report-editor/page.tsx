@@ -53,7 +53,7 @@ function ReportEditorInner() {
 
   const fetchReportData = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${editSlug}/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${editSlug}/`);
       if (res.ok) {
         const data = await res.json();
         setFormData({
@@ -126,7 +126,7 @@ function ReportEditorInner() {
     setError("");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${editSlug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${editSlug}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -138,7 +138,7 @@ function ReportEditorInner() {
         const promises = currentItems.map(async (item) => {
           const original = originalItems.find((o) => o.id === item.id);
           if (original && JSON.stringify(original) !== JSON.stringify(item)) {
-            const patchRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/${endpoint}/${item.id}/`, {
+            const patchRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${endpoint}/${item.id}/`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(item),
@@ -151,7 +151,7 @@ function ReportEditorInner() {
 
       const patchModifiedObject = async (endpoint: string, currentObj: any, originalObj: any) => {
         if (currentObj && currentObj.id && JSON.stringify(currentObj) !== JSON.stringify(originalObj)) {
-          const patchRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/${endpoint}/${currentObj.id}/`, {
+          const patchRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/${endpoint}/${currentObj.id}/`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(currentObj),

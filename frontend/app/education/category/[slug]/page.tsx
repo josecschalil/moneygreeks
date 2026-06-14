@@ -7,7 +7,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   // Fetch dynamic categories
   let category: any = null;
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/${slug}/`, { next: { revalidate: 60 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/education-categories/${slug}/`, { next: { revalidate: 60 } });
     if (res.ok) {
       category = await res.json();
     }

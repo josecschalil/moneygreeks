@@ -39,7 +39,7 @@ export default function NewsletterModal({ isOpen, onClose }) {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/newsletter-subscribe/`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/newsletter-subscribe/`,
         {
           method: "POST",
           headers: {

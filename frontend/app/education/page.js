@@ -10,7 +10,7 @@ export default async function IntelligenceHub() {
   // Fetch latest news for the Intelligence Briefing sidebar widget
   let latestNews = [];
   try {
-    const newsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/?category=news`, { next: { revalidate: 60 } });
+    const newsRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/?category=news`, { next: { revalidate: 60 } });
     if (newsRes.ok) {
       const newsData = await newsRes.json();
       const allNews = Array.isArray(newsData) ? newsData : (newsData.results || []);
@@ -23,7 +23,7 @@ export default async function IntelligenceHub() {
   // Fetch dynamic categories
   let categories = [];
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/`, { next: { revalidate: 60 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/education-categories/`, { next: { revalidate: 60 } });
     if (res.ok) {
       categories = await res.json();
     }

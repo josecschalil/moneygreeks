@@ -15,7 +15,7 @@ export default function ReportsManagement() {
 
   const fetchReports = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/report-list/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/report-list/`);
       if (res.ok) {
         const data = await res.json();
         setReports(data.results || data);
@@ -30,7 +30,7 @@ export default function ReportsManagement() {
   const generateReport = async () => {
     setGenerating(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/generate-report/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/generate-report/`, {
         method: "POST",
       });
       if (res.ok) {
@@ -52,7 +52,7 @@ export default function ReportsManagement() {
     if (!confirm("Are you sure you want to delete this report?")) return;
     
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${slug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${slug}/`, {
         method: "DELETE",
       });
       if (res.ok) {

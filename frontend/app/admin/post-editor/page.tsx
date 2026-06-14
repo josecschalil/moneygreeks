@@ -51,7 +51,7 @@ function PostEditorInner() {
 
   const fetchEduCategories = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/education-categories/`);
       if (res.ok) {
         setEduCategories(await res.json());
       }
@@ -62,7 +62,7 @@ function PostEditorInner() {
 
   const fetchPostData = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${editSlug}/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${editSlug}/`);
       if (res.ok) {
         const data = await res.json();
         setFormData({
@@ -146,8 +146,8 @@ function PostEditorInner() {
 
     try {
       const url = editSlug 
-        ? `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${editSlug}/` 
-        : `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/`;
+        ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${editSlug}/` 
+        : `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`;
       
       const method = editSlug ? "PUT" : "POST";
 

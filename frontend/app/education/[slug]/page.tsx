@@ -9,11 +9,17 @@ import {
   ArrowLeft,
   BookOpen,
   Award,
+  ArrowRight,
+  PlayCircle,
+  Download,
+  FileText,
+  CheckCircle2,
 } from "lucide-react";
+import SocialShare from "../../components/SocialShare";
 import RecommendedPosts from "@/app/components/recommended";
 
 interface ContentBlock {
-  type: "h1" | "paragraph" | "image";
+  type: "h1" | "paragraph" | "image" | "newsletter-cta";
   text?: string;
   url?: string;
   caption?: string;
@@ -34,14 +40,19 @@ interface ArticleData {
 
 async function getArticleData(slug: string): Promise<ArticleData | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${slug}/`, {
-      next: { revalidate: 60 }
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}/`,
+      {
+        next: { revalidate: 60 },
+      },
+    );
     if (res.ok) {
       return await res.json();
     }
   } catch (error) {
-    console.warn("Django backend unreachable for education, falling back to local JSON");
+    console.warn(
+      "Django backend unreachable for education, falling back to local JSON",
+    );
   }
 
   try {
@@ -76,8 +87,13 @@ export async function generateMetadata({
     };
   }
   const metaTitle = post.meta_title || `${post.title} | MoneyGreeks Academy`;
-  const metaDescription = post.meta_description || post.content.find((b) => b.type === "paragraph")?.text || "Master financial analysis and trading concepts with MoneyGreeks Academy.";
-  const metaKeywords = post.meta_keywords ? post.meta_keywords.split(',').map((k: string) => k.trim()) : [];
+  const metaDescription =
+    post.meta_description ||
+    post.content.find((b) => b.type === "paragraph")?.text ||
+    "Master financial analysis and trading concepts with MoneyGreeks Academy.";
+  const metaKeywords = post.meta_keywords
+    ? post.meta_keywords.split(",").map((k: string) => k.trim())
+    : [];
 
   return {
     title: metaTitle,
@@ -86,13 +102,23 @@ export async function generateMetadata({
     openGraph: {
       title: metaTitle,
       description: metaDescription,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/education/${slug}`,
       type: "article",
       publishedTime: post.date,
+      images: [
+        {
+          url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/default-og.jpg`,
+          width: 1200,
+          height: 630,
+          alt: metaTitle,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: metaTitle,
       description: metaDescription,
+      images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/default-og.jpg`],
     },
   };
 }
@@ -144,22 +170,30 @@ export default async function EducationArticlePage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": post.title,
-    "datePublished": post.date,
-    "author": [{
+    headline: post.title,
+    datePublished: post.date,
+    author: [
+      {
         "@type": "Person",
-        "name": post.author || "MoneyGreeks",
-    }],
-    "publisher": {
+        name: post.author || "MoneyGreeks",
+      },
+    ],
+    publisher: {
       "@type": "Organization",
-      "name": "MoneyGreeks",
+      name: "MoneyGreeks",
     },
-    "description": post.meta_description || post.content.find((b) => b.type === "paragraph")?.text || ""
+    description:
+      post.meta_description ||
+      post.content.find((b) => b.type === "paragraph")?.text ||
+      "",
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -289,6 +323,11 @@ export default async function EducationArticlePage({
                   }
                 })}
               </div>
+
+              <SocialShare
+                url={`${process.env.NEXT_PUBLIC_SITE_URL}/education/${slug}`}
+                title={post.title}
+              />
 
               {/* Dynamic About Author Card */}
               <div className="mt-16 pt-8 border-t border-gray-100">

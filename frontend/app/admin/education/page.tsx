@@ -14,7 +14,7 @@ export default function EducationManagement() {
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`);
       if (res.ok) {
         const data = await res.json();
         const allPosts = data.results || data;
@@ -31,7 +31,7 @@ export default function EducationManagement() {
     if (!confirm("Are you sure you want to delete this post?")) return;
     
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${slug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}/`, {
         method: "DELETE",
       });
       if (res.ok) {

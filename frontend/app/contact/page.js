@@ -175,9 +175,11 @@ const OFFICES = [
   },
 ];
 
+const SITE_DOMAIN = (process.env.NEXT_PUBLIC_SITE_URL || "https://moneygreeks.com").replace(/^https?:\/\//, '');
+
 const DIRECT_CONTACTS = [
-  { label: "Institutional Support", email: "support@moneygreeks.com" },
-  { label: "Media Inquiries", email: "press@moneygreeks.com" },
+  { label: "Institutional Support", email: `support@${SITE_DOMAIN}` },
+  { label: "Media Inquiries", email: `press@${SITE_DOMAIN}` },
 ];
 
 const FAQS = [
@@ -306,7 +308,7 @@ const InquiryForm = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/enquiries/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/enquiries/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

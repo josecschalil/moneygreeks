@@ -271,7 +271,7 @@ async function getMarketData(slug: string) {
   console.log("Fetching data for slug:", slug);
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${slug}/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${slug}/`, {
       cache: "no-store",
     });
 
@@ -344,7 +344,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
       "Market Open",
       "Trading",
     ],
-    canonicalUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/market-data/${slug}`,
+    canonicalUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/market-data/${slug}`,
   };
   const globalIndices = Array.isArray(data?.global_indices)
     ? data.global_indices

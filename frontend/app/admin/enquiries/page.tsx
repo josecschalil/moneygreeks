@@ -13,7 +13,7 @@ export default function EnquiriesAdminPage() {
 
   const fetchEnquiries = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/enquiries/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/enquiries/`);
       if (res.ok) {
         const data = await res.json();
         setEnquiries(Array.isArray(data) ? data : data.results || []);
@@ -27,7 +27,7 @@ export default function EnquiriesAdminPage() {
 
   const markAsRead = async (id: number, currentStatus: boolean) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/enquiries/${id}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/enquiries/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ is_read: !currentStatus }),
@@ -43,7 +43,7 @@ export default function EnquiriesAdminPage() {
   const deleteEnquiry = async (id: number) => {
     if (!confirm("Are you sure you want to delete this enquiry?")) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/enquiries/${id}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/enquiries/${id}/`, {
         method: "DELETE",
       });
       if (res.ok) {

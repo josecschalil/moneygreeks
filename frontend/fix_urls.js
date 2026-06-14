@@ -7,7 +7,7 @@ function walk(dir) {
     list.forEach(function(file) {
         file = path.join(dir, file);
         const stat = fs.statSync(file);
-        if (stat && stat.isDirectory()) { 
+        if (stat && stat.isDirectory() && !file.includes('node_modules') && !file.includes('.next')) { 
             results = results.concat(walk(file));
         } else if (file.endsWith('.js') || file.endsWith('.jsx') || file.endsWith('.ts') || file.endsWith('.tsx')) { 
             results.push(file);
@@ -21,9 +21,9 @@ const files = walk('c:/Users/josec/Desktop/moneygreeks/frontend/app');
 files.forEach(file => {
     let content = fs.readFileSync(file, 'utf8');
     
-    // Clean up redundant fallback
-    let newContent = content.replace(/\(process\.env\.NEXT_PUBLIC_API_BASE_URL \|\| "http:\/\/127\.0\.0\.1:8000"\)/g, '"http://127.0.0.1:8000"');
-    newContent = newContent.replace(/process\.env\.NEXT_PUBLIC_API_BASE_URL\s*\|\|\s*process\.env\.NEXT_PUBLIC_API_BASE_URL/g, 'process.env.NEXT_PUBLIC_API_BASE_URL');
+    // Remove the hardcoded fallback
+    let newContent = content.replace(/ \|\| "https:\/\/moneygreeks\.com"/g, '');
+    newContent = newContent.replace(/ \|\| 'https:\/\/moneygreeks\.com'/g, '');
 
     if (content !== newContent) {
         fs.writeFileSync(file, newContent, 'utf8');

@@ -13,7 +13,7 @@ export default function SubscribersAdminPage() {
 
   const fetchSubscribers = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/newsletter-subscribe/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/newsletter-subscribe/`);
       if (res.ok) {
         const data = await res.json();
         setSubscribers(Array.isArray(data) ? data : data.results || []);
@@ -28,7 +28,7 @@ export default function SubscribersAdminPage() {
   const deleteSubscriber = async (id: number) => {
     if (!confirm("Are you sure you want to remove this subscriber?")) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/newsletter-subscribe/${id}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/newsletter-subscribe/${id}/`, {
         method: "DELETE",
       });
       if (res.ok) {

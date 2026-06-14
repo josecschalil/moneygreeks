@@ -135,7 +135,7 @@ export default function PostMarketAdminPage() {
 
   const fetchReports = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/post-market-list/`);
       const data = await res.json();
       setReports(Array.isArray(data) ? data : data.results || []);
     } catch (err) {
@@ -185,7 +185,7 @@ export default function PostMarketAdminPage() {
         report_data: parsedData,
       };
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/post-market-list/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -222,7 +222,7 @@ export default function PostMarketAdminPage() {
   const handleDelete = async (slug: string) => {
     if (!confirm("Are you sure you want to delete this report?")) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/${slug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/post-market-list/${slug}/`, {
         method: "DELETE",
       });
       if (res.ok) {

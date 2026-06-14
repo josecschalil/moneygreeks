@@ -4,6 +4,20 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  --mg-container: 1200px;
+  --mg-surface: #ffffff;
+  --mg-surface-soft: #f9fafb;
+  --mg-surface-muted: #f3f4f6;
+  --mg-border: #e5e7eb;
+  --mg-border-strong: #d1d5db;
+  --mg-text: #111827;
+  --mg-text-muted: #4b5563;
+  --mg-text-soft: #6b7280;
+  --mg-positive: #10b981;
+  --mg-negative: #ef4444;
+  --mg-radius: 0.75rem;
+  --mg-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 @theme inline {
@@ -17,6 +31,17 @@
   :root {
     --background: #ffffff;
     --foreground: #ededed;
+    --mg-surface: #171717;
+    --mg-surface-soft: #262626;
+    --mg-surface-muted: #404040;
+    --mg-border: #262626;
+    --mg-border-strong: #404040;
+    --mg-text: #f9fafb;
+    --mg-text-muted: #d1d5db;
+    --mg-text-soft: #9ca3af;
+    --mg-positive: #10b981;
+    --mg-negative: #ef4444;
+    --mg-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
   }
 }
 
