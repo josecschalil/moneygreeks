@@ -31,17 +31,6 @@
   :root {
     --background: #ffffff;
     --foreground: #ededed;
-    --mg-surface: #171717;
-    --mg-surface-soft: #262626;
-    --mg-surface-muted: #404040;
-    --mg-border: #262626;
-    --mg-border-strong: #404040;
-    --mg-text: #f9fafb;
-    --mg-text-muted: #d1d5db;
-    --mg-text-soft: #9ca3af;
-    --mg-positive: #10b981;
-    --mg-negative: #ef4444;
-    --mg-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
   }
 }
 
