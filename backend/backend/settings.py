@@ -29,9 +29,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = 'django-insecure-i_21%p(4!9t=ulg9fodbve5lw8j0z9l+44@%@7i4an913qb!9='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["api.moneygreeks.live", "157.245.103.157", "localhost"]
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition

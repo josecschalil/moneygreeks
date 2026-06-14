@@ -28,15 +28,26 @@ export default function HeroCarousel() {
     async function loadSlides() {
       try {
         const [reportRes, blogRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/report-list/`, { cache: "no-store" }),
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, { cache: "no-store" }),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/report-list/`, { cache: "no-store" }).catch(() => null),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, { cache: "no-store" }).catch(() => null),
         ]);
+
+        if (!reportRes || !blogRes || !reportRes.ok || !blogRes.ok) {
+          throw new Error("Backend unavailable");
+        }
 
         const reports = await reportRes.json();
         const blogs = await blogRes.json();
 
-        const generatedSlides: Slide[] = [
-          {
+        // Check if both APIs returned successfully but are completely empty
+        if ((!reports || reports.length === 0) && (!blogs || blogs.length === 0)) {
+          setSlides([]);
+          return;
+        }
+
+        const generatedSlides: Slide[] = [];
+        if (reports && reports.length > 0) {
+          generatedSlides.push({
             id: 1,
             image: reports[0]?.image_url,
             tag: "Pre-Market Report",
@@ -44,21 +55,46 @@ export default function HeroCarousel() {
             description: reports[0]?.overall_conclusion,
             slug: reports[0]?.slug,
             type: "report",
-          },
-          ...blogs.slice(0, 2).map((post: any, index: number) => ({
-            id: index + 2,
-            image: post.featured_image,
-            tag: "Blog",
-            title: post.title,
-            description: post.subtitle,
-            slug: post.slug,
-            type: "blog",
-          })),
-        ];
+          });
+        }
+
+        if (blogs && blogs.length > 0) {
+          generatedSlides.push(
+            ...blogs.slice(0, 2).map((post: any, index: number) => ({
+              id: index + 2,
+              image: post.featured_image,
+              tag: "Blog",
+              title: post.title,
+              description: post.subtitle,
+              slug: post.slug,
+              type: "blog",
+            }))
+          );
+        }
 
         setSlides(generatedSlides);
       } catch (error) {
-        console.error("Carousel data fetch error:", error);
+        console.warn("Carousel data fetch error, falling back to demo data:", error);
+        setSlides([
+          {
+            id: 1,
+            image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3",
+            tag: "Pre-Market Report",
+            title: "Market Setup: Key Levels to Watch",
+            description: "A comprehensive look at today's market drivers.",
+            slug: "#",
+            type: "report",
+          },
+          {
+            id: 2,
+            image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f",
+            tag: "Blog",
+            title: "Understanding Market Liquidity",
+            description: "How institutional flows impact intraday volatility.",
+            slug: "#",
+            type: "blog",
+          }
+        ]);
       }
     }
 

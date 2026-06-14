@@ -21,18 +21,23 @@ export default async function IntelligenceHub() {
   }
 
   // Fetch dynamic categories
-  let categories = [];
+  let categories = null;
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/education-categories/`, { next: { revalidate: 60 } });
     if (res.ok) {
       categories = await res.json();
     }
   } catch (err) {
-    console.error("Failed to fetch education categories", err);
+    console.warn("Failed to fetch education categories, falling back to empty state");
   }
 
+  // If categories is null, the backend is unreachable. 
+  // Wait, there is no demo data for categories. 
+  // If categories is null or empty, we must handle it gracefully.
+  const safeCategories = categories || [];
+
   // Find Introductory category
-  const introCategory = categories.find((c) => c.name.toLowerCase() === "introductory");
+  const introCategory = safeCategories.find((c) => c.name.toLowerCase() === "introductory");
   
   // Find Hero Post (first post in introductory category)
   let heroPost = null;
@@ -57,7 +62,7 @@ export default async function IntelligenceHub() {
   }
 
   // Filter out the introductory category for the remaining dynamic sections
-  const sections = categories.filter((c) => c.name.toLowerCase() !== "introductory");
+  const sections = safeCategories.filter((c) => c.name.toLowerCase() !== "introductory");
 
   return (
     <div className={styles.body}>

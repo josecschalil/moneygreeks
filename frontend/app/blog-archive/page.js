@@ -1,17 +1,38 @@
 import Image from "next/image";
 import Link from "next/link";
 async function fetchBlogPostData() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, {
-    cache: "no-store",
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch blog post data");
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    return null;
   }
-  return res.json();
 }
 
 export default async function BlogArchivePage() {
   const blogPostData = await fetchBlogPostData();
+  
+  if (blogPostData === null) {
+    return (
+      <main className="bg-white min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Backend is currently unreachable. Please check back later.</p>
+      </main>
+    );
+  }
+
+  if (blogPostData.length === 0) {
+    return (
+      <main className="bg-white min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">No blog posts available right now.</p>
+      </main>
+    );
+  }
+
   const blogPosts = blogPostData.slice(0, 3);
 
   return (

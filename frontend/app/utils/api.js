@@ -21,6 +21,7 @@ export async function fetchPostsByCategory(category) {
     }
   } catch (error) {
     console.warn(`Django backend unreachable for ${category}, falling back to local mock data`);
+    return null;
   }
 
   // Fallback to local mock data mapping if backend is down

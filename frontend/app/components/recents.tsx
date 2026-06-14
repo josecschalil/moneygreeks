@@ -43,16 +43,21 @@ function formatDate(dateStr: string) {
 /* =========================
    Data Fetcher
 ========================= */
-async function fetchBlogPostData(): Promise<BlogPost[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, {
-    cache: "no-store",
-  });
+async function fetchBlogPostData(): Promise<BlogPost[] | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, {
+      cache: "no-store",
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch blog post data");
+    if (!res.ok) {
+      return null;
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.warn("Failed to fetch blog post data, returning null");
+    return null;
   }
-
-  return res.json();
 }
 
 /* =========================

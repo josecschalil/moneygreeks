@@ -1,8 +1,32 @@
 import styles from "../news-today/MarketInsight.module.css";
-import { marketItems } from "../news-today/data";
+import { marketItems as fallbackMarketItems } from "../news-today/data";
 import Icon from "./Icon";
 
-export default function MarketTicker({ compact = false }) {
+export default async function MarketTicker({ compact = false }) {
+  let marketItems = fallbackMarketItems;
+
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/global-indices/`, { next: { revalidate: 60 } });
+    if (res.ok) {
+      const data = await res.json();
+      const items = Array.isArray(data) ? data : (data.results || []);
+      if (items.length > 0) {
+        marketItems = items.slice(0, 5).map((item) => {
+          const changeVal = parseFloat(item.change || "0");
+          return {
+            name: item.name || item.index_name,
+            value: item.last_price || item.value,
+            change: `${changeVal >= 0 ? '+' : ''}${item.percent_change}%`,
+            points: `${changeVal >= 0 ? '+' : ''}${item.change}`,
+            trend: changeVal >= 0 ? "up" : "down"
+          };
+        });
+      }
+    }
+  } catch (err) {
+    console.warn("Could not fetch global-indices, using fallback data.");
+  }
+
   if (compact) {
     return (
       <div className={`${styles.card} ${styles.compactPanel}`}>

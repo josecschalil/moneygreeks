@@ -7,12 +7,12 @@ async function fetchBlogPostData() {
       cache: "no-store",
     });
     if (!res.ok) {
-      return RECOMMENDED_POSTS;
+      return null;
     }
     return await res.json();
   } catch (error) {
-    console.warn("Backend blog-post endpoint unavailable. Using local fallback recommended posts.");
-    return RECOMMENDED_POSTS;
+    console.warn("Backend blog-post endpoint unavailable. Returning null.");
+    return null;
   }
 }
 function formatDate(dateStr) {
@@ -405,9 +405,15 @@ export default function RecommendedPosts() {
         </div>
 
         <div className="rp-grid">
-          {posts.map((post) => (
-            <PostCard key={post.slug || post.id || post.title} post={post} />
-          ))}
+          {posts.length === 0 ? (
+            <div style={{ gridColumn: '1 / -1', padding: '40px', textAlign: 'center', color: '#6b7280', background: '#f9fafb', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+              No recommended posts available.
+            </div>
+          ) : (
+            posts.map((post) => (
+              <PostCard key={post.slug || post.id || post.title} post={post} />
+            ))
+          )}
         </div>
       </section>
     </>
