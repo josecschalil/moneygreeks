@@ -1,94 +1,103 @@
 import Link from "next/link";
+import { ArrowLeft, Clock } from "lucide-react";
 import { fetchPostsByCategory } from "../../../utils/api";
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  // Fetch dynamic categories
   let category: any = null;
   try {
-    const res = await fetch(`http://127.0.0.1:8000/education-categories/${slug}/`, { next: { revalidate: 60 } });
-    if (res.ok) {
-      category = await res.json();
-    }
-  } catch (err) {
-    console.error("Failed to fetch category details", err);
+    const res = await fetch(`http://127.0.0.1:8000/education-categories/${slug}/`, {
+      next: { revalidate: 60 },
+    });
+    if (res.ok) category = await res.json();
+  } catch (error) {
+    console.error("Failed to fetch category details", error);
   }
 
-  const eduPosts = await fetchPostsByCategory("education") || [];
-  
-  // Filter posts matching this category's ID
-  const categoryPosts = category ? eduPosts.filter((p: any) => p.education_category === category.id) : [];
+  const eduPosts = (await fetchPostsByCategory("education")) || [];
+  const categoryPosts = category
+    ? eduPosts.filter((post: any) => post.education_category === category.id)
+    : [];
 
   if (!category) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Category Not Found</h1>
-          <p className="text-gray-600 mb-8">The category you are looking for does not exist.</p>
-          <Link href="/education" className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+      <main className="flex min-h-screen items-center justify-center bg-[var(--mg-bg)] px-4">
+        <div className="max-w-md rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-8 text-center shadow-[var(--mg-shadow)]">
+          <h1 className="font-heading text-3xl font-semibold text-[var(--mg-text)]">Category not found</h1>
+          <p className="mt-3 text-sm leading-6 text-[var(--mg-text-muted)]">
+            The category you are looking for does not exist.
+          </p>
+          <Link href="/education" className="mt-6 inline-flex rounded-full bg-[var(--mg-accent)] px-4 py-2.5 text-sm font-medium text-white">
             Back to Education Hub
           </Link>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-12 border-b border-gray-200 pb-8">
-          <Link href="/education" className="text-sm text-blue-600 hover:text-blue-800 mb-4 inline-block font-medium">
-            &larr; Back to Intelligence Hub
+    <main className="min-h-screen bg-[var(--mg-bg)]">
+      <div className="mx-auto max-w-[var(--mg-container)] px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <header className="mb-10 border-b border-[var(--mg-border)] pb-8">
+          <Link href="/education" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--mg-text-muted)] transition hover:text-[var(--mg-text)]">
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Back to Intelligence Hub
           </Link>
-          <h1 className="text-4xl font-bold text-gray-900 font-serif tracking-tight mt-2">{category.name}</h1>
+          <h1 className="mt-5 font-heading text-4xl font-semibold tracking-normal text-[var(--mg-text)]">
+            {category.name}
+          </h1>
           {category.description && (
-            <p className="text-xl text-gray-500 mt-4 max-w-3xl leading-relaxed">{category.description}</p>
+            <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--mg-text-muted)]">
+              {category.description}
+            </p>
           )}
-        </div>
+        </header>
 
         {categoryPosts.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-gray-200 shadow-sm">
-            <h3 className="text-xl font-medium text-gray-900 mb-2">No Articles Yet</h3>
-            <p className="text-gray-500">Check back later for new {category.name.toLowerCase()} content.</p>
-          </div>
+          <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-10 text-center shadow-[var(--mg-shadow)]">
+            <h2 className="font-heading text-xl font-semibold text-[var(--mg-text)]">No articles yet</h2>
+            <p className="mt-2 text-sm text-[var(--mg-text-muted)]">
+              Check back later for new {category.name.toLowerCase()} content.
+            </p>
+          </section>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {categoryPosts.map((item: any) => (
               <Link
                 href={`/education/${item.slug}`}
-                className="group flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                className="group overflow-hidden rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] shadow-[var(--mg-shadow)] transition hover:-translate-y-0.5 hover:border-[var(--mg-border-strong)]"
                 key={item.slug}
               >
-                <div className="aspect-[16/9] overflow-hidden bg-gray-100">
+                <div className="aspect-[16/10] overflow-hidden bg-[var(--mg-surface-muted)]">
                   <img
                     alt={item.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                     src={item.featured_image || "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3"}
                   />
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <span className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-2">
+                <div className="p-5">
+                  <span className="rounded-full bg-[var(--mg-surface-muted)] px-2.5 py-1 text-xs font-medium text-[var(--mg-text-muted)]">
                     {category.name}
                   </span>
-                  <h4 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h2 className="mt-4 line-clamp-2 font-heading text-lg font-semibold leading-snug text-[var(--mg-text)] group-hover:text-[var(--mg-text-muted)]">
                     {item.title}
-                  </h4>
+                  </h2>
                   {item.subtitle && (
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-3 flex-1">
+                    <p className="mt-3 line-clamp-3 text-sm leading-6 text-[var(--mg-text-muted)]">
                       {item.subtitle}
                     </p>
                   )}
-                  <div className="mt-auto flex items-center text-xs text-gray-500 uppercase font-medium">
-                    <span className="material-symbols-outlined mr-1" style={{ fontSize: 16 }}>schedule</span>
-                    {item.time || "5 MIN READ"}
+                  <div className="mt-5 flex items-center gap-2 text-xs text-[var(--mg-text-soft)]">
+                    <Clock className="h-4 w-4" aria-hidden="true" />
+                    <span>{item.time || "5 min read"}</span>
                   </div>
                 </div>
               </Link>
             ))}
-          </div>
+          </section>
         )}
       </div>
-    </div>
+    </main>
   );
 }

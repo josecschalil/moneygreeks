@@ -1,45 +1,44 @@
-import styles from "../news-today/MarketInsight.module.css";
+import Link from "next/link";
 import {
+  compactIndices,
   feedItems,
   quickHits,
-  compactIndices,
   sectors,
 } from "../news-today/data";
 import Icon from "./Icon";
 import SentimentWidget from "./SentimentWidget";
-import Link from "next/link";
 
 function LiveFeed({ posts }) {
   const items = posts?.length ? posts : feedItems;
 
   return (
-    <div className={`${styles.card} ${styles.tallPanel} ${styles.feedColumn}`}>
-      <div className={styles.denseHeader}>
-        <h2 className={styles.panelTitle}>
-          <Icon name="feed" className={styles.up} /> Live Feed
+    <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+      <div className="flex items-center justify-between gap-4">
+        <h2 className="flex items-center gap-2 font-heading text-base font-semibold text-[var(--mg-text)]">
+          <Icon name="feed" className="text-[var(--mg-positive)]" />
+          Live Feed
         </h2>
-        <button className={styles.filterButton}>
-          <Icon name="filter_list" /> Filter
+        <button className="inline-flex items-center gap-2 rounded-full border border-[var(--mg-border)] px-3 py-1.5 text-xs text-[var(--mg-text-muted)]">
+          <Icon name="filter_list" />
+          Filter
         </button>
       </div>
-      <div className={styles.feedBody}>
+
+      <div className="mt-4 max-h-[620px] overflow-y-auto pr-1">
         {items.map((item, index) => {
           const content = (
-            <div className={styles.feedInner}>
-              <div
-                className={`${styles.feedTime} ${item.hot ? styles.hotTime : ""}`}
-              >
+            <div className="flex gap-4 border-t border-[var(--mg-border)] py-4 first:border-t-0 first:pt-0 last:pb-0">
+              <div className={`w-16 shrink-0 text-xs font-medium ${item.hot ? "text-[var(--mg-negative)]" : "text-[var(--mg-text-soft)]"}`}>
                 {item.time || "JUST IN"}
               </div>
-              <div>
-                <h3 className={styles.feedTitle}>{item.title}</h3>
-                <p className={styles.feedText}>{item.subtitle || item.body || item.content?.substring(0, 100)}</p>
-                <div className={styles.tagRow}>
-                  {(item.tags || []).map((tag, tIndex) => (
-                    <span
-                      className={`${styles.feedTag} ${tIndex > 0 ? styles.outlineTag : ""}`}
-                      key={tag}
-                    >
+              <div className="min-w-0">
+                <h3 className="text-sm font-medium leading-6 text-[var(--mg-text)]">{item.title}</h3>
+                <p className="mt-1 line-clamp-2 text-sm leading-6 text-[var(--mg-text-muted)]">
+                  {item.subtitle || item.body || item.content?.substring(0, 110)}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {(item.tags || []).map((tag) => (
+                    <span key={tag} className="rounded-full bg-[var(--mg-surface-muted)] px-2 py-0.5 text-[11px] text-[var(--mg-text-soft)]">
                       {tag}
                     </span>
                   ))}
@@ -49,149 +48,148 @@ function LiveFeed({ posts }) {
           );
 
           return item.slug ? (
-            <Link href={`/news-today/${item.slug}`} className={`${styles.feedItem} hover:bg-gray-50 transition-colors block`} key={item.slug}>
+            <Link href={`/news-today/${item.slug}`} className="block transition hover:bg-[var(--mg-surface-soft)]" key={item.slug}>
               {content}
             </Link>
           ) : (
-            <div className={styles.feedItem} key={index}>
-              {content}
-            </div>
+            <div key={index}>{content}</div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
 
 function QuickHitsColumn({ quickHitPosts, breakingPosts }) {
-  const breakingItems = breakingPosts?.length ? breakingPosts : [
-    { title: "Global Markets Brace as Central Banks Signal Aggressive Rate Hikes", subtitle: "Investors navigate heightened volatility as major central banks pivot towards tighter monetary policy." },
-    { title: "Tech Sector Earnings Beat Estimates Despite Supply Chain Woes", subtitle: "Major tech firms report robust quarterly earnings, signaling resilient consumer demand." }
-  ];
-
+  const breakingItems = breakingPosts?.length
+    ? breakingPosts
+    : [
+      {
+        title: "Global markets brace as central banks signal aggressive rate hikes",
+        subtitle: "Investors navigate heightened volatility as central banks pivot toward tighter policy.",
+      },
+      {
+        title: "Tech sector earnings beat estimates despite supply-chain pressure",
+        subtitle: "Major technology firms report resilient demand and stable cloud growth.",
+      },
+    ];
   const hits = quickHitPosts?.length ? quickHitPosts : quickHits;
 
   return (
-    <div className={styles.middleColumn}>
-      <div className={`${styles.card} ${styles.breakingBox}`}>
-        <h3 className={`${styles.widgetTitle} ${styles.breakingTitle}`}>
-          <Icon name="bolt" /> Breaking
+    <div className="space-y-5">
+      <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+        <h3 className="flex items-center gap-2 font-heading text-base font-semibold text-[var(--mg-text)]">
+          <Icon name="bolt" className="text-[var(--mg-warning)]" />
+          Breaking
         </h3>
-        {breakingItems.map((story, i) => {
+        <div className="mt-4 divide-y divide-[var(--mg-border)]">
+          {breakingItems.map((story, index) => {
             const content = (
-              <>
-                {i > 0 && <div className={styles.storySplit} />}
-                <h4 className={styles.smallStoryTitle}>{story.title}</h4>
-                <p className={styles.smallStoryText}>{story.subtitle || story.description}</p>
-              </>
-            );
-            return story.slug ? (
-              <Link href={`/news-today/${story.slug}`} className="block hover:opacity-80 transition-opacity" key={story.slug}>
-                {content}
-              </Link>
-            ) : (
-              <div key={i}>{content}</div>
-            );
-        })}
-      </div>
-
-      <div className={`${styles.card} ${styles.quickHitsPanel}`}>
-        <div className={styles.denseHeader}>
-          <h3 className={styles.panelTitle}>
-            <Icon name="flash_on" className={styles.up} /> Quick Hits
-          </h3>
-        </div>
-        <div className={styles.quickHitsBody}>
-          {hits.map((hit, i) => {
-            const content = (
-              <>
-                <div className={styles.quickTop}>
-                  <span
-                    className={`${styles.hitType} ${hit.tone === "up" ? styles.up : hit.tone === "down" ? styles.down : ""}`}
-                  >
-                    {hit.type || "MARKET"}
-                  </span>
-                  <span className={styles.mutedSmall}>{hit.time || "JUST IN"}</span>
-                </div>
-                <p className={styles.hitText}>{hit.title || hit.text}</p>
-              </>
-            );
-            return hit.slug ? (
-              <Link href={`/news-today/${hit.slug}`} className={`${styles.quickHit} hover:bg-gray-50 transition-colors block`} key={hit.slug}>
-                {content}
-              </Link>
-            ) : (
-              <div className={styles.quickHit} key={i}>
-                {content}
+              <div className="py-4 first:pt-0 last:pb-0">
+                <h4 className="text-sm font-medium leading-6 text-[var(--mg-text)]">{story.title}</h4>
+                <p className="mt-1 text-sm leading-6 text-[var(--mg-text-muted)]">{story.subtitle || story.description}</p>
               </div>
+            );
+
+            return story.slug ? (
+              <Link href={`/news-today/${story.slug}`} className="block" key={story.slug}>
+                {content}
+              </Link>
+            ) : (
+              <div key={index}>{content}</div>
             );
           })}
         </div>
-      </div>
+      </section>
+
+      <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+        <h3 className="flex items-center gap-2 font-heading text-base font-semibold text-[var(--mg-text)]">
+          <Icon name="flash_on" className="text-[var(--mg-positive)]" />
+          Quick Hits
+        </h3>
+        <div className="mt-4 divide-y divide-[var(--mg-border)]">
+          {hits.slice(0, 7).map((hit, index) => {
+            const content = (
+              <div className="py-3 first:pt-0 last:pb-0">
+                <div className="flex items-center justify-between gap-3">
+                  <span className={`text-xs font-medium uppercase tracking-[0.14em] ${hit.tone === "up" ? "text-[var(--mg-positive)]" : hit.tone === "down" ? "text-[var(--mg-negative)]" : "text-[var(--mg-text-soft)]"}`}>
+                    {hit.type || "Market"}
+                  </span>
+                  <span className="text-xs text-[var(--mg-text-soft)]">{hit.time || "Just in"}</span>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-[var(--mg-text-muted)]">{hit.title || hit.text}</p>
+              </div>
+            );
+
+            return hit.slug ? (
+              <Link href={`/news-today/${hit.slug}`} className="block" key={hit.slug}>
+                {content}
+              </Link>
+            ) : (
+              <div key={index}>{content}</div>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 }
 
 function CompactIndices() {
   return (
-    <div className={`${styles.card} ${styles.compactPanel}`}>
-      <div className={styles.panelHeader}>
-        <h2 className={styles.panelTitleSmall}>
-          <Icon name="monitoring" className={styles.up} /> Indices
+    <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+      <div className="flex items-center justify-between">
+        <h2 className="flex items-center gap-2 font-heading text-base font-semibold text-[var(--mg-text)]">
+          <Icon name="monitoring" className="text-[var(--mg-positive)]" />
+          Indices
         </h2>
-        <span className={styles.mutedSmall}>LIVE</span>
+        <span className="text-xs text-[var(--mg-text-soft)]">Live</span>
       </div>
-      <div className={styles.compactList}>
+      <div className="mt-4 divide-y divide-[var(--mg-border)]">
         {compactIndices.map((item) => (
-          <div className={styles.compactIndexRow} key={item.name}>
-            <span className={styles.rowTitle}>{item.name}</span>
-            <div className={styles.compactQuote}>
-              <span className={styles.rowValue}>{item.value}</span>
-              <span
-                className={`${styles.compactChange} ${item.trend === "up" ? styles.up : styles.down}`}
-              >
+          <div className="flex items-center justify-between py-3 first:pt-0 last:pb-0" key={item.name}>
+            <span className="text-sm font-medium text-[var(--mg-text)]">{item.name}</span>
+            <div className="text-right">
+              <span className="block text-sm text-[var(--mg-text-muted)]">{item.value}</span>
+              <span className={`text-xs font-medium ${item.trend === "up" ? "text-[var(--mg-positive)]" : "text-[var(--mg-negative)]"}`}>
                 {item.change}
               </span>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
 function SectorHeatmap() {
-  const classForSector = (sector) => {
-    if (sector.trend === "flat") return "";
-    if (sector.trend === "up") return styles[`sectorUp${sector.strength}`];
-    return styles[`sectorDown${sector.strength}`];
-  };
-
   return (
-    <div className={`${styles.card} ${styles.sectorPanel}`}>
-      <h3 className={styles.panelTitleSmall}>Sector Heatmap</h3>
-      <div className={styles.sectorGrid}>
-        {sectors.map((sector) => (
-          <div
-            className={`${styles.sectorBox} ${classForSector(sector)}`}
-            key={sector.name}
-          >
-            <span className={styles.sectorName}>{sector.name}</span>
-            <span
-              className={`${styles.sectorValue} ${sector.trend === "up" ? styles.up : sector.trend === "down" ? styles.down : styles.rowValue}`}
-            >
-              {sector.value}
-            </span>
-          </div>
-        ))}
+    <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+      <h3 className="font-heading text-base font-semibold text-[var(--mg-text)]">Sector Heatmap</h3>
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        {sectors.map((sector) => {
+          const tone =
+            sector.trend === "up"
+              ? "bg-[var(--mg-positive-soft)] text-[var(--mg-positive)]"
+              : sector.trend === "down"
+                ? "bg-[var(--mg-negative-soft)] text-[var(--mg-negative)]"
+                : "bg-[var(--mg-surface-muted)] text-[var(--mg-text-muted)]";
+
+          return (
+            <div key={sector.name} className={`rounded-2xl p-3 ${tone}`}>
+              <span className="block text-xs">{sector.name}</span>
+              <span className="mt-1 block text-sm font-medium">{sector.value}</span>
+            </div>
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }
 
 function MarketDataColumn() {
   return (
-    <div className={styles.rightColumn}>
+    <div className="space-y-5">
       <CompactIndices />
       <SentimentWidget compact />
       <SectorHeatmap />
@@ -199,20 +197,23 @@ function MarketDataColumn() {
   );
 }
 
-export default function AdvancedMarketFeed({ feedPosts, quickHits, breakingPosts }) {
+export default function AdvancedMarketFeed({ feedPosts, quickHits: quickHitPosts, breakingPosts }) {
   return (
-    <>
-      <div className={styles.terminalHeader}>
-        <h2 className={styles.terminalTitle}>
-          <Icon name="terminal" className={styles.terminalIcon} /> Advanced
-          Market Feed
+    <section>
+      <div className="mb-5">
+        <p className="text-xs font-medium uppercase tracking-[0.16em] text-[var(--mg-text-soft)]">
+          Terminal
+        </p>
+        <h2 className="mt-1 flex items-center gap-2 font-heading text-2xl font-semibold text-[var(--mg-text)]">
+          <Icon name="terminal" />
+          Advanced Market Feed
         </h2>
       </div>
-      <section className={styles.denseGrid}>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)_300px]">
         <LiveFeed posts={feedPosts} />
-        <QuickHitsColumn quickHitPosts={quickHits} breakingPosts={breakingPosts} />
+        <QuickHitsColumn quickHitPosts={quickHitPosts} breakingPosts={breakingPosts} />
         <MarketDataColumn />
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

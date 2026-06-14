@@ -107,6 +107,8 @@ export default function FinancialDataDashboard() {
   // Calculate breadth percentage for the visual bar
   const totalStocks = marketPulse.breadth.advancing + marketPulse.breadth.declining;
   const advPercent = (marketPulse.breadth.advancing / totalStocks) * 100;
+  const advWidthClass =
+    advPercent >= 75 ? "w-3/4" : advPercent >= 60 ? "w-2/3" : advPercent >= 50 ? "w-1/2" : "w-1/3";
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
@@ -117,7 +119,7 @@ export default function FinancialDataDashboard() {
             <li>
               <Link href="/" className="hover:text-blue-600">Home</Link>
             </li>
-            <li className="before:content-['›'] before:mx-2">
+            <li className="before:content-['/'] before:mx-2">
               <span className="text-blue-600 font-medium">Financial Data Dashboard</span>
             </li>
           </ol>
@@ -240,9 +242,8 @@ export default function FinancialDataDashboard() {
                   </div>
                   {/* Horizontal Progress Bar */}
                   <div className="w-full h-2.5 bg-red-100 rounded-full overflow-hidden flex">
-                    <div 
-                      className="h-full bg-green-500 transition-all duration-1000 ease-out" 
-                      style={{ width: `${advPercent}%` }}
+                    <div
+                      className={`h-full bg-green-500 transition-all duration-1000 ease-out ${advWidthClass}`}
                       title={`Advancing: ${marketPulse.breadth.advancing}`}
                     />
                     <div 
@@ -412,9 +413,8 @@ export default function FinancialDataDashboard() {
                     </span>
                   </div>
                   <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full ${institutionalFlow.fiiNet > 0 ? 'bg-green-500' : 'bg-red-500'}`} 
-                      style={{ width: '45%' }} 
+                    <div
+                      className={`h-full w-[45%] rounded-full ${institutionalFlow.fiiNet > 0 ? 'bg-green-500' : 'bg-red-500'}`}
                     />
                   </div>
                 </div>
@@ -428,9 +428,8 @@ export default function FinancialDataDashboard() {
                     </span>
                   </div>
                   <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full rounded-full ${institutionalFlow.diiNet > 0 ? 'bg-green-500' : 'bg-red-500'}`} 
-                      style={{ width: '75%' }} 
+                    <div
+                      className={`h-full w-3/4 rounded-full ${institutionalFlow.diiNet > 0 ? 'bg-green-500' : 'bg-red-500'}`}
                     />
                   </div>
                 </div>

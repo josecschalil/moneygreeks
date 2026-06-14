@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import styles from "../news-today/MarketInsight.module.css";
+import { useEffect, useState } from "react";
 import Icon from "./Icon";
 
 export default function SentimentWidget({ compact = false }) {
@@ -32,18 +31,14 @@ export default function SentimentWidget({ compact = false }) {
 
   const checkIfVotedToday = () => {
     const today = new Date().toISOString().split("T")[0];
-    const voted = localStorage.getItem(`sentiment_voted_${today}`);
-    if (voted) {
-      setHasVoted(true);
-    }
+    setHasVoted(Boolean(localStorage.getItem(`sentiment_voted_${today}`)));
   };
 
   const handleVote = async (voteType) => {
     if (hasVoted) return;
 
-    // Optimistic update
-    if (voteType === "bullish") setBullishVotes((v) => v + 1);
-    if (voteType === "bearish") setBearishVotes((v) => v + 1);
+    if (voteType === "bullish") setBullishVotes((value) => value + 1);
+    if (voteType === "bearish") setBearishVotes((value) => value + 1);
     setHasVoted(true);
 
     const today = new Date().toISOString().split("T")[0];
@@ -66,65 +61,64 @@ export default function SentimentWidget({ compact = false }) {
   };
 
   const totalVotes = bullishVotes + bearishVotes;
-  let bullishPercentage = 50;
-  if (totalVotes > 0) {
-    bullishPercentage = Math.round((bullishVotes / totalVotes) * 100);
-  }
-
-  let sentimentText = "Neutral";
-  if (totalVotes === 0) sentimentText = "Awaiting Votes";
-  else if (bullishPercentage >= 60) sentimentText = "Optimistic";
-  else if (bullishPercentage <= 40) sentimentText = "Pessimistic";
+  const bullishPercentage =
+    totalVotes > 0 ? Math.round((bullishVotes / totalVotes) * 100) : 50;
+  const sentimentText =
+    totalVotes === 0
+      ? "Awaiting votes"
+      : bullishPercentage >= 60
+        ? "Optimistic"
+        : bullishPercentage <= 40
+          ? "Pessimistic"
+          : "Neutral";
+  const needlePosition =
+    bullishPercentage >= 60 ? "left-2/3" : bullishPercentage <= 40 ? "left-1/3" : "left-1/2";
 
   return (
-    <div
-      className={`${styles.card} ${compact ? `${styles.compactPanel} ${styles.compactSentiment}` : styles.widget}`}
-    >
-      <h3 className={compact ? styles.panelTitleSmall : styles.widgetTitle}>
-        <Icon name="speed" /> {compact ? "Sentiment" : "Market Sentiment"}
+    <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+      <h3 className="flex items-center gap-2 font-heading text-base font-semibold text-[var(--mg-text)]">
+        <Icon name="speed" />
+        {compact ? "Sentiment" : "Market Sentiment"}
       </h3>
 
-      <div>
-        <div className={styles.sentimentLabels}>
-          <span className={styles.down}>Bearish</span>
-          <span className={styles.up}>Bullish</span>
+      <div className="mt-5">
+        <div className="mb-2 flex justify-between text-xs text-[var(--mg-text-soft)]">
+          <span>Bearish</span>
+          <span>Bullish</span>
         </div>
-        <div className={styles.meter}>
-          <div className={styles.meterFill} />
-          <div 
-            className={styles.needle} 
-            style={{ left: `${bullishPercentage}%`, transition: "left 0.5s ease" }}
-          />
+        <div className="relative h-3 rounded-full bg-[var(--mg-surface-muted)]">
+          <div className="h-full w-1/2 rounded-full bg-[var(--mg-positive)]" />
+          <div className={`absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[var(--mg-text)] shadow ${needlePosition}`} />
         </div>
-        <div className={styles.sentimentValue}>
+        <div className="mt-3 text-sm font-medium text-[var(--mg-text)]">
           {loading ? "Loading..." : `${sentimentText} (${bullishPercentage}/100)`}
         </div>
       </div>
 
-      <div className={styles.voteGrid}>
+      <div className={`mt-5 grid gap-3 ${compact ? "grid-cols-1" : "grid-cols-2"}`}>
         <button
+          type="button"
           onClick={() => handleVote("bearish")}
           disabled={hasVoted || loading}
-          className={`${styles.voteButton} ${compact ? styles.voteCompact : ""} ${styles.bearishButton} ${hasVoted ? "opacity-50 cursor-not-allowed" : ""}`}
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--mg-border)] bg-[var(--mg-negative-soft)] px-3 py-2 text-sm font-medium text-[var(--mg-negative)] transition hover:border-[var(--mg-border-strong)] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <Icon name="thumb_down" /> Vote Bearish
+          <Icon name="thumb_down" />
+          Bearish
         </button>
         <button
+          type="button"
           onClick={() => handleVote("bullish")}
           disabled={hasVoted || loading}
-          className={`${styles.voteButton} ${compact ? styles.voteCompact : ""} ${styles.bullishButton} ${hasVoted ? "opacity-50 cursor-not-allowed" : ""}`}
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--mg-border)] bg-[var(--mg-positive-soft)] px-3 py-2 text-sm font-medium text-[var(--mg-positive)] transition hover:border-[var(--mg-border-strong)] disabled:cursor-not-allowed disabled:opacity-50"
         >
-          <Icon name="thumb_up" /> Vote Bullish
+          <Icon name="thumb_up" />
+          Bullish
         </button>
       </div>
 
-      {compact ? (
-        <p className={styles.voteCount}>Based on {totalVotes.toLocaleString()} votes today</p>
-      ) : (
-        <p className={styles.widgetFoot}>
-          Based on {totalVotes.toLocaleString()} aggregate votes today.
-        </p>
-      )}
-    </div>
+      <p className="mt-4 text-xs leading-5 text-[var(--mg-text-soft)]">
+        Based on {totalVotes.toLocaleString()} aggregate votes today.
+      </p>
+    </section>
   );
 }

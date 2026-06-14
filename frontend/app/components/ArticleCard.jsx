@@ -1,27 +1,31 @@
-import styles from "../news-today/MarketInsight.module.css";
 import Link from "next/link";
 
 export default function ArticleCard({ article }) {
   const href = article.slug ? `/news-today/${article.slug}` : "#";
+
   return (
-    <Link href={href} className="block group h-full">
-      <article className={`${styles.card} ${styles.articleCard} h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-gray-300`}>
-        <div className={`${styles.articleImageWrap} overflow-hidden`}>
-          <img 
-            src={article.featured_image || article.image} 
-            alt={article.title || article.alt} 
-            className={`${styles.image} transition-transform duration-500 group-hover:scale-105`} 
+    <Link href={href} className="group block h-full">
+      <article className="h-full overflow-hidden rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] shadow-[var(--mg-shadow)] transition hover:-translate-y-0.5 hover:border-[var(--mg-border-strong)]">
+        <div className="aspect-[16/10] overflow-hidden bg-[var(--mg-surface-muted)]">
+          <img
+            src={article.featured_image || article.image}
+            alt={article.title || article.alt || ""}
+            className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
           />
         </div>
-        <div className={styles.articleBody}>
-          <div className={styles.meta}>
-            <span className={styles.badge}>{article.category}</span>
-            <span className={styles.mutedSmall}>{article.readTime}</span>
+        <div className="p-5">
+          <div className="flex items-center justify-between gap-3 text-xs text-[var(--mg-text-soft)]">
+            <span className="rounded-full bg-[var(--mg-surface-muted)] px-2.5 py-1 font-medium">
+              {article.category || "Markets"}
+            </span>
+            <span>{article.readTime || "5 min read"}</span>
           </div>
-          <h3 className={`${styles.articleTitle} transition-colors duration-200 group-hover:text-blue-600`}>
+          <h3 className="mt-4 line-clamp-2 font-heading text-lg font-semibold leading-snug text-[var(--mg-text)] group-hover:text-[var(--mg-text-muted)]">
             {article.title}
           </h3>
-          <p className={styles.articleText}>{article.subtitle || article.description}</p>
+          <p className="mt-3 line-clamp-3 text-sm leading-6 text-[var(--mg-text-muted)]">
+            {article.subtitle || article.description}
+          </p>
         </div>
       </article>
     </Link>

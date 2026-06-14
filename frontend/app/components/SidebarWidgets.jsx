@@ -1,33 +1,36 @@
-import styles from "../news-today/MarketInsight.module.css";
+import Link from "next/link";
 import { mostRead as defaultMostRead } from "../news-today/data";
 import SentimentWidget from "./SentimentWidget";
-import Link from "next/link";
 
 export default function SidebarWidgets({ mostRead }) {
   const displayMostRead = mostRead?.length ? mostRead : defaultMostRead;
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
       <SentimentWidget />
 
-      <div className={`${styles.card} ${styles.widget}`}>
-        <h3 className={styles.widgetTitle}>Most Read</h3>
-        <ol className={styles.mostReadList}>
+      <section className="rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)]">
+        <h3 className="font-heading text-base font-semibold text-[var(--mg-text)]">Most Read</h3>
+        <ol className="mt-4 space-y-4">
           {displayMostRead.map((item, index) => (
-            <li className={styles.mostReadItem} key={item.slug || index}>
-              <span className={styles.rank}>{index + 1}</span>
+            <li key={item.slug || index} className="flex gap-3">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--mg-surface-muted)] text-xs font-medium text-[var(--mg-text-muted)]">
+                {index + 1}
+              </span>
               <div>
-                <Link href={`/news-today/${item.slug}`} className="hover:underline">
-                  <h4 className={styles.mostReadTitle}>{item.title}</h4>
+                <Link href={item.slug ? `/news-today/${item.slug}` : "#"} className="group">
+                  <h4 className="line-clamp-2 text-sm font-medium leading-6 text-[var(--mg-text)] group-hover:text-[var(--mg-text-muted)]">
+                    {item.title}
+                  </h4>
                 </Link>
-                <span className={styles.mutedSmall}>
+                <span className="mt-1 block text-xs text-[var(--mg-text-soft)]">
                   {item.view_count !== undefined ? `${item.view_count} views` : item.meta}
                 </span>
               </div>
             </li>
           ))}
         </ol>
-      </div>
+      </section>
     </aside>
   );
 }

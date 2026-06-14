@@ -1,81 +1,98 @@
-import styles from './MarketNews.module.css'
-import Link from 'next/link'
-import { fetchPostsByCategory } from '../utils/api'
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { fetchPostsByCategory } from "../utils/api";
 
-// Fallback data if API is down
 const fallbackNews = [
   {
-    category: 'ECONOMY',
-    title: "RBI keeps repo rate unchanged at 6.5%; maintains 'withdrawal of accommodation' stance",
-    excerpt: 'The Monetary Policy Committee voted 5:1 to keep rates steady, citing sticky food inflation',
+    category: "Economy",
+    title: "RBI keeps repo rate unchanged while monitoring sticky food inflation",
+    excerpt: "The Monetary Policy Committee stayed cautious, keeping liquidity and inflation in focus.",
   },
   {
-    category: 'CORPORATE',
-    title: 'Reliance Industries announces strategic partnership with global tech major',
-    excerpt: 'The conglomerate outlines a $2B investment plan over the next three years to bolster its...',
+    category: "Corporate",
+    title: "Reliance announces strategic partnership with a global technology major",
+    excerpt: "The group outlined a multi-year investment plan across platforms and infrastructure.",
   },
   {
-    category: 'GLOBAL MARKETS',
-    title: 'US Fed signals potential rate cuts later this year, boosting equity sentiment',
-    excerpt: 'Fed Chair Powell noted that while inflation remains above target, the disinflationary...',
+    category: "Global Markets",
+    title: "US Fed commentary supports risk sentiment across equity markets",
+    excerpt: "Investors are pricing a softer path as disinflation slowly broadens across categories.",
   },
   {
-    category: 'SECTORS',
-    title: 'Auto sales surge 12% YoY in March; EV penetration crosses critical threshold',
-    excerpt: 'Passenger vehicle sales touched record highs, driven by robust demand for SUVs and...',
+    category: "Sectors",
+    title: "Auto sales rise as EV adoption crosses a key threshold",
+    excerpt: "Passenger vehicle demand remains resilient, with premium SUVs leading volume growth.",
   },
-]
+];
 
-function extractText(content) {
+function extractText(content: unknown): string {
   if (!content) return "";
   if (typeof content === "string") return content;
-  if (Array.isArray(content)) {
-    return content.map(extractText).join(" ");
-  }
+  if (Array.isArray(content)) return content.map(extractText).join(" ");
   if (typeof content === "object") {
-    // Attempt to pull out common text fields from block editor structures
-    if (content.text) return content.text;
-    if (content.content) return extractText(content.content);
-    return "";
+    const record = content as { text?: unknown; content?: unknown };
+    if (record.text) return extractText(record.text);
+    if (record.content) return extractText(record.content);
   }
   return String(content);
 }
 
-function truncateText(content, length = 100) {
+function truncateText(content: unknown, length = 100) {
   const text = extractText(content);
   if (!text) return "";
-  if (text.length <= length) return text;
-  return text.substring(0, length).trim() + "...";
+  return text.length <= length ? text : `${text.substring(0, length).trim()}...`;
 }
 
 export default async function MarketNews() {
-  const liveNews = await fetchPostsByCategory('news')
-
-  // Use live data if available, take top 4
-  const displayNews = liveNews && liveNews.length > 0 
-    ? liveNews.slice(0, 4).map(post => ({
-        category: post.news_placement ? post.news_placement.replace('_', ' ').toUpperCase() : 'MARKET NEWS',
-        title: post.title,
-        excerpt: truncateText(post.summary || post.content, 120),
-        slug: post.slug,
-      }))
-    : fallbackNews
+  const liveNews = await fetchPostsByCategory("news");
+  const displayNews =
+    liveNews && liveNews.length > 0
+      ? liveNews.slice(0, 4).map((post: any) => ({
+          category: post.news_placement
+            ? post.news_placement.replace("_", " ")
+            : "Market News",
+          title: post.title,
+          excerpt: truncateText(post.summary || post.content, 120),
+          slug: post.slug,
+        }))
+      : fallbackNews;
 
   return (
-    <section className={styles.section}>
-      <div className={styles.header}>
-        <h2 className={styles.sectionTitle}>Market News</h2>
-        <Link href="/news-today" className={styles.viewAll}>View All →</Link>
+    <section>
+      <div className="mb-5 flex items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.16em] text-[var(--mg-text-soft)]">
+            Latest
+          </p>
+          <h2 className="mt-1 font-heading text-2xl font-semibold text-[var(--mg-text)]">
+            Market News
+          </h2>
+        </div>
+        <Link href="/news-today" className="inline-flex items-center gap-2 text-sm font-medium text-[var(--mg-text-muted)] transition hover:text-[var(--mg-text)]">
+          View all
+          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
       </div>
-      <div className={styles.grid}>
-        {displayNews.map((item, i) => (
-          <Link key={i} href={item.slug ? `/news-today/${item.slug}` : "/news-today"} className={styles.card} style={{ textDecoration: 'none' }}>
-            <div className={styles.category}>{item.category}</div>
-            <h3 className={styles.title}>{item.title}</h3>
-            <p className={styles.excerpt}>{item.excerpt}</p>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {displayNews.map((item: any, index: number) => (
+          <Link
+            key={item.slug || index}
+            href={item.slug ? `/news-today/${item.slug}` : "/news-today"}
+            className="group rounded-[var(--mg-radius)] border border-[var(--mg-border)] bg-[var(--mg-surface)] p-5 shadow-[var(--mg-shadow)] transition hover:-translate-y-0.5 hover:border-[var(--mg-border-strong)]"
+          >
+            <div className="text-xs font-medium uppercase tracking-[0.16em] text-[var(--mg-text-soft)]">
+              {item.category}
+            </div>
+            <h3 className="mt-3 line-clamp-2 font-heading text-lg font-semibold leading-snug text-[var(--mg-text)] group-hover:text-[var(--mg-text-muted)]">
+              {item.title}
+            </h3>
+            <p className="mt-3 line-clamp-2 text-sm leading-6 text-[var(--mg-text-muted)]">
+              {item.excerpt}
+            </p>
           </Link>
         ))}
       </div>
     </section>
-  )
+  );
 }
