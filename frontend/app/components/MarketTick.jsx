@@ -74,8 +74,6 @@ export default function MarketTicker({ compact = false }) {
           </div>
         ))}
       </div>
-
-      <button className={styles.viewButton}>View All Markets</button>
     </div>
   );
 }

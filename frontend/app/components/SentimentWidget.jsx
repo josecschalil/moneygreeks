@@ -91,13 +91,18 @@ export default function SentimentWidget({ compact = false }) {
         </div>
         <div className={styles.meter}>
           <div className={styles.meterFill} />
-          <div 
-            className={styles.needle} 
-            style={{ left: `${bullishPercentage}%`, transition: "left 0.5s ease" }}
+          <div
+            className={styles.needle}
+            style={{
+              left: `${bullishPercentage}%`,
+              transition: "left 0.5s ease",
+            }}
           />
         </div>
         <div className={styles.sentimentValue}>
-          {loading ? "Loading..." : `${sentimentText} (${bullishPercentage}/100)`}
+          {loading
+            ? "Loading..."
+            : `${sentimentText} (${bullishPercentage}/100)`}
         </div>
       </div>
 
@@ -119,7 +124,9 @@ export default function SentimentWidget({ compact = false }) {
       </div>
 
       {compact ? (
-        <p className={styles.voteCount}>Based on {totalVotes.toLocaleString()} votes today</p>
+        <p className={styles.voteCount}>
+          Based on {totalVotes.toLocaleString()} votes today
+        </p>
       ) : (
         <p className={styles.widgetFoot}>
           Based on {totalVotes.toLocaleString()} aggregate votes today.

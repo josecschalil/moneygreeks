@@ -46,6 +46,13 @@ export const marketItems = [
     points: "",
     trend: "up",
   },
+  {
+    name: "US 10-YR YELD",
+    value: "4.28%",
+    change: "+0.05",
+    points: "",
+    trend: "up",
+  },
 ];
 
 export const latestArticles = [

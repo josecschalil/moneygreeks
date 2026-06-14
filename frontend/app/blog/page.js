@@ -507,7 +507,6 @@ export default async function ReportsPage({ searchParams }) {
               color: "#44474c",
               maxWidth: 680,
               margin: "0 auto",
-              fontStyle: "italic",
               lineHeight: 1.65,
             }}
           >
@@ -569,7 +568,6 @@ export default async function ReportsPage({ searchParams }) {
                 backgroundColor: "#f2f4f6",
                 borderRadius: 2,
                 fontFamily: "'Source Serif 4', serif",
-                fontStyle: "italic",
                 fontSize: 14,
                 color: "#191c1e",
                 outline: "none",

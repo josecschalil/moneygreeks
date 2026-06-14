@@ -90,8 +90,6 @@
 .rowRight { text-align: right; }
 .up { color: var(--secondary); }
 .down { color: var(--error); }
-.viewButton { width: 100%; margin-top: 16px; padding: 8px; border: 1px solid var(--primary); border-radius: 2px; color: var(--primary); background: transparent; font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; line-height: 16px; letter-spacing: .02em; font-weight: 600; }
-.viewButton:hover { background: var(--surface-container-low); }
 
 .sectionHeader { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 24px; padding-bottom: 8px; border-bottom: 1px solid var(--outline-variant); }
 .sectionTitle { margin: 0; color: var(--primary); font-family: 'Source Serif 4', serif; font-size: 32px; line-height: 40px; letter-spacing: -0.01em; font-weight: 700; }
