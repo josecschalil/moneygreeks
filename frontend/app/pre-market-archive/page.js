@@ -29,7 +29,7 @@ const FALLBACK_PREMARKET_DATA = [
 
 async function fetchPreMarketData() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/report-list/", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/report-list/`, {
       cache: "no-store",
     });
     if (!res.ok) {

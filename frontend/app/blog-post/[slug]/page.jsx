@@ -7,7 +7,7 @@ import RecommendedPosts from "@/app/components/recommended";
 async function getBlogPost(slug) {
   if (!slug) notFound();
 
-  const res = await fetch(`http://127.0.0.1:8000/blog-post/${slug}/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${slug}/`, {
     cache: "no-store",
   });
 
@@ -22,12 +22,17 @@ export async function generateMetadata({ params }) {
 
   const post = await getBlogPost(slug);
 
+  const metaTitle = post.meta_title || `${post.title} | MoneyGreeks`;
+  const metaDescription = post.meta_description || post.subtitle || "";
+  const metaKeywords = post.meta_keywords ? post.meta_keywords.split(',').map(k => k.trim()) : [];
+
   return {
-    title: `${post.title} | MoneyGreeks`,
-    description: post.subtitle,
+    title: metaTitle,
+    description: metaDescription,
+    keywords: metaKeywords,
     openGraph: {
-      title: post.title,
-      description: post.subtitle,
+      title: metaTitle,
+      description: metaDescription,
       type: "article",
       publishedTime: post.created_at,
       images: [
@@ -41,8 +46,8 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description: post.subtitle,
+      title: metaTitle,
+      description: metaDescription,
       images: [post.featured_image],
     },
   };
@@ -99,8 +104,27 @@ export default async function BlogPostPage({ params }) {
     });
   };
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "image": post.featured_image ? [post.featured_image] : [],
+    "datePublished": post.created_at,
+    "dateModified": post.created_at,
+    "author": [{
+        "@type": "Person",
+        "name": post.author || "Jose C S",
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "MoneyGreeks",
+    },
+    "description": post.meta_description || post.subtitle || ""
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="max-w-7xl mx-auto px-4 py-2 md:py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         <main className="lg:col-span-3">
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">

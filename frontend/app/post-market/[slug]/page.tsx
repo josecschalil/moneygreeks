@@ -207,7 +207,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 async function getPostMarketReport(slug: string) {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/post-market-list/${slug}/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/${slug}/`, {
       cache: "no-store",
     });
     if (!res.ok) return null;
@@ -223,9 +223,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   
   if (!report) return { title: "Post-Market Report | MoneyGreeks" };
 
+  const metaTitle = report.meta_title || `${report.title} | MoneyGreeks`;
+  const metaDescription = report.meta_description || report.overall_conclusion || report.report_data?.technical?.conclusion || "Daily Post-Market Analysis";
+  const metaKeywords = report.meta_keywords ? report.meta_keywords.split(',').map((k: string) => k.trim()) : [];
+
   return {
-    title: `${report.title} | MoneyGreeks`,
-    description: report.overall_conclusion || report.report_data?.technical?.conclusion || "Daily Post-Market Analysis",
+    title: metaTitle,
+    description: metaDescription,
+    keywords: metaKeywords,
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      type: "article",
+      publishedTime: report.created_at,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description: metaDescription,
+    },
   };
 }
 
@@ -246,8 +262,25 @@ export default async function PostMarketReportPage({ params }: { params: Promise
           fiidii, sectors, fo, global: globalMkts, corporateActions, analystCalls, technical, quickSnapshot } = report_data;
 
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": backendReport.title,
+    "datePublished": backendReport.report_date,
+    "author": [{
+        "@type": "Person",
+        "name": backendReport.analyst || "Jose C S",
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "MoneyGreeks",
+    },
+    "description": backendReport.meta_description || backendReport.overall_conclusion || ""
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="w-full h-1 bg-gray-900"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -283,7 +316,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
             <section className="bg-white rounded-2xl border border-gray-200 p-6">
               <SectionTitle>1 · Market Summary</SectionTitle>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-                {marketSummary.indices.map((idx) => (
+                {marketSummary.indices.map((idx: any) => (
                   <div key={idx.name} className={`rounded-xl p-4 border ${idx.direction === "up" ? "border-green-100 bg-green-50/40" : "border-red-100 bg-red-50/40"}`}>
                     <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wide mb-1">{idx.name}</p>
                     <p className="text-xl font-black text-gray-900">{idx.close.toLocaleString("en-IN")}</p>
@@ -324,7 +357,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-green-600 mb-3">Top Gainers</p>
                   <div className="space-y-2">
-                    {topGainers.map((s) => (
+                    {topGainers.map((s: any) => (
                       <div key={s.symbol} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                         <div>
                           <span className="font-bold text-gray-900 text-sm">{s.symbol}</span>
@@ -341,7 +374,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-red-500 mb-3">Top Losers</p>
                   <div className="space-y-2">
-                    {topLosers.map((s) => (
+                    {topLosers.map((s: any) => (
                       <div key={s.symbol} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                         <div>
                           <span className="font-bold text-gray-900 text-sm">{s.symbol}</span>
@@ -361,7 +394,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
               <div className="mt-4 p-4 bg-amber-50 border border-amber-100 rounded-xl">
                 <p className="text-xs font-bold uppercase tracking-widest text-amber-700 mb-3">⚡ Volume Shockers</p>
                 <div className="space-y-2">
-                  {volumeShockers.map((s) => (
+                  {volumeShockers.map((s: any) => (
                     <div key={s.symbol} className="flex items-center gap-3">
                       <span className="font-black text-gray-900 text-sm w-24">{s.symbol}</span>
                       <span className="bg-amber-200 text-amber-800 text-xs font-bold px-2 py-0.5 rounded">{s.volume} avg vol</span>
@@ -376,13 +409,13 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 <div className="p-3 bg-green-50 border border-green-100 rounded-xl">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-green-700 mb-2">Upper Circuit</p>
                   <div className="flex flex-wrap gap-1">
-                    {circuitStocks.upperCircuit.map(s => <span key={s} className="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">{s}</span>)}
+                    {circuitStocks.upperCircuit.map((s: any) => <span key={s} className="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">{s}</span>)}
                   </div>
                 </div>
                 <div className="p-3 bg-red-50 border border-red-100 rounded-xl">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-red-700 mb-2">Lower Circuit</p>
                   <div className="flex flex-wrap gap-1">
-                    {circuitStocks.lowerCircuit.map(s => <span key={s} className="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">{s}</span>)}
+                    {circuitStocks.lowerCircuit.map((s: any) => <span key={s} className="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">{s}</span>)}
                   </div>
                 </div>
               </div>
@@ -426,7 +459,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
             <section className="bg-white rounded-2xl border border-gray-200 p-6">
               <SectionTitle>4 · Sectoral Roundup</SectionTitle>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {sectors.sort((a, b) => b.change - a.change).map((sec) => (
+                {sectors.sort((a: any, b: any) => b.change - a.change).map((sec: any) => (
                   <div key={sec.name} className="flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors">
                     <div>
                       <p className="font-semibold text-gray-900 text-sm">{sec.name}</p>
@@ -445,7 +478,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 {[
                   { label: "Nifty 50", data: fo.nifty },
                   { label: "Bank Nifty", data: fo.bankNifty },
-                ].map(({ label, data }) => (
+                ].map(({ label, data }: any) => (
                   <div key={label} className="bg-gray-50 rounded-xl p-4 border border-gray-100">
                     <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">{label} Derivatives</p>
                     <div className="grid grid-cols-3 gap-y-3 text-sm">
@@ -456,7 +489,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                         { k: "PCR", v: data.pcr },
                         { k: "Max Pain", v: data.maxPain.toLocaleString("en-IN") },
                         { k: "IV Percentile", v: data.ivPercentile },
-                      ].map(({ k, v }) => (
+                      ].map(({ k, v }: any) => (
                         <div key={k}>
                           <p className="text-[10px] text-gray-400 uppercase">{k}</p>
                           <p className="font-bold text-gray-900">{v}</p>
@@ -471,7 +504,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
               <div className="mb-4">
                 <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">Open Interest Signals</p>
                 <div className="space-y-2">
-                  {fo.oiActivity.map((oi) => (
+                  {fo.oiActivity.map((oi: any) => (
                     <div key={oi.strike} className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0">
                       <span className="bg-gray-900 text-white text-[11px] font-bold px-2 py-0.5 rounded whitespace-nowrap">{oi.strike}</span>
                       <span className="text-xs text-indigo-600 font-semibold">{oi.oi}</span>
@@ -494,7 +527,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                       </tr>
                     </thead>
                     <tbody>
-                      {fo.activeOptions.map((opt) => (
+                      {fo.activeOptions.map((opt: any) => (
                         <tr key={opt.instrument} className="border-b border-gray-50">
                           <td className="px-3 py-2 font-medium text-gray-900">{opt.instrument}</td>
                           <td className="px-3 py-2 text-gray-600">{opt.volume}</td>
@@ -514,7 +547,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">Corporate Actions</p>
                   <div className="space-y-3">
-                    {corporateActions.map((ca) => (
+                    {corporateActions.map((ca: any) => (
                       <div key={ca.company} className="flex gap-3 py-2 border-b border-gray-50 last:border-0">
                         <span className="text-[10px] font-black uppercase bg-gray-900 text-white px-2 py-1 rounded h-fit whitespace-nowrap">{ca.event}</span>
                         <div>
@@ -528,7 +561,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">Broker Calls</p>
                   <div className="space-y-3">
-                    {analystCalls.map((ac) => (
+                    {analystCalls.map((ac: any) => (
                       <div key={`${ac.broker}-${ac.stock}`} className="py-2 border-b border-gray-50 last:border-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-black text-gray-900 text-sm">{ac.stock}</span>
@@ -552,7 +585,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 {[
                   { label: "Nifty 50", data: technical.nifty },
                   { label: "Bank Nifty", data: technical.bankNifty },
-                ].map(({ label, data }) => (
+                ].map(({ label, data }: any) => (
                   <div key={label} className={`rounded-xl border p-4 ${data.bias === "Bullish" ? "border-green-100 bg-green-50/30" : data.bias === "Bearish" ? "border-red-100 bg-red-50/30" : "border-gray-100 bg-gray-50"}`}>
                     <div className="flex items-center justify-between mb-3">
                       <p className="text-sm font-bold text-gray-900">{label}</p>
@@ -563,11 +596,11 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                     <div className="grid grid-cols-2 gap-3 mb-3">
                       <div>
                         <p className="text-[10px] font-bold uppercase text-green-600 mb-1">Support</p>
-                        {data.support.map((s) => <p key={s} className="text-xs font-semibold text-gray-700">{s}</p>)}
+                        {data.support.map((s: any) => <p key={s} className="text-xs font-semibold text-gray-700">{s}</p>)}
                       </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase text-red-500 mb-1">Resistance</p>
-                        {data.resistance.map((r) => <p key={r} className="text-xs font-semibold text-gray-700">{r}</p>)}
+                        {data.resistance.map((r: any) => <p key={r} className="text-xs font-semibold text-gray-700">{r}</p>)}
                       </div>
                     </div>
                     <p className="text-xs text-gray-500 leading-relaxed">{data.pattern}</p>
@@ -579,7 +612,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
               <div className="mb-6">
                 <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3">📋 Watchlist for Tomorrow</p>
                 <div className="grid sm:grid-cols-2 gap-2">
-                  {technical.watchlist.map((w) => (
+                  {technical.watchlist.map((w: any) => (
                     <div key={w.symbol} className="flex gap-3 bg-gray-50 rounded-lg p-3">
                       <span className="font-black text-gray-900 text-sm whitespace-nowrap">{w.symbol}</span>
                       <p className="text-xs text-gray-500">{w.setup}</p>
@@ -607,7 +640,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
               <div className="space-y-4">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">🇺🇸 US Markets (Previous Close)</p>
-                  {globalMkts.us.map((m) => (
+                  {globalMkts.us.map((m: any) => (
                     <div key={m.name} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
                       <span className="text-sm text-gray-700 font-medium">{m.name}</span>
                       <div className="text-right">
@@ -619,7 +652,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">🌏 Asian Markets</p>
-                  {globalMkts.asia.map((m) => (
+                  {globalMkts.asia.map((m: any) => (
                     <div key={m.name} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
                       <span className="text-sm text-gray-700 font-medium">{m.name}</span>
                       <div className="text-right">
@@ -631,7 +664,7 @@ export default async function PostMarketReportPage({ params }: { params: Promise
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">🛢️ Commodities & Currency</p>
-                  {globalMkts.commodities.map((m) => (
+                  {globalMkts.commodities.map((m: any) => (
                     <div key={m.name} className="flex justify-between items-center py-1.5 border-b border-gray-50 last:border-0">
                       <span className="text-sm text-gray-700 font-medium">{m.name}</span>
                       <div className="text-right">

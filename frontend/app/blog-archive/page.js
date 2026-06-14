@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 async function fetchBlogPostData() {
-  const res = await fetch("http://127.0.0.1:8000/blog-post/", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/`, {
     cache: "no-store",
   });
   if (!res.ok) {

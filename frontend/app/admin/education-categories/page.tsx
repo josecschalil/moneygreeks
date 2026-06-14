@@ -24,7 +24,7 @@ export default function EducationCategories() {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://127.0.0.1:8000/education-categories/");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/`);
       if (res.ok) {
         const data = await res.json();
         setCategories(data);
@@ -55,8 +55,8 @@ export default function EducationCategories() {
     e.preventDefault();
     try {
       const url = isEditing && editingId
-        ? `http://127.0.0.1:8000/education-categories/${editingId}/`
-        : "http://127.0.0.1:8000/education-categories/";
+        ? `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/${editingId}/`
+        : `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/`;
         
       const method = isEditing ? "PATCH" : "POST";
 
@@ -93,7 +93,7 @@ export default function EducationCategories() {
   const handleDelete = async (slug: string) => {
     if (!confirm("Are you sure you want to delete this category?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/education-categories/${slug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/${slug}/`, {
         method: "DELETE"
       });
       if (res.ok) {

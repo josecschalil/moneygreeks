@@ -30,6 +30,12 @@ class MarketReport(models.Model):
     report_type = models.CharField(max_length=20, choices=REPORT_TYPE_CHOICES, default=REPORT_TYPE_LIMITED)
     quality_notes = models.JSONField(blank=True, null=True)
     raw_data = models.JSONField(blank=True, null=True)
+    
+    # SEO Fields
+    meta_title = models.CharField(max_length=150, blank=True)
+    meta_description = models.TextField(blank=True)
+    meta_keywords = models.CharField(max_length=255, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -174,6 +180,12 @@ class BlogPost(models.Model):
     key_highlights = models.JSONField(default=list, blank=True)
     content = models.JSONField(default=list, help_text="Array of content blocks (h1, paragraph, image)")
     view_count = models.PositiveIntegerField(default=0)
+    
+    # SEO Fields
+    meta_title = models.CharField(max_length=150, blank=True)
+    meta_description = models.TextField(blank=True)
+    meta_keywords = models.CharField(max_length=255, blank=True)
+
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -235,6 +247,12 @@ class PostMarketReport(models.Model):
     overall_conclusion = models.TextField(blank=True)
     report_data = models.JSONField()
     is_published = models.BooleanField(default=True)
+    
+    # SEO Fields
+    meta_title = models.CharField(max_length=150, blank=True)
+    meta_description = models.TextField(blank=True)
+    meta_keywords = models.CharField(max_length=255, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

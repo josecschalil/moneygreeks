@@ -271,7 +271,7 @@ async function getMarketData(slug: string) {
   console.log("Fetching data for slug:", slug);
 
   try {
-    const res = await fetch(`http://127.0.0.1:8000/reports/${slug}/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${slug}/`, {
       cache: "no-store",
     });
 
@@ -296,6 +296,33 @@ async function getMarketData(slug: string) {
   notFound();
 }
 
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const data = await getMarketData(slug);
+  if (!data) return { title: "Pre-Market Data | MoneyGreeks" };
+
+  const metaTitle = data.meta_title || `${data.title} | MoneyGreeks`;
+  const metaDescription = data.meta_description || "Complete analysis of Indian stock market opening with GIFTNIFTY, NIFTY50, BANKNIFTY, BSE SENSEX performance.";
+  const metaKeywords = data.meta_keywords ? data.meta_keywords.split(',').map((k: string) => k.trim()) : ["India Market", "NIFTY", "Sensex", "Stock Market", "Market Open", "Trading"];
+
+  return {
+    title: metaTitle,
+    description: metaDescription,
+    keywords: metaKeywords,
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      type: "article",
+      publishedTime: data.created_at,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description: metaDescription,
+    },
+  };
+}
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -317,7 +344,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
       "Market Open",
       "Trading",
     ],
-    canonicalUrl: "http://127.0.0.1:8000/market-data/" + slug,
+    canonicalUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/market-data/${slug}`,
   };
   const globalIndices = Array.isArray(data?.global_indices)
     ? data.global_indices
@@ -344,8 +371,21 @@ export default async function MarketBlogPost({ params }: PageProps) {
     optionChainSummaries,
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Report",
+    "headline": data.title,
+    "datePublished": data.report_date,
+    "publisher": {
+      "@type": "Organization",
+      "name": "MoneyGreeks",
+    },
+    "description": metadata.description
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">

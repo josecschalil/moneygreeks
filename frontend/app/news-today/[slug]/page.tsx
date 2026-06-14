@@ -22,11 +22,14 @@ interface ArticleData {
   category: string;
   keyHighlights: string[];
   content: ContentBlock[];
+  meta_title?: string;
+  meta_description?: string;
+  meta_keywords?: string;
 }
 
 async function getArticleData(slug: string): Promise<ArticleData | null> {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/blog-post/${slug}/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${slug}/`, {
       next: { revalidate: 60 }
     });
     if (res.ok) {
@@ -67,11 +70,25 @@ export async function generateMetadata({
       title: "News | MoneyGreeks",
     };
   }
+  const metaTitle = post.meta_title || `${post.title} | MoneyGreeks News`;
+  const metaDescription = post.meta_description || post.content.find((b) => b.type === "paragraph")?.text || "Read the latest financial news on MoneyGreeks.";
+  const metaKeywords = post.meta_keywords ? post.meta_keywords.split(',').map((k: string) => k.trim()) : [];
+
   return {
-    title: `${post.title} | MoneyGreeks News`,
-    description:
-      post.content.find((b) => b.type === "paragraph")?.text ||
-      "Read the latest financial news on MoneyGreeks.",
+    title: metaTitle,
+    description: metaDescription,
+    keywords: metaKeywords,
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      type: "article",
+      publishedTime: post.date,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metaTitle,
+      description: metaDescription,
+    },
   };
 }
 
@@ -103,8 +120,25 @@ export default async function NewsArticlePage({
     .reduce((acc, curr) => acc + (curr.text?.split(/\s+/).length || 0), 0);
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": post.title,
+    "datePublished": post.date,
+    "author": [{
+        "@type": "Person",
+        "name": post.author || "MoneyGreeks",
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "MoneyGreeks",
+    },
+    "description": post.meta_description || post.content.find((b) => b.type === "paragraph")?.text || ""
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Main Grid Layout */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

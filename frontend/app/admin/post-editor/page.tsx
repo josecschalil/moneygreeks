@@ -11,7 +11,9 @@ interface ContentBlock {
   caption?: string;
 }
 
-export default function PostEditor() {
+import { Suspense } from "react";
+
+function PostEditorInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const editSlug = searchParams.get("slug");
@@ -31,6 +33,9 @@ export default function PostEditor() {
     authorDesignation: "Market Analyst",
     education_category: "",
     news_placement: "",
+    meta_title: "",
+    meta_description: "",
+    meta_keywords: "",
   });
 
   const [keyHighlights, setKeyHighlights] = useState<string[]>([""]);
@@ -46,7 +51,7 @@ export default function PostEditor() {
 
   const fetchEduCategories = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/education-categories/");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/education-categories/`);
       if (res.ok) {
         setEduCategories(await res.json());
       }
@@ -57,7 +62,7 @@ export default function PostEditor() {
 
   const fetchPostData = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/blog-post/${editSlug}/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${editSlug}/`);
       if (res.ok) {
         const data = await res.json();
         setFormData({
@@ -70,6 +75,9 @@ export default function PostEditor() {
           authorDesignation: data.authorDesignation || "Market Analyst",
           education_category: data.education_category || "",
           news_placement: data.news_placement || "",
+          meta_title: data.meta_title || "",
+          meta_description: data.meta_description || "",
+          meta_keywords: data.meta_keywords || "",
         });
         setKeyHighlights(data.keyHighlights && data.keyHighlights.length ? data.keyHighlights : [""]);
         setContent(data.content || []);
@@ -138,8 +146,8 @@ export default function PostEditor() {
 
     try {
       const url = editSlug 
-        ? `http://127.0.0.1:8000/blog-post/${editSlug}/` 
-        : "http://127.0.0.1:8000/blog-post/";
+        ? `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/${editSlug}/` 
+        : `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/`;
       
       const method = editSlug ? "PUT" : "POST";
 
@@ -353,6 +361,44 @@ export default function PostEditor() {
               </div>
             </div>
 
+            {/* SEO Settings Section */}
+            <div className="p-6 md:p-8 space-y-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">SEO Settings</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
+                  <input
+                    name="meta_title"
+                    value={formData.meta_title}
+                    onChange={handleBasicChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Custom SEO Title (defaults to post title)"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                  <textarea
+                    name="meta_description"
+                    value={formData.meta_description}
+                    onChange={handleBasicChange}
+                    rows={3}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-y"
+                    placeholder="Short summary for search engines (150-160 characters)"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+                  <input
+                    name="meta_keywords"
+                    value={formData.meta_keywords}
+                    onChange={handleBasicChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                    placeholder="Comma separated keywords (e.g. trading, nifty, strategy)"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Content Builder Section */}
             <div className="p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
@@ -454,5 +500,13 @@ export default function PostEditor() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function PostEditor() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading editor...</div>}>
+      <PostEditorInner />
+    </Suspense>
   );
 }

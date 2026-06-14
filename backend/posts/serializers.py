@@ -127,6 +127,7 @@ class MarketReportDetailSerializer(serializers.ModelSerializer):
             "sector_performance", "sector_analysis",
             "option_chain_summaries",
             "overall_conclusion",
+            "meta_title", "meta_description", "meta_keywords",
         ]
 
 
@@ -159,6 +160,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             "news_placement", "featured_image", "content",
             "view_count", "created_at", "author",
             "authorDesignation", "keyHighlights", "date",
+            "meta_title", "meta_description", "meta_keywords",
         ]
 
 

@@ -128,11 +128,14 @@ export default function PostMarketAdminPage() {
     overall_conclusion: "",
     report_data: JSON_TEMPLATE,
     is_published: true,
+    meta_title: "",
+    meta_description: "",
+    meta_keywords: "",
   });
 
   const fetchReports = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/post-market-list/");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/`);
       const data = await res.json();
       setReports(Array.isArray(data) ? data : data.results || []);
     } catch (err) {
@@ -146,8 +149,8 @@ export default function PostMarketAdminPage() {
     fetchReports();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -163,7 +166,7 @@ export default function PostMarketAdminPage() {
     setFormData((prev) => ({ ...prev, slug }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     try {
@@ -182,7 +185,7 @@ export default function PostMarketAdminPage() {
         report_data: parsedData,
       };
 
-      const res = await fetch("http://127.0.0.1:8000/post-market-list/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -200,6 +203,9 @@ export default function PostMarketAdminPage() {
           overall_conclusion: "",
           report_data: "",
           is_published: true,
+          meta_title: "",
+          meta_description: "",
+          meta_keywords: "",
         });
         fetchReports();
       } else {
@@ -213,10 +219,10 @@ export default function PostMarketAdminPage() {
     }
   };
 
-  const handleDelete = async (slug) => {
+  const handleDelete = async (slug: string) => {
     if (!confirm("Are you sure you want to delete this report?")) return;
     try {
-      const res = await fetch(`http://127.0.0.1:8000/post-market-list/${slug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/post-market-list/${slug}/`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -323,6 +329,45 @@ export default function PostMarketAdminPage() {
               rows={3}
               className="w-full p-2 border rounded"
             />
+          </div>
+
+          <div className="border-t border-gray-200 mt-6 pt-6 mb-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">SEO Settings</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <label className="block text-sm font-medium mb-1">Meta Title</label>
+                <input
+                  type="text"
+                  name="meta_title"
+                  value={formData.meta_title}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                  placeholder="Custom SEO Title"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-sm font-medium mb-1">Meta Description</label>
+                <textarea
+                  name="meta_description"
+                  value={formData.meta_description}
+                  onChange={handleInputChange}
+                  rows={2}
+                  className="w-full p-2 border rounded"
+                  placeholder="Short summary for search engines"
+                />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-sm font-medium mb-1">Meta Keywords</label>
+                <input
+                  type="text"
+                  name="meta_keywords"
+                  value={formData.meta_keywords}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                  placeholder="Comma separated keywords"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="mb-4">

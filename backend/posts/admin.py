@@ -34,6 +34,10 @@ class MarketReportAdmin(admin.ModelAdmin):
         ("Quality", {
             "fields": ("quality_score", "report_type", "quality_notes")
         }),
+        ("SEO Settings", {
+            "fields": ("meta_title", "meta_description", "meta_keywords"),
+            "classes": ("collapse",)
+        }),
         ("Conclusion", {
             "fields": ("overall_conclusion",)
         }),
@@ -120,7 +124,24 @@ class OptionChainSummaryAdmin(admin.ModelAdmin):
 
 @admin.register(BlogPost)
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ("title", "created_at")
+    list_display = ("title", "category", "created_at")
+    search_fields = ("title", "slug")
+    prepopulated_fields = {"slug": ("title",)}
+    fieldsets = (
+        ("Post Details", {
+            "fields": ("title", "subtitle", "slug", "category", "news_placement", "education_category", "featured_image", "author", "author_designation")
+        }),
+        ("SEO Settings", {
+            "fields": ("meta_title", "meta_description", "meta_keywords"),
+            "classes": ("collapse",)
+        }),
+        ("Content", {
+            "fields": ("key_highlights", "content")
+        }),
+        ("Stats", {
+            "fields": ("view_count",)
+        })
+    )
 
     
 @admin.register(NewsletterSubscriber)
@@ -128,3 +149,21 @@ class NewsletterSubscriberAdmin(admin.ModelAdmin):
     list_display = ("email", "subscribed_at")
     search_fields = ("email",)
     list_filter = ("subscribed_at",)
+
+from .models import PostMarketReport
+@admin.register(PostMarketReport)
+class PostMarketReportAdmin(admin.ModelAdmin):
+    list_display = ("title", "report_date", "is_published")
+    prepopulated_fields = {"slug": ("title",)}
+    fieldsets = (
+        ("Report Info", {
+            "fields": ("title", "slug", "report_date", "analyst", "analyst_designation", "is_published")
+        }),
+        ("SEO Settings", {
+            "fields": ("meta_title", "meta_description", "meta_keywords"),
+            "classes": ("collapse",)
+        }),
+        ("Content", {
+            "fields": ("overall_conclusion", "report_data")
+        }),
+    )

@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Save, AlertCircle } from "lucide-react";
 
-export default function ReportEditor() {
+import { Suspense } from "react";
+
+function ReportEditorInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const editSlug = searchParams.get("slug");
@@ -20,6 +22,9 @@ export default function ReportEditor() {
     status: "draft",
     image_url: "",
     overall_conclusion: "",
+    meta_title: "",
+    meta_description: "",
+    meta_keywords: "",
   });
 
   const [globalIndices, setGlobalIndices] = useState<any[]>([]);
@@ -48,7 +53,7 @@ export default function ReportEditor() {
 
   const fetchReportData = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/reports/${editSlug}/`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${editSlug}/`);
       if (res.ok) {
         const data = await res.json();
         setFormData({
@@ -56,6 +61,9 @@ export default function ReportEditor() {
           status: data.status || "draft",
           image_url: data.image_url || "",
           overall_conclusion: data.overall_conclusion || "",
+          meta_title: data.meta_title || "",
+          meta_description: data.meta_description || "",
+          meta_keywords: data.meta_keywords || "",
         });
         
         setGlobalIndices(data.global_indices || []);
@@ -118,7 +126,7 @@ export default function ReportEditor() {
     setError("");
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/reports/${editSlug}/`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/reports/${editSlug}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -130,7 +138,7 @@ export default function ReportEditor() {
         const promises = currentItems.map(async (item) => {
           const original = originalItems.find((o) => o.id === item.id);
           if (original && JSON.stringify(original) !== JSON.stringify(item)) {
-            const patchRes = await fetch(`http://127.0.0.1:8000/${endpoint}/${item.id}/`, {
+            const patchRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/${endpoint}/${item.id}/`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(item),
@@ -143,7 +151,7 @@ export default function ReportEditor() {
 
       const patchModifiedObject = async (endpoint: string, currentObj: any, originalObj: any) => {
         if (currentObj && currentObj.id && JSON.stringify(currentObj) !== JSON.stringify(originalObj)) {
-          const patchRes = await fetch(`http://127.0.0.1:8000/${endpoint}/${currentObj.id}/`, {
+          const patchRes = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/${endpoint}/${currentObj.id}/`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(currentObj),
@@ -290,6 +298,42 @@ export default function ReportEditor() {
                           rows={8}
                           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-y"
                         />
+                      </div>
+                      <div className="col-span-2 mt-6 pt-6 border-t border-gray-200">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">SEO Settings</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
+                            <input
+                              name="meta_title"
+                              value={formData.meta_title}
+                              onChange={handleChange}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                              placeholder="Custom SEO Title"
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                            <textarea
+                              name="meta_description"
+                              value={formData.meta_description}
+                              onChange={handleChange}
+                              rows={3}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-y"
+                              placeholder="Short summary for search engines"
+                            />
+                          </div>
+                          <div className="col-span-2">
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+                            <input
+                              name="meta_keywords"
+                              value={formData.meta_keywords}
+                              onChange={handleChange}
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                              placeholder="Comma separated keywords"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -562,5 +606,13 @@ export default function ReportEditor() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ReportEditor() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading editor...</div>}>
+      <ReportEditorInner />
+    </Suspense>
   );
 }

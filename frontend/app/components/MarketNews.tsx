@@ -26,7 +26,7 @@ const fallbackNews = [
   },
 ]
 
-function extractText(content) {
+function extractText(content: any): string {
   if (!content) return "";
   if (typeof content === "string") return content;
   if (Array.isArray(content)) {
@@ -41,7 +41,7 @@ function extractText(content) {
   return String(content);
 }
 
-function truncateText(content, length = 100) {
+function truncateText(content: any, length = 100) {
   const text = extractText(content);
   if (!text) return "";
   if (text.length <= length) return text;
@@ -53,7 +53,7 @@ export default async function MarketNews() {
 
   // Use live data if available, take top 4
   const displayNews = liveNews && liveNews.length > 0 
-    ? liveNews.slice(0, 4).map(post => ({
+    ? liveNews.slice(0, 4).map((post: any) => ({
         category: post.news_placement ? post.news_placement.replace('_', ' ').toUpperCase() : 'MARKET NEWS',
         title: post.title,
         excerpt: truncateText(post.summary || post.content, 120),
@@ -68,7 +68,7 @@ export default async function MarketNews() {
         <Link href="/news-today" className={styles.viewAll}>View All →</Link>
       </div>
       <div className={styles.grid}>
-        {displayNews.map((item, i) => (
+        {displayNews.map((item: any, i: number) => (
           <Link key={i} href={item.slug ? `/news-today/${item.slug}` : "/news-today"} className={styles.card} style={{ textDecoration: 'none' }}>
             <div className={styles.category}>{item.category}</div>
             <h3 className={styles.title}>{item.title}</h3>

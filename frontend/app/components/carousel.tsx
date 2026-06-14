@@ -28,8 +28,8 @@ export default function HeroCarousel() {
     async function loadSlides() {
       try {
         const [reportRes, blogRes] = await Promise.all([
-          fetch("http://127.0.0.1:8000/report-list/", { cache: "no-store" }),
-          fetch("http://127.0.0.1:8000/blog-post/", { cache: "no-store" }),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/report-list/`, { cache: "no-store" }),
+          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000"}/blog-post/`, { cache: "no-store" }),
         ]);
 
         const reports = await reportRes.json();
