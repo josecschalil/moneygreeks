@@ -88,8 +88,6 @@ function PostCard({ post }) {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap');
-
         .post-card {
           display: flex;
           flex-direction: column;
@@ -135,7 +133,7 @@ function PostCard({ post }) {
           background: #ffffff;
           border: 1px solid #e0dbd4;
           border-radius: 2px;
-          font-family: 'Hanken Grotesk', sans-serif;
+          font-family: var(--font-body);
           font-size: 10px;
           font-weight: 500;
           letter-spacing: 0.1em;
@@ -156,7 +154,7 @@ function PostCard({ post }) {
           display: flex;
           align-items: center;
           gap: 8px;
-          font-family: 'Hanken Grotesk', sans-serif;
+          font-family: var(--font-body);
           font-size: 11px;
           color: #a09890;
           font-weight: 400;
@@ -172,7 +170,7 @@ function PostCard({ post }) {
         }
 
         .card-title {
-          font-family: 'Source Serif 4', serif;
+          font-family: var(--font-heading);
           font-size: 15px;
           font-weight: 600;
           line-height: 1.45;
@@ -185,7 +183,7 @@ function PostCard({ post }) {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          font-family: 'Hanken Grotesk', sans-serif;
+          font-family: var(--font-body);
           font-size: 11.5px;
           font-weight: 500;
           letter-spacing: 0.06em;
@@ -272,14 +270,12 @@ export default function RecommendedPosts() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;600;700&display=swap');
-
         .rp-section {
           width: 100%;
           max-width: 1120px;
           margin: 0 auto;
           padding: 72px 24px 80px;
-          font-family: 'Hanken Grotesk', sans-serif;
+          font-family: var(--font-body);
         }
 
         .rp-header {
@@ -321,7 +317,7 @@ export default function RecommendedPosts() {
         }
 
         .rp-heading {
-          font-family: 'Source Serif 4', serif;
+          font-family: var(--font-heading);
           font-size: clamp(24px, 3vw, 32px);
           font-weight: 700;
           color: #1a1714;

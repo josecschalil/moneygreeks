@@ -4,13 +4,24 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --font-heading: var(--font-geist-sans);
+  --font-body: var(--font-inter);
+  --text-heading-1: 3.5rem;
+  --text-heading-2: 2.25rem;
+  --text-heading-3: 1.5rem;
+  --text-subheading: 1.125rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --leading-heading: 1.08;
+  --leading-subheading: 1.35;
+  --leading-body: 1.7;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,7 +34,105 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Hanken Grotesk', sans-serif;
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
 }
 
+body *,
+.font-sans,
+.font-body-md,
+.font-body-lg,
+.font-label-md,
+.font-caption,
+.text-body,
+.text-small {
+  font-family: var(--font-body) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif,
+.font-headline-sm,
+.font-headline-md,
+.font-display {
+  font-family: var(--font-heading) !important;
+}
+
+.font-sans,
+.font-body-md,
+.font-body-lg,
+.font-label-md,
+.font-caption {
+  font-family: var(--font-body) !important;
+}
+
+h1 {
+  font-size: var(--text-heading-1);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.04em;
+}
+
+h2 {
+  font-size: var(--text-heading-2);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-size: var(--text-heading-3);
+  line-height: 1.2;
+}
+
+p,
+li,
+td,
+th,
+label,
+input,
+textarea,
+button,
+a {
+  font-family: var(--font-body);
+}
+
+.text-heading-1 {
+  font-size: var(--text-heading-1);
+  line-height: var(--leading-heading);
+  font-family: var(--font-heading);
+}
+
+.text-heading-2 {
+  font-size: var(--text-heading-2);
+  line-height: 1.12;
+  font-family: var(--font-heading);
+}
+
+.text-heading-3 {
+  font-size: var(--text-heading-3);
+  line-height: 1.2;
+  font-family: var(--font-heading);
+}
+
+.text-subheading {
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  font-family: var(--font-body);
+}
+
+.text-body {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-family: var(--font-body);
+}
+
+.text-small {
+  font-size: var(--text-small);
+  line-height: 1.45;
+  font-family: var(--font-body);
+}
 
