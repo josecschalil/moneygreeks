@@ -5,7 +5,7 @@
   --mg-surface: #ffffff;
   --mg-surface-soft: #ffffff;
   --mg-surface-muted: #f0f0ee;
-  --mg-border: #ffffff;
+  --mg-border: #f1f1f1;
   --mg-border-strong: #d9d6ce;
   --mg-text: #171717;
   --mg-text-muted: #666862;
@@ -68,7 +68,6 @@ h5,
 h6 {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   letter-spacing: 0;
-  color: var(--mg-text);
   font-weight: 600;
 }
 
@@ -88,6 +87,7 @@ textarea,
 select {
   font: inherit;
   letter-spacing: 0;
+  color: inherit;
 }
 
 button {
