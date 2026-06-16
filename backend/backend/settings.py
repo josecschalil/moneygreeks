@@ -31,7 +31,8 @@ SECRET_KEY = 'django-insecure-i_21%p(4!9t=ulg9fodbve5lw8j0z9l+44@%@7i4an913qb!9=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["api.moneygreeks.live", "157.245.103.157", "localhost"]
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["*", "api.moneygreeks.live", "157.245.103.157", "localhost"])
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=["https://api.moneygreeks.live", "https://moneygreeks.com"])
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
