@@ -1,4 +1,3 @@
-'use client'
 import styles from './StocksInFocus.module.css'
 
 const FALLBACK_STOCKS = [

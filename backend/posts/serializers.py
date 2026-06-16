@@ -19,8 +19,8 @@ from .models import (
     DailySentiment,
     Enquiry,
     PostMarketReport,
+    LiveMarketIndex,
 )
-
 
 class DailySentimentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -193,3 +193,9 @@ class PostMarketReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostMarketReport
         fields = "__all__"
+
+class LiveMarketIndexSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LiveMarketIndex
+        fields = "__all__"
+

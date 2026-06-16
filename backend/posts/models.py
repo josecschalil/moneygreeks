@@ -263,3 +263,15 @@ class PostMarketReport(models.Model):
         ordering = ["-report_date"]
         verbose_name = "Post-Market Report"
         verbose_name_plural = "Post-Market Reports"
+
+class LiveMarketIndex(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    last_price = models.DecimalField(max_digits=12, decimal_places=2)
+    change = models.DecimalField(max_digits=12, decimal_places=2)
+    percent_change = models.DecimalField(max_digits=6, decimal_places=2)
+    up = models.BooleanField(default=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+

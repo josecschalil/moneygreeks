@@ -226,3 +226,18 @@ class PostMarketReportViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Admin can see all; public only sees published
         return PostMarketReport.objects.all()
+
+import requests
+import json
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from .models import LiveMarketIndex
+from .serializers import LiveMarketIndexSerializer
+
+class LiveIndianIndicesView(APIView):
+    def get(self, request, *args, **kwargs):
+        indices = LiveMarketIndex.objects.all().order_by('id')
+        serializer = LiveMarketIndexSerializer(indices, many=True)
+        return Response(serializer.data)
+
