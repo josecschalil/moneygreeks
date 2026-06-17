@@ -163,7 +163,7 @@ class GenerateReportView(APIView):
         try:
             report_date = timezone.localdate()
             collector = PremarketDataCollector()
-            raw_data = collector.collect(report_date=report_date, include_google=True)
+            raw_data = collector.collect(report_date=report_date)
             archive_premarket_data(raw_data, report_date=report_date)
             
             report = build_report_from_data(
