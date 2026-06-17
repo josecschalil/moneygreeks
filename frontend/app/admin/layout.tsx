@@ -21,6 +21,7 @@ export const metadata = {
 };
 
 import FetchInterceptor from "./utils/FetchInterceptor";
+import LogoutButton from "./components/LogoutButton";
 
 export default function AdminLayout({
   children,
@@ -107,14 +108,15 @@ export default function AdminLayout({
           </Link>
         </nav>
 
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-gray-100 space-y-2">
           <Link
             href="/"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors font-medium"
           >
-            <LogOut size={20} />
+            <Home size={20} />
             Back to Site
           </Link>
+          <LogoutButton />
         </div>
       </aside>
 
