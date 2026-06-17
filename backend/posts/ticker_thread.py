@@ -42,37 +42,46 @@ def fetch_live_data():
                 )
                 
                 # Log success
-                ApiSystemLog.objects.update_or_create(
-                    api_name=api_name,
-                    defaults={
-                        "status": ApiSystemLog.STATUS_OK,
-                        "error_message": "",
-                        "is_failing": False
-                    }
-                )
+                try:
+                    ApiSystemLog.objects.update_or_create(
+                        api_name=api_name,
+                        defaults={
+                            "status": ApiSystemLog.STATUS_OK,
+                            "error_message": "",
+                            "is_failing": False
+                        }
+                    )
+                except Exception as db_err:
+                    print(f"DB Error logging success: {db_err}")
 
             except requests.exceptions.RequestException as e:
                 # Handle rate limits (429) specifically
                 status = ApiSystemLog.STATUS_RATE_LIMITED if (hasattr(e, 'response') and e.response is not None and e.response.status_code == 429) else ApiSystemLog.STATUS_ERROR
                 
-                ApiSystemLog.objects.update_or_create(
-                    api_name=api_name,
-                    defaults={
-                        "status": status,
-                        "error_message": str(e),
-                        "is_failing": True
-                    }
-                )
+                try:
+                    ApiSystemLog.objects.update_or_create(
+                        api_name=api_name,
+                        defaults={
+                            "status": status,
+                            "error_message": str(e),
+                            "is_failing": True
+                        }
+                    )
+                except Exception as db_err:
+                    print(f"DB Error logging failure: {db_err}")
                 print(f"Error fetching {name}: {e}")
             except Exception as e:
-                ApiSystemLog.objects.update_or_create(
-                    api_name=api_name,
-                    defaults={
-                        "status": ApiSystemLog.STATUS_ERROR,
-                        "error_message": str(e),
-                        "is_failing": True
-                    }
-                )
+                try:
+                    ApiSystemLog.objects.update_or_create(
+                        api_name=api_name,
+                        defaults={
+                            "status": ApiSystemLog.STATUS_ERROR,
+                            "error_message": str(e),
+                            "is_failing": True
+                        }
+                    )
+                except Exception as db_err:
+                    print(f"DB Error logging failure: {db_err}")
                 print(f"Error fetching {name}: {e}")
 
         time.sleep(10)
