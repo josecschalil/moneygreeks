@@ -1,39 +1,34 @@
+import requests
 import time
 import threading
-import requests
-
 URLS = {
-    "NIFTY 50": "https://priceapi.moneycontrol.com/pricefeed/notapplicable/inidicesindia/in%3BNSX",
-    "SENSEX": "https://priceapi.moneycontrol.com/pricefeed/notapplicable/inidicesindia/in%3BSEN",
-    "NIFTY BANK": "https://priceapi.moneycontrol.com/pricefeed/notapplicable/inidicesindia/in%3Bnbx",
-    "NIFTY MIDCAP 100": "https://priceapi.moneycontrol.com/pricefeed/notapplicable/inidicesindia/in%3Bccx",
+    "NIFTY 50": "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEI",
+    "SENSEX": "https://query1.finance.yahoo.com/v8/finance/chart/%5EBSESN",
+    "NIFTY BANK": "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEBANK",
+    "NIFTY MIDCAP 100": "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSMIDCP",
 }
 
 headers = {
     "User-Agent": "Mozilla/5.0",
-    "Referer": "https://www.moneycontrol.com/",
-    "Accept": "application/json"
 }
 
 def fetch_live_data():
-    from .models import LiveMarketIndex  # import inside thread to avoid AppRegistryNotReady
-    
+    from .models import LiveMarketIndex
+
     while True:
         for name, url in URLS.items():
             try:
                 r = requests.get(url, headers=headers, timeout=10)
                 r.raise_for_status()
-                data = r.json().get("data", {})
+                data = r.json()
                 
-                pricecurrent = float(data.get("pricecurrent", "0.0").replace(',', ''))
-                priceprevclose = float(data.get("priceprevclose", str(pricecurrent)).replace(',', ''))
-                
+                meta = data["chart"]["result"][0]["meta"]
+                pricecurrent = float(meta.get("regularMarketPrice", 0))
+                priceprevclose = float(meta.get("chartPreviousClose", pricecurrent))
+
                 calculated_change = pricecurrent - priceprevclose
-                if priceprevclose > 0:
-                    calculated_percent = (calculated_change / priceprevclose) * 100
-                else:
-                    calculated_percent = 0.0
-                
+                calculated_percent = (calculated_change / priceprevclose) * 100 if priceprevclose > 0 else 0.0
+
                 LiveMarketIndex.objects.update_or_create(
                     name=name,
                     defaults={
@@ -45,8 +40,7 @@ def fetch_live_data():
                 )
             except Exception as e:
                 print(f"Error fetching {name}: {e}")
-        
-        # Wait for 10 seconds before fetching again
+
         time.sleep(10)
 
 def start_ticker_thread():
