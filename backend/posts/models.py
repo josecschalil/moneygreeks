@@ -276,3 +276,22 @@ class LiveMarketIndex(models.Model):
     def __str__(self):
         return self.name
 
+
+class ApiSystemLog(models.Model):
+    STATUS_OK = "ok"
+    STATUS_ERROR = "error"
+    STATUS_RATE_LIMITED = "rate_limited"
+    STATUS_CHOICES = [
+        (STATUS_OK, "OK"),
+        (STATUS_ERROR, "Error"),
+        (STATUS_RATE_LIMITED, "Rate Limited"),
+    ]
+
+    api_name = models.CharField(max_length=100, unique=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_OK)
+    error_message = models.TextField(blank=True)
+    last_checked = models.DateTimeField(auto_now=True)
+    is_failing = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.api_name} - {self.status}"

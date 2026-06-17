@@ -14,10 +14,11 @@ headers = {
 }
 
 def fetch_live_data():
-    from .models import LiveMarketIndex
+    from .models import LiveMarketIndex, ApiSystemLog
 
     while True:
         for name, url in URLS.items():
+            api_name = f"Yahoo Finance Ticker: {name}"
             try:
                 r = requests.get(url, headers=headers, timeout=10)
                 r.raise_for_status()
@@ -39,7 +40,39 @@ def fetch_live_data():
                         "up": calculated_change >= 0,
                     }
                 )
+                
+                # Log success
+                ApiSystemLog.objects.update_or_create(
+                    api_name=api_name,
+                    defaults={
+                        "status": ApiSystemLog.STATUS_OK,
+                        "error_message": "",
+                        "is_failing": False
+                    }
+                )
+
+            except requests.exceptions.RequestException as e:
+                # Handle rate limits (429) specifically
+                status = ApiSystemLog.STATUS_RATE_LIMITED if (hasattr(e, 'response') and e.response is not None and e.response.status_code == 429) else ApiSystemLog.STATUS_ERROR
+                
+                ApiSystemLog.objects.update_or_create(
+                    api_name=api_name,
+                    defaults={
+                        "status": status,
+                        "error_message": str(e),
+                        "is_failing": True
+                    }
+                )
+                print(f"Error fetching {name}: {e}")
             except Exception as e:
+                ApiSystemLog.objects.update_or_create(
+                    api_name=api_name,
+                    defaults={
+                        "status": ApiSystemLog.STATUS_ERROR,
+                        "error_message": str(e),
+                        "is_failing": True
+                    }
+                )
                 print(f"Error fetching {name}: {e}")
 
         time.sleep(10)

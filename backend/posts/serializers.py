@@ -20,7 +20,13 @@ from .models import (
     Enquiry,
     PostMarketReport,
     LiveMarketIndex,
+    ApiSystemLog,
 )
+
+class ApiSystemLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApiSystemLog
+        fields = "__all__"
 
 class DailySentimentSerializer(serializers.ModelSerializer):
     class Meta:

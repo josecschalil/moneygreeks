@@ -136,6 +136,23 @@ class PremarketDataCollector:
             "collector": "PremarketDataCollector",
             "source_status": self.source_status,
         }
+        
+        # Write to ApiSystemLog model
+        from posts.models import ApiSystemLog
+        for source, status in self.source_status.items():
+            is_failing = status.startswith("failed:")
+            api_status = ApiSystemLog.STATUS_ERROR if is_failing else ApiSystemLog.STATUS_OK
+            error_message = status if is_failing else ""
+            
+            ApiSystemLog.objects.update_or_create(
+                api_name=f"Premarket Collector: {source}",
+                defaults={
+                    "status": api_status,
+                    "error_message": error_message,
+                    "is_failing": is_failing
+                }
+            )
+
         return payload
 
     # -----------------------------------------------------------------------

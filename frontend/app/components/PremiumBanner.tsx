@@ -7,13 +7,16 @@ export default async function PremiumBanner() {
     overall_conclusion:
       "Comprehensive market analysis covering institutional flows, sector performance, market breadth and stocks to watch.",
     report_date: "",
-    slug: "premium-market-report",
+    slug: "",
   };
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/report-list/", {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/report-list/`,
+      {
+        next: { revalidate: 60 },
+      },
+    );
 
     if (res.ok) {
       const data = await res.json();
@@ -25,8 +28,8 @@ export default async function PremiumBanner() {
         report = {
           title: latest.title,
           overall_conclusion: latest.overall_conclusion,
-          report_date: latest.report_date,
           slug: latest.slug,
+          report_date: latest.report_date,
         };
       }
     }

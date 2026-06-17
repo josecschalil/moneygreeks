@@ -10,6 +10,7 @@ import {
   Layers,
   MessageSquare,
   Users,
+  Activity,
 } from "lucide-react";
 
 export const metadata = {
@@ -96,6 +97,13 @@ export default function AdminLayout({
           >
             <Users size={20} />
             Subscribers
+          </Link>
+          <Link
+            href="/admin/system-status"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
+          >
+            <Activity size={20} />
+            System Status
           </Link>
         </nav>
 

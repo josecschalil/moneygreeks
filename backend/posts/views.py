@@ -257,3 +257,11 @@ class AdminLoginView(APIView):
             token, created = Token.objects.get_or_create(user=user)
             return Response({"success": True, "token": token.key}, status=status.HTTP_200_OK)
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+from .models import ApiSystemLog
+from .serializers import ApiSystemLogSerializer
+
+class ApiSystemLogViewSet(viewsets.ModelViewSet):
+    queryset = ApiSystemLog.objects.all().order_by('-last_checked')
+    serializer_class = ApiSystemLogSerializer
+    http_method_names = ["get", "delete"]  # allow admin to delete logs if they want
