@@ -55,7 +55,12 @@ export default function Navbar() {
               </span>
             </div>
             <button className={styles.loginBtn}>Login</button>
-            <button className={styles.loginBtn} onClick={() => setIsNewsletterOpen(true)}>Subscribe Newsletter</button>
+            <button
+              className={styles.loginBtn}
+              onClick={() => setIsNewsletterOpen(true)}
+            >
+              Subscribe Newsletter
+            </button>
           </div>
         </nav>
 
@@ -77,7 +82,12 @@ export default function Navbar() {
               Search markets, stocks, news...
             </span>
           </div>
-          <button className={styles.loginBtn} onClick={() => setIsNewsletterOpen(true)}>Subscribe Newsletter</button>
+          <button
+            className={styles.loginBtn}
+            onClick={() => setIsNewsletterOpen(true)}
+          >
+            Subscribe Newsletter
+          </button>
         </div>
 
         {/* Hamburger */}
@@ -92,9 +102,9 @@ export default function Navbar() {
         </button>
       </div>
 
-      <NewsletterModal 
-        isOpen={isNewsletterOpen} 
-        onClose={() => setIsNewsletterOpen(false)} 
+      <NewsletterModal
+        isOpen={isNewsletterOpen}
+        onClose={() => setIsNewsletterOpen(false)}
       />
     </header>
   );

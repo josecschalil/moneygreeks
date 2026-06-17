@@ -61,10 +61,10 @@ export default function MarketTicker() {
 
   return (
     <section className="border-b border-[var(--mg-border)] bg-[var(--mg-surface)]">
-      <div className="mx-auto flex max-w-[var(--mg-container)] flex-wrap justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+      {/* Desktop: same as before */}
+      <div className="mx-auto hidden max-w-[var(--mg-container)] sm:flex flex-wrap justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         {indices.map((item) => {
           const TrendIcon = item.up ? ArrowUpRight : ArrowDownRight;
-
           return (
             <div
               key={item.name}
@@ -89,6 +89,50 @@ export default function MarketTicker() {
             </div>
           );
         })}
+      </div>
+
+      {/* Mobile: marquee */}
+      <div className="mx-auto max-w-[var(--mg-container)] overflow-hidden sm:hidden">
+        <style>{`
+        @keyframes mg-marquee {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .mg-marquee-track {
+          animation: mg-marquee 22s linear infinite;
+        }
+        .mg-marquee-track:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+        <div className="mg-marquee-track flex w-max gap-2.5 py-3 px-4">
+          {[...indices, ...indices].map((item, i) => {
+            const TrendIcon = item.up ? ArrowUpRight : ArrowDownRight;
+            return (
+              <div
+                key={i}
+                className="inline-flex shrink-0 flex-col rounded-2xl border border-[var(--mg-border)] bg-[var(--mg-surface-soft)] px-4 py-3"
+              >
+                <div className="text-[11px] font-medium uppercase tracking-[0.14em] text-[var(--mg-text-soft)] whitespace-nowrap">
+                  {item.name}
+                </div>
+                <div className="mt-1 font-heading text-base font-semibold text-[var(--mg-text)]">
+                  {item.value}
+                </div>
+                <div
+                  className={`mt-1 inline-flex items-center gap-1 text-xs font-medium ${
+                    item.up
+                      ? "text-[var(--mg-positive)]"
+                      : "text-[var(--mg-negative)]"
+                  }`}
+                >
+                  <TrendIcon className="h-3.5 w-3.5" aria-hidden="true" />
+                  {item.change}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

@@ -6,6 +6,7 @@ URLS = {
     "SENSEX": "https://query1.finance.yahoo.com/v8/finance/chart/%5EBSESN",
     "NIFTY BANK": "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEBANK",
     "NIFTY MIDCAP 100": "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSMIDCP",
+    "INDIA VIX":"https://query1.finance.yahoo.com/v8/finance/chart/%5EINDIAVIX",
 }
 
 headers = {

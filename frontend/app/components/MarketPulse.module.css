@@ -130,7 +130,9 @@
 
 /* ── Mobile ── */
 @media (max-width: 420px) {
-  .card { padding: 16px; }
+  .card { padding: 16px; 
+  display: none;
+  }
   .title { font-size: 15px; }
   .stats { gap: 16px; }
   .statValue { font-size: 14px; }
