@@ -12,6 +12,15 @@ import {
   Users,
 } from "lucide-react";
 
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
+import FetchInterceptor from "./utils/FetchInterceptor";
+
 export default function AdminLayout({
   children,
 }: {
@@ -19,6 +28,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="flex h-screen bg-gray-50 text-gray-900 font-sans">
+      <FetchInterceptor />
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col shadow-sm">
         <div className="h-16 flex items-center px-6 border-b border-gray-100">

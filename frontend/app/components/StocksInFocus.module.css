@@ -39,7 +39,7 @@
 
 .name {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   color: #111827;
   letter-spacing: 0.3px;
   margin-bottom: 4px;
@@ -54,7 +54,7 @@
 
 .price {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   color: #111827;
 }
 

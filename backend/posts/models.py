@@ -107,6 +107,7 @@ class MarketBreadth(models.Model):
     report = models.OneToOneField(MarketReport, on_delete=models.CASCADE, related_name="market_breadth")
     advancing = models.PositiveIntegerField()
     declining = models.PositiveIntegerField()
+    unchanged = models.PositiveIntegerField(null=True, blank=True)
     advance_decline_ratio = models.DecimalField(max_digits=5, decimal_places=2)
 
 

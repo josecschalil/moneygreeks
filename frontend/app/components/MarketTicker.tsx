@@ -22,7 +22,6 @@ const FALLBACK_INDICES = [
 
 export default function MarketTicker() {
   const [indices, setIndices] = useState(FALLBACK_INDICES);
-
   useEffect(() => {
     const fetchLiveIndices = async () => {
       try {

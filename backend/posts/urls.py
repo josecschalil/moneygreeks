@@ -34,4 +34,5 @@ urlpatterns = [
     path("sentiment/today/", DailySentimentTodayView.as_view(), name="sentiment-today"),
     path("sentiment/vote/", DailySentimentVoteView.as_view(), name="sentiment-vote"),
     path("live-indian-indices/", LiveIndianIndicesView.as_view(), name="live-indian-indices"),
+    path("admin-login/", AdminLoginView.as_view(), name="admin-login"),
 ] + router.urls

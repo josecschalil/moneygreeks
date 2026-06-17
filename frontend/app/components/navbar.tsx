@@ -54,7 +54,6 @@ export default function Navbar() {
                 Search markets, stocks, news...
               </span>
             </div>
-            <button className={styles.loginBtn}>Login</button>
             <button
               className={styles.loginBtn}
               onClick={() => setIsNewsletterOpen(true)}

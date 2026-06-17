@@ -248,9 +248,12 @@ class PremarketDataCollector:
         count_data = advance_data.get("count", {})
         advances = count_data.get("Advances", 0)
         declines = count_data.get("Declines", 0)
+        unchanged = count_data.get("Unchange", 0)
+
         return {
             "advances": advances,
             "declines": declines,
+            "unchanged": unchanged, 
             "ad_ratio": round(advances / declines, 2) if declines else None,
         }
 

@@ -17,7 +17,9 @@ export default function SentimentWidget({ compact = false }) {
 
   const fetchSentiment = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sentiment/today/`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/sentiment/today/`,
+      );
       if (res.ok) {
         const data = await res.json();
         setBullishVotes(data.bullish_votes || 0);
@@ -50,11 +52,14 @@ export default function SentimentWidget({ compact = false }) {
     localStorage.setItem(`sentiment_voted_${today}`, "true");
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sentiment/vote/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vote: voteType }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/sentiment/vote/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vote: voteType }),
+        },
+      );
       if (res.ok) {
         const data = await res.json();
         setBullishVotes(data.bullish_votes);

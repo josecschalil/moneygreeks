@@ -1,17 +1,16 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
+from .permissions import AllowAnyPostOrIsAuthenticatedOrReadOnly
 from .models import (
     MarketReport,
     GlobalMarketIndex,
     GlobalMarketAnalysis,
     IndianMarketIndex,
     IndianMarketAnalysis,
-    InstitutionalFlow,)
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework import status
-from .models import (
+    InstitutionalFlow,
     MarketReport,
     GlobalMarketIndex,
     GlobalMarketAnalysis,
@@ -130,6 +129,7 @@ class EducationCategoryViewSet(viewsets.ModelViewSet):
 class NewsletterSubscriberViewSet(viewsets.ModelViewSet):
     queryset = NewsletterSubscriber.objects.all()
     serializer_class = NewsletterSubscriberSerializer
+    permission_classes = [AllowAnyPostOrIsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post"]
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -194,6 +194,8 @@ class DailySentimentTodayView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class DailySentimentVoteView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request, *args, **kwargs):
         vote = request.data.get("vote")
         if vote not in ["bullish", "bearish"]:
@@ -215,6 +217,7 @@ class DailySentimentVoteView(APIView):
 class EnquiryViewSet(viewsets.ModelViewSet):
     queryset = Enquiry.objects.all()
     serializer_class = EnquirySerializer
+    permission_classes = [AllowAnyPostOrIsAuthenticatedOrReadOnly]
     http_method_names = ["get", "post", "patch", "delete"]
 
 class PostMarketReportViewSet(viewsets.ModelViewSet):
@@ -241,3 +244,16 @@ class LiveIndianIndicesView(APIView):
         serializer = LiveMarketIndexSerializer(indices, many=True)
         return Response(serializer.data)
 
+from django.contrib.auth import authenticate
+
+class AdminLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({"success": True, "token": token.key}, status=status.HTTP_200_OK)
+        return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
