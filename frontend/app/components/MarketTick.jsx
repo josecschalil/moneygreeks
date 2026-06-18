@@ -6,25 +6,26 @@ export default async function MarketTicker({ compact = false }) {
   let marketItems = fallbackMarketItems;
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/global-indices/`, { next: { revalidate: 60 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/live-indian-indices/`, { next: { revalidate: 60 } });
     if (res.ok) {
       const data = await res.json();
       const items = Array.isArray(data) ? data : (data.results || []);
       if (items.length > 0) {
         marketItems = items.slice(0, 5).map((item) => {
           const changeVal = parseFloat(item.change || "0");
+          const pctVal = parseFloat(item.percent_change || "0");
           return {
             name: item.name || item.index_name,
             value: item.last_price || item.value,
-            change: `${changeVal >= 0 ? '+' : ''}${item.percent_change}%`,
-            points: `${changeVal >= 0 ? '+' : ''}${item.change}`,
-            trend: changeVal >= 0 ? "up" : "down"
+            change: `${changeVal >= 0 ? '+' : ''}${pctVal.toFixed(2)}%`,
+            points: `${changeVal >= 0 ? '+' : ''}${changeVal.toFixed(2)}`,
+            trend: item.up !== undefined ? (item.up ? "up" : "down") : (changeVal >= 0 ? "up" : "down")
           };
         });
       }
     }
   } catch (err) {
-    console.warn("Could not fetch global-indices, using fallback data.");
+    console.warn("Could not fetch live-indian-indices, using fallback data.");
   }
 
   if (compact) {
