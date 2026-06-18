@@ -85,6 +85,14 @@ const RECOMMENDED_POSTS = [
 function PostCard({ post }) {
   const [hovered, setHovered] = useState(false);
 
+  const getPostUrl = (p) => {
+    if (p.category === "news") return `/news-today/${p.slug}`;
+    if (p.category === "education") return `/education/${p.slug}`;
+    return `/blog-post/${p.slug}`;
+  };
+
+  const postUrl = getPostUrl(post);
+
   return (
     <>
       <style>{`
@@ -215,7 +223,7 @@ function PostCard({ post }) {
 
       <article
         className="post-card"
-        onClick={() => (window.location.href = `/blog-post/${post.slug}`)}
+        onClick={() => (window.location.href = postUrl)}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
@@ -237,7 +245,7 @@ function PostCard({ post }) {
 
           <h3 className="card-title">{post.title}</h3>
 
-          <a href={`/blog-post/${post.slug}`} className="card-read-more">
+          <a href={postUrl} className="card-read-more">
             Read More
             <svg
               className="arrow-icon"

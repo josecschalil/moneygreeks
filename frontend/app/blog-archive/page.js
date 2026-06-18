@@ -35,6 +35,12 @@ export default async function BlogArchivePage() {
 
   const blogPosts = blogPostData.slice(0, 3);
 
+  const getPostUrl = (post) => {
+    if (post.category === "news") return `/news-today/${post.slug}`;
+    if (post.category === "education") return `/education/${post.slug}`;
+    return `/blog-post/${post.slug}`;
+  };
+
   return (
     <main className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-24">
@@ -53,7 +59,7 @@ export default async function BlogArchivePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => (
-              <Link key={post.slug} href={`/blog-post/${post.slug}`}>
+              <Link key={post.slug} href={getPostUrl(post)}>
                 <article className="group h-full">
                   <div className="relative h-72 rounded-2xl overflow-hidden mb-6 bg-gray-100">
                     <Image

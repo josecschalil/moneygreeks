@@ -13,6 +13,7 @@ type Slide = {
   description: string;
   slug: string;
   type: "report" | "blog";
+  category?: string;
 };
 
 export default function HeroCarousel() {
@@ -63,11 +64,12 @@ export default function HeroCarousel() {
             ...blogs.slice(0, 2).map((post: any, index: number) => ({
               id: index + 2,
               image: post.featured_image,
-              tag: "Blog",
+              tag: post.category || "Blog",
               title: post.title,
               description: post.subtitle,
               slug: post.slug,
               type: "blog",
+              category: post.category,
             }))
           );
         }
@@ -142,6 +144,13 @@ export default function HeroCarousel() {
 
   if (!slides.length) return null;
 
+  const getSlideUrl = (slide: Slide) => {
+    if (slide.type === "report") return `/market-data/${slide.slug}`;
+    if (slide.category === "news") return `/news-today/${slide.slug}`;
+    if (slide.category === "education") return `/education/${slide.slug}`;
+    return `/blog-post/${slide.slug}`;
+  };
+
   return (
     <div
       className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-white"
@@ -150,10 +159,7 @@ export default function HeroCarousel() {
       onTouchEnd={handleTouchEnd}
     >
       {slides.map((slide, index) => {
-        const href =
-          slide.type === "report"
-            ? `/market-data/${slide.slug}`
-            : `/blog-post/${slide.slug}`;
+        const href = getSlideUrl(slide);
 
         return (
           <Link

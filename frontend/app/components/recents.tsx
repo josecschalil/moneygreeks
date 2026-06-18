@@ -16,6 +16,7 @@ type BlogPost = {
   featured_image: string;
   created_at: string;
   author: Author;
+  category?: string;
 };
 function formatDate(dateStr: string) {
   if (!dateStr) return dateStr;
@@ -60,6 +61,12 @@ async function fetchBlogPostData(): Promise<BlogPost[] | null> {
   }
 }
 
+function getPostUrl(post: BlogPost) {
+  if (post.category === "news") return `/news-today/${post.slug}`;
+  if (post.category === "education") return `/education/${post.slug}`;
+  return `/blog-post/${post.slug}`;
+}
+
 /* =========================
    Component
 ========================= */
@@ -88,7 +95,7 @@ export default async function BlogPostsGrid() {
         {/* Blog Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
           {blogPosts.map((post) => (
-            <Link key={post.slug} href={`/blog-post/${post.slug}`}>
+            <Link key={post.slug} href={getPostUrl(post)}>
               <article className="group cursor-pointer rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 {/* Image */}
                 <div className="aspect-[4/3] overflow-hidden bg-gray-100">

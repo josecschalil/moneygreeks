@@ -183,37 +183,38 @@ export default async function NewsArticlePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Main Grid Layout */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8 py-4 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Article Main Column */}
           <main className="lg:col-span-2 space-y-8">
-            <article className="bg-white rounded-2xl border border-gray-200/60 shadow-sm overflow-hidden p-6 md:p-10">
-              {/* Back button link */}
-              <Link
-                href="/news-today"
-                className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6 font-medium group"
-              >
-                <ArrowLeft
-                  size={16}
-                  className="transition-transform duration-200 group-hover:-translate-x-1"
-                />
-                Back to News Today
-              </Link>
+            <article className="bg-white md:rounded-2xl md:border md:border-gray-200/60 md:shadow-sm overflow-hidden px-4 py-6 md:p-10">
+              {/* Header Navigation & Category Row */}
+              <div className="flex items-center justify-between mb-6">
+                {/* Back button link */}
+                <Link
+                  href="/news-today"
+                  className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium group"
+                >
+                  <ArrowLeft
+                    size={16}
+                    className="transition-transform duration-200 group-hover:-translate-x-1"
+                  />
+                  Back to News Today
+                </Link>
 
-              {/* Category Pill */}
-              <div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-200/40">
+                {/* Category Pill */}
+                <span className="inline-flex items-center px-3 mr-5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-200/40">
                   {post.category}
                 </span>
               </div>
 
-              {/* Title - Styled with beautiful Serif font for editorial touch */}
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mt-4 mb-6 leading-tight tracking-tight font-serif">
+              {/* Title - Styled with clean sans-serif font for modern editorial touch */}
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mt-2 mb-4 leading-tight tracking-tight font-poppins">
                 {post.title}
               </h1>
 
               {/* Author & Publish Date Meta row */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 border-b border-gray-100 pb-6 mb-8 font-sans">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-500 border-b border-gray-100 pb-4 mb-6 font-sans">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs">
                     {(post.author || "MG")
@@ -225,36 +226,36 @@ export default async function NewsArticlePage({
                     <p className="font-semibold text-gray-900 leading-none">
                       {post.author}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">
                       {post.authorDesignation}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={16} className="text-gray-400" />
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock size={16} className="text-gray-400" />
-                  <span>{readTime} min read</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={14} className="text-gray-400" />
+                    <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock size={14} className="text-gray-400" />
+                    <span>{readTime} min read</span>
+                  </div>
                 </div>
               </div>
 
               {/* Key Highlights Card */}
               {post.keyHighlights && post.keyHighlights.length > 0 && (
-                <div className="bg-gradient-to-br from-blue-50/80 to-indigo-50/40 border border-blue-100/70 rounded-xl p-5 md:p-6 mb-8 shadow-sm">
-                  <h3 className="text-base font-bold text-blue-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <div className="hidden md:block bg-gradient-to-br from-blue-50/80 to-indigo-50/40 border border-blue-100/70 rounded-xl p-4 md:p-5 mb-6 shadow-sm">
+                  <h3 className="text-sm md:text-base font-bold text-blue-900 uppercase tracking-wider mb-2 flex items-center gap-2">
                     <span className="text-blue-500">💡</span> Key Highlights
                   </h3>
-                  <ul className="space-y-3 font-sans">
+                  <ul className="space-y-1.5 font-sans">
                     {post.keyHighlights.map((highlight, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed"
+                        className="flex items-start gap-2 text-gray-700 text-sm leading-snug"
                       >
-                        <span className="text-blue-600 font-bold mt-0.5">
-                          ✓
-                        </span>
+                        <span className="text-blue-600 font-bold">✓</span>
                         <span>{highlight}</span>
                       </li>
                     ))}
@@ -307,8 +308,8 @@ export default async function NewsArticlePage({
                 })}
               </div>
 
-              <SocialShare 
-                url={`${process.env.NEXT_PUBLIC_SITE_URL}/news-today/${slug}`} 
+              <SocialShare
+                url={`${process.env.NEXT_PUBLIC_SITE_URL}/news-today/${slug}`}
                 title={post.title}
               />
 
@@ -340,7 +341,7 @@ export default async function NewsArticlePage({
           </main>
 
           {/* Sidebar Column */}
-          <aside className="lg:col-span-1 space-y-6">
+          <aside className="lg:col-span-1 space-y-6 px-4 sm:px-0">
             {/* Ad Block 300x250 */}
             <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-4">
               <div className="flex items-center justify-between mb-2">

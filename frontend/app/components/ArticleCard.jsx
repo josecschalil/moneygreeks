@@ -1,7 +1,14 @@
 import Link from "next/link";
 
 export default function ArticleCard({ article }) {
-  const href = article.slug ? `/news-today/${article.slug}` : "#";
+  const getPostUrl = (p) => {
+    if (!p || !p.slug) return "#";
+    if (p.category === "news") return `/news-today/${p.slug}`;
+    if (p.category === "education") return `/education/${p.slug}`;
+    return `/blog-post/${p.slug}`;
+  };
+
+  const href = getPostUrl(article);
 
   return (
     <Link href={href} className="group block h-full">

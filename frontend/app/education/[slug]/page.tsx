@@ -195,11 +195,11 @@ export default async function EducationArticlePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8 md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content Area */}
           <main className="lg:col-span-2 space-y-8">
-            <article className="bg-white rounded-2xl border border-gray-200/60 shadow-sm overflow-hidden p-6 md:p-10">
+            <article className="bg-white md:rounded-2xl md:border md:border-gray-200/60 md:shadow-sm overflow-hidden px-4 py-6 md:p-10">
               {/* Back to Hub Link */}
               <Link
                 href="/education"
@@ -224,13 +224,13 @@ export default async function EducationArticlePage({
                 </span>
               </div>
 
-              {/* Title - Beautiful Serif Font */}
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mt-4 mb-6 leading-tight tracking-tight font-serif">
+              {/* Title - Clean modern sans-serif */}
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mt-2 mb-4 leading-tight tracking-tight font-sans">
                 {post.title}
               </h1>
 
               {/* Meta information row */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 border-b border-gray-100 pb-6 mb-8 font-sans">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-500 border-b border-gray-100 pb-4 mb-6 font-sans">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs">
                     {(post.author || "MG")
@@ -242,18 +242,20 @@ export default async function EducationArticlePage({
                     <p className="font-semibold text-gray-900 leading-none">
                       {post.author}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">
                       {post.authorDesignation}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={16} className="text-gray-400" />
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock size={16} className="text-gray-400" />
-                  <span>{readTime} min read</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={14} className="text-gray-400" />
+                    <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  </div>
+                  <div className="flex items-center gap-1.5 hidden sm:flex">
+                    <Clock size={14} className="text-gray-400" />
+                    <span>{readTime} min read</span>
+                  </div>
                 </div>
               </div>
 
@@ -355,7 +357,7 @@ export default async function EducationArticlePage({
           </main>
 
           {/* Sidebar Area */}
-          <aside className="lg:col-span-1 space-y-6">
+          <aside className="lg:col-span-1 space-y-6 px-4 sm:px-0">
             {/* Ad block 300x250 */}
             <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-4">
               <div className="flex items-center justify-between mb-2">
