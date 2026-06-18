@@ -245,7 +245,7 @@ export default async function NewsArticlePage({
 
               {/* Key Highlights Card */}
               {post.keyHighlights && post.keyHighlights.length > 0 && (
-                <div className=" bg-gradient-to-br from-blue-50/80 to-indigo-50/40 border border-blue-100/70 rounded-xl p-4 md:p-5 mb-6 shadow-sm">
+                <div className="hidden md:block bg-gradient-to-br from-blue-50/80 to-indigo-50/40 border border-blue-100/70 rounded-xl p-4 md:p-5 mb-6 shadow-sm">
                   <h3 className="text-sm md:text-base font-bold text-blue-900 uppercase tracking-wider mb-2 flex items-center gap-2">
                     <span className="text-blue-500">💡</span> Key Highlights
                   </h3>
@@ -280,7 +280,7 @@ export default async function NewsArticlePage({
                       return (
                         <p
                           key={idx}
-                          className="text-gray-700 leading-relaxed text-sm md:text-base mb-5 whitespace-pre-line"
+                          className="text-gray-700 leading-relaxed text-[17px] sm:text-base mb-5 whitespace-pre-line"
                         >
                           {block.text}
                         </p>
