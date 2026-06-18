@@ -1,5 +1,7 @@
 import time
 import requests
+from datetime import datetime
+from zoneinfo import ZoneInfo
 from django.core.management.base import BaseCommand
 from posts.models import LiveMarketIndex, ApiSystemLog
 
@@ -20,7 +22,24 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS("Starting live ticker..."))
+        ist = ZoneInfo('Asia/Kolkata')
+        
         while True:
+            now = datetime.now(ist)
+            
+            # Check if it's Monday (0) to Friday (4)
+            is_weekday = now.weekday() <= 4
+            
+            # Check if it's between 9:00 AM and 3:30 PM
+            market_start = now.replace(hour=9, minute=0, second=0, microsecond=0)
+            market_end = now.replace(hour=15, minute=30, second=0, microsecond=0)
+            is_market_hours = market_start <= now <= market_end
+            
+            if not (is_weekday and is_market_hours):
+                # Outside market hours, sleep for a minute to save resources
+                time.sleep(60)
+                continue
+
             for name, url in URLS.items():
                 api_name = f"Yahoo Finance Ticker: {name}"
                 try:
