@@ -22,8 +22,35 @@ const FALLBACK_INDICES = [
 
 export default function MarketTicker() {
   const [indices, setIndices] = useState(FALLBACK_INDICES);
+  const [hasFetched, setHasFetched] = useState(false);
+
   useEffect(() => {
+    const isMarketOpen = () => {
+      const now = new Date();
+      // Get current time in IST
+      const istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+      
+      const day = istTime.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+      if (day === 0 || day === 6) return false;
+      
+      const hours = istTime.getHours();
+      const minutes = istTime.getMinutes();
+      const timeInMinutes = hours * 60 + minutes;
+      
+      const marketStart = 9 * 60; // 9:00 AM
+      const marketEnd = 15 * 60 + 30; // 3:30 PM
+      
+      return timeInMinutes >= marketStart && timeInMinutes <= marketEnd;
+    };
+
+    let localHasFetched = false;
+
     const fetchLiveIndices = async () => {
+      // If we already fetched at least once and the market is closed, skip polling
+      if (localHasFetched && !isMarketOpen()) {
+        return;
+      }
+
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/live-indian-indices/`,
@@ -44,6 +71,8 @@ export default function MarketTicker() {
                 };
               }),
             );
+            localHasFetched = true;
+            setHasFetched(true);
           }
         }
       } catch (err) {
