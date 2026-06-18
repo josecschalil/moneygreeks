@@ -183,11 +183,11 @@ export default async function NewsArticlePage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Main Grid Layout */}
-      <div className="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+      <div className="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8  md:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Article Main Column */}
           <main className="lg:col-span-2 space-y-8">
-            <article className="bg-white md:rounded-2xl md:border md:border-gray-200/60 md:shadow-sm overflow-hidden px-4 py-6 md:p-10">
+            <article className="bg-white md:rounded-2xl md:border md:border-gray-200/60 md:shadow-sm overflow-hidden px-6 py-6 md:p-10">
               {/* Header Navigation & Category Row */}
               <div className="flex items-center justify-between mb-6">
                 {/* Back button link */}
@@ -203,13 +203,13 @@ export default async function NewsArticlePage({
                 </Link>
 
                 {/* Category Pill */}
-                <span className="inline-flex items-center px-3 mr-5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-200/40">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-200/40">
                   {post.category}
                 </span>
               </div>
 
               {/* Title - Styled with clean sans-serif font for modern editorial touch */}
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mt-2 mb-4 leading-tight tracking-tight font-poppins">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mt-2 mb-4 leading-tight tracking-tight font-sans">
                 {post.title}
               </h1>
 
@@ -271,7 +271,7 @@ export default async function NewsArticlePage({
                       return (
                         <h2
                           key={idx}
-                          className="text-xl font-bold text-gray-900 mt-8 mb-3 border-l-4 border-blue-600 pl-4 font-serif leading-tight"
+                          className="text-xl md:text-2xl font-bold text-gray-900 mt-8 mb-3 border-l-4 border-blue-600 pl-3 md:pl-4 -ml-3 md:-ml-4 font-sans leading-tight"
                         >
                           {block.text}
                         </h2>
