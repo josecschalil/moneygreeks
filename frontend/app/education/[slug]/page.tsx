@@ -199,33 +199,36 @@ export default async function EducationArticlePage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content Area */}
           <main className="lg:col-span-2 space-y-8">
-            <article className="bg-white md:rounded-2xl md:border md:border-gray-200/60 md:shadow-sm overflow-hidden px-4 py-6 md:p-10">
-              {/* Back to Hub Link */}
-              <Link
-                href="/education"
-                className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors mb-6 font-medium group"
-              >
-                <ArrowLeft
-                  size={16}
-                  className="transition-transform duration-200 group-hover:-translate-x-1"
-                />
-                Back to Intelligence Hub
-              </Link>
+            <article className="bg-white md:rounded-2xl md:border md:border-gray-200/60 md:shadow-sm overflow-hidden px-6 py-6 md:p-10">
+              {/* Header Navigation & Category Row */}
+              <div className="flex items-start md:items-center justify-between mb-6 flex-col md:flex-row gap-4 md:gap-0">
+                {/* Back to Hub Link */}
+                <Link
+                  href="/education"
+                  className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors font-medium group"
+                >
+                  <ArrowLeft
+                    size={16}
+                    className="transition-transform duration-200 group-hover:-translate-x-1"
+                  />
+                  Back to Intelligence Hub
+                </Link>
 
-              {/* Eyebrow & Category */}
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/40">
-                  <BookOpen size={12} />
-                  {post.category}
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/40">
-                  <Award size={12} />
-                  Academy Guide
-                </span>
+                {/* Eyebrow & Category */}
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/40">
+                    <BookOpen size={12} />
+                    {post.category}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200/40">
+                    <Award size={12} />
+                    Academy Guide
+                  </span>
+                </div>
               </div>
 
               {/* Title - Clean modern sans-serif */}
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mt-2 mb-4 leading-tight tracking-tight font-sans">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-700 mt-2 mb-4 leading-snug md:leading-tight tracking-tight font-popins ">
                 {post.title}
               </h1>
 
@@ -261,19 +264,17 @@ export default async function EducationArticlePage({
 
               {/* Study Highlights Card */}
               {post.keyHighlights && post.keyHighlights.length > 0 && (
-                <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/40 border border-emerald-100/70 rounded-xl p-5 md:p-6 mb-8 shadow-sm">
-                  <h3 className="text-base font-bold text-emerald-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                <div className="bg-gradient-to-br from-emerald-50/80 to-teal-50/40 border border-emerald-100/70 rounded-xl p-4 md:p-5 mb-6 shadow-sm">
+                  <h3 className="text-sm md:text-base font-bold text-emerald-900 uppercase tracking-wider mb-2 flex items-center gap-2">
                     <span>📖</span> Core Learning Takeaways
                   </h3>
-                  <ul className="space-y-3 font-sans">
+                  <ul className="space-y-2.5 font-sans">
                     {post.keyHighlights.map((highlight, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed"
+                        className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
                       >
-                        <span className="text-emerald-600 font-bold mt-0.5">
-                          ✓
-                        </span>
+                        <span className="text-emerald-600 font-bold">✓</span>
                         <span>{highlight}</span>
                       </li>
                     ))}
@@ -289,7 +290,7 @@ export default async function EducationArticlePage({
                       return (
                         <h2
                           key={idx}
-                          className="text-xl font-bold text-gray-900 mt-8 mb-3 border-l-4 border-emerald-600 pl-4 font-serif leading-tight"
+                          className="text-xl md:text-2xl font-bold text-gray-900 mt-8 mb-3 border-l-4 border-emerald-600 pl-3 md:pl-4 -ml-3 md:-ml-4 font-sans leading-tight"
                         >
                           {block.text}
                         </h2>
@@ -298,7 +299,7 @@ export default async function EducationArticlePage({
                       return (
                         <p
                           key={idx}
-                          className="text-gray-700 leading-relaxed text-sm md:text-base mb-5 whitespace-pre-line"
+                          className="text-gray-700 leading-relaxed text-[17px] sm:text-base mb-5 whitespace-pre-line"
                         >
                           {block.text}
                         </p>

@@ -209,7 +209,7 @@ export default async function NewsArticlePage({
               </div>
 
               {/* Title - Styled with clean sans-serif font for modern editorial touch */}
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mt-2 mb-4 leading-tight tracking-tight font-sans">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 mt-2 mb-4 leading-snug md:leading-tight tracking-tight font-sans">
                 {post.title}
               </h1>
 
