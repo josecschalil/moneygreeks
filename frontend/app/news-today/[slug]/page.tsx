@@ -203,7 +203,7 @@ export default async function NewsArticlePage({
                 </Link>
 
                 {/* Category Pill */}
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-200/40">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-green-50 text-green-600 border border-green-200/40">
                   {post.category}
                 </span>
               </div>
@@ -216,7 +216,7 @@ export default async function NewsArticlePage({
               {/* Author & Publish Date Meta row */}
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-500 border-b border-gray-100 pb-4 mb-6 font-sans">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-xs">
+                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-xs">
                     {(post.author || "MG")
                       .split(" ")
                       .map((n) => n[0])
@@ -245,17 +245,19 @@ export default async function NewsArticlePage({
 
               {/* Key Highlights Card */}
               {post.keyHighlights && post.keyHighlights.length > 0 && (
-                <div className="hidden md:block bg-gradient-to-br from-blue-50/80 to-indigo-50/40 border border-blue-100/70 rounded-xl p-4 md:p-5 mb-6 shadow-sm">
-                  <h3 className="text-sm md:text-base font-bold text-blue-900 uppercase tracking-wider mb-2 flex items-center gap-2">
-                    <span className="text-blue-500">💡</span> Key Highlights
+                <div className=" bg-gradient-to-br from-emerald-50/80 to-teal-50/40 border border-emerald-100/70 rounded-xl p-4 md:p-5 mb-6 shadow-sm">
+                  <h3 className="text-sm md:text-base font-bold text-emerald-900 uppercase tracking-wider mb-2 flex items-center gap-2">
+                    <span className="text-emerald-500">💡</span> Key Highlights
                   </h3>
-                  <ul className="space-y-1.5 font-sans">
+                  <ul className="space-y-2.5 font-sans">
                     {post.keyHighlights.map((highlight, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-2 text-gray-700 text-sm leading-snug"
+                        className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
                       >
-                        <span className="text-blue-600 font-bold">✓</span>
+                        <span className="text-emerald-600 font-bold mt-0.5">
+                          ✓
+                        </span>
                         <span>{highlight}</span>
                       </li>
                     ))}
