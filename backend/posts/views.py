@@ -265,3 +265,29 @@ class ApiSystemLogViewSet(viewsets.ModelViewSet):
     queryset = ApiSystemLog.objects.all().order_by('-last_checked')
     serializer_class = ApiSystemLogSerializer
     http_method_names = ["get", "delete"]  # allow admin to delete logs if they want
+
+
+class NewsPostsView(APIView):
+    """
+    Targeted news posts endpoint.
+    Query params:
+      placement  - news_placement value (hero, latest, deep_dive, live_feed, quick_hit, breaking)
+      limit      - max number of posts to return (default 10)
+    Always returns posts ordered by -created_at (newest first).
+    """
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        placement = request.query_params.get("placement")
+        try:
+            limit = int(request.query_params.get("limit", 10))
+        except (ValueError, TypeError):
+            limit = 10
+
+        qs = BlogPost.objects.filter(category="news").order_by("-created_at")
+        if placement:
+            qs = qs.filter(news_placement=placement)
+
+        qs = qs[:limit]
+        serializer = BlogPostSerializer(qs, many=True)
+        return Response(serializer.data)

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { deepDiveArticles } from "../news-today/data";
 import Icon from "./Icon";
 import SectionHeader from "./SectionHeader";
 import SidebarWidgets from "./SidebarWidgets";
@@ -41,17 +40,21 @@ function DeepArticle({ article }) {
 }
 
 export default function DeepDiveSection({ posts, mostRead }) {
-  const displayPosts = posts?.length ? posts : deepDiveArticles;
+  if (!posts?.length && !mostRead?.length) return null;
 
   return (
     <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
       <div>
-        <SectionHeader title="Deep Dive Analysis" />
-        <div className="space-y-5">
-          {displayPosts.map((article, index) => (
-            <DeepArticle key={article.slug || index} article={article} />
-          ))}
-        </div>
+        {posts?.length > 0 && (
+          <>
+            <SectionHeader title="Deep Dive Analysis" />
+            <div className="space-y-5">
+              {posts.map((article, index) => (
+                <DeepArticle key={article.slug || index} article={article} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <SidebarWidgets mostRead={mostRead} />
     </section>

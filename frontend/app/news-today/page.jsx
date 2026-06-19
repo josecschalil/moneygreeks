@@ -4,48 +4,77 @@ import LatestIntelligence from "../components/LatestIntelligence";
 import DeepDiveSection from "../components/DeepDiveSection";
 import TrendingTopics from "../components/TrendingTopics";
 import AdvancedMarketFeed from "../components/AdvancedMarketFeed";
-import { fetchPostsByCategory } from "../utils/api";
+
+const API = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+async function fetchSection(placement, limit) {
+  try {
+    const url = placement
+      ? `${API}/news-posts/?placement=${placement}&limit=${limit}`
+      : `${API}/news-posts/?limit=${limit}`;
+    const res = await fetch(url, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.results || []);
+  } catch {
+    return [];
+  }
+}
 
 export default async function MarketInsightPage() {
-  const fetchedPosts = await fetchPostsByCategory("news");
+  // Fetch all sections in parallel — only the exact count needed per section
+  const [
+    heroArr,
+    latestPosts,
+    deepDivePosts,
+    feedPosts,
+    quickHitPosts,
+    breakingPosts,
+    mostReadArr,
+  ] = await Promise.all([
+    fetchSection("hero", 1),
+    fetchSection("latest", 3),
+    fetchSection("deep_dive", 3),
+    fetchSection("live_feed", 20),
+    fetchSection("quick_hit", 15),
+    fetchSection("breaking", 3),
+    fetchSection(null, 5),   // most read — all news, sorted by view_count below
+  ]);
 
-  // If fetchedPosts is null, API is down -> fallback to demo data
-  if (fetchedPosts === null) {
+  // Hero: use explicit hero post; fall back to most recent across all placements
+  let heroPost = heroArr[0] || null;
+
+  // If no hero post tagged, fall back to newest post overall
+  if (!heroPost) {
+    const fallbackArr = await fetchSection(null, 1);
+    heroPost = fallbackArr[0] || null;
+  }
+
+  // Most read: sort by view_count from the latest 5 fetched
+  const mostReadPosts = [...mostReadArr].sort(
+    (a, b) => (b.view_count || 0) - (a.view_count || 0),
+  );
+
+  // If API is completely unreachable on all fetches, show fallback
+  const allEmpty =
+    !heroPost &&
+    !latestPosts.length &&
+    !deepDivePosts.length &&
+    !feedPosts.length;
+
+  if (allEmpty) {
     return (
       <div className={styles.page}>
         <main className={styles.main}>
           <HeroSection post={null} />
-          <LatestIntelligence posts={[]} isFallback={true} />
-          <DeepDiveSection posts={[]} mostRead={[]} isFallback={true} />
+          <LatestIntelligence posts={[]} />
+          <DeepDiveSection posts={[]} mostRead={[]} />
           <TrendingTopics />
-          <AdvancedMarketFeed feedPosts={[]} quickHits={[]} breakingPosts={[]} isFallback={true} />
+          <AdvancedMarketFeed feedPosts={[]} quickHits={[]} breakingPosts={[]} />
         </main>
       </div>
     );
   }
-
-  // If connected but empty, show empty state
-  if (fetchedPosts.length === 0) {
-    return (
-      <div className={styles.page}>
-        <main className={styles.main}>
-          <div className="flex h-64 items-center justify-center rounded-2xl border border-[var(--mg-border)] bg-[var(--mg-surface-soft)] text-[var(--mg-text-muted)]">
-            No news articles available right now. Check back later!
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  const newsPosts = fetchedPosts;
-  const heroPost = newsPosts.find((p) => p.news_placement === "hero") || newsPosts[0];
-  const latestPosts = newsPosts.filter((p) => p.news_placement === "latest").slice(0, 3);
-  const deepDivePosts = newsPosts.filter((p) => p.news_placement === "deep_dive").slice(0, 2);
-  const feedPosts = newsPosts.filter((p) => p.news_placement === "live_feed");
-  const quickHitPosts = newsPosts.filter((p) => p.news_placement === "quick_hit");
-  const breakingPosts = newsPosts.filter((p) => p.news_placement === "breaking").slice(0, 2);
-
-  const mostReadPosts = [...newsPosts].sort((a, b) => (b.view_count || 0) - (a.view_count || 0)).slice(0, 5);
 
   return (
     <div className={styles.page}>
@@ -54,10 +83,10 @@ export default async function MarketInsightPage() {
         <LatestIntelligence posts={latestPosts} />
         <DeepDiveSection posts={deepDivePosts} mostRead={mostReadPosts} />
         <TrendingTopics />
-        <AdvancedMarketFeed 
-          feedPosts={feedPosts} 
-          quickHits={quickHitPosts} 
-          breakingPosts={breakingPosts} 
+        <AdvancedMarketFeed
+          feedPosts={feedPosts}
+          quickHits={quickHitPosts}
+          breakingPosts={breakingPosts}
         />
       </main>
     </div>
