@@ -6,6 +6,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import fs from "fs";
 import path from "path";
+import {
+  absoluteUrl,
+  buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  defaultOpenGraphImage,
+  getSiteUrl,
+  splitKeywords,
+} from "@/app/utils/seo";
 interface GlobalMarketIndex {
   id: number;
   index_name: string;
@@ -303,22 +311,40 @@ export async function generateMetadata({ params }: PageProps) {
 
   const metaTitle = data.meta_title || `${data.title} | MoneyGreeks`;
   const metaDescription = data.meta_description || "Complete analysis of Indian stock market opening with GIFTNIFTY, NIFTY50, BANKNIFTY, BSE SENSEX performance.";
-  const metaKeywords = data.meta_keywords ? data.meta_keywords.split(',').map((k: string) => k.trim()) : ["India Market", "NIFTY", "Sensex", "Stock Market", "Market Open", "Trading"];
+  const metaKeywords = data.meta_keywords ? splitKeywords(data.meta_keywords) : ["India Market", "NIFTY", "Sensex", "Stock Market", "Market Open", "Trading"];
+  const canonicalUrl = `${getSiteUrl()}/market-data/${slug}`;
+  const imageUrl = absoluteUrl(data.featured_image || defaultOpenGraphImage());
+  const datePublished = data.created_at || data.report_date;
+  const dateModified = data.updated_at || datePublished;
 
   return {
     title: metaTitle,
     description: metaDescription,
     keywords: metaKeywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: metaTitle,
       description: metaDescription,
+      url: canonicalUrl,
       type: "article",
-      publishedTime: data.created_at,
+      publishedTime: datePublished,
+      modifiedTime: dateModified,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: metaTitle,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: metaTitle,
       description: metaDescription,
+      images: [imageUrl],
     },
   };
 }
@@ -344,7 +370,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
       "Market Open",
       "Trading",
     ],
-    canonicalUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/market-data/${slug}`,
+    canonicalUrl: `${getSiteUrl()}/market-data/${slug}`,
   };
   const globalIndices = Array.isArray(data?.global_indices)
     ? data.global_indices
@@ -371,21 +397,29 @@ export default async function MarketBlogPost({ params }: PageProps) {
     optionChainSummaries,
   });
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Report",
-    "headline": data.title,
-    "datePublished": data.report_date,
-    "publisher": {
-      "@type": "Organization",
-      "name": "MoneyGreeks",
-    },
-    "description": metadata.description
-  };
+  const jsonLd = buildArticleJsonLd({
+    type: "Report",
+    title: data.title,
+    description: data.meta_description || metadata.description,
+    url: metadata.canonicalUrl,
+    image: absoluteUrl(data.featured_image || defaultOpenGraphImage()),
+    datePublished: data.report_date || data.created_at,
+    dateModified: data.updated_at || data.report_date || data.created_at,
+    author: data.analyst || metadata.author,
+    section: "Pre-Market",
+    keywords: splitKeywords(data.meta_keywords || metadata.keywords),
+    wordCount: undefined,
+  });
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Home", url: getSiteUrl() },
+    { name: "Market Data", url: `${getSiteUrl()}/market-data` },
+    { name: data.title, url: metadata.canonicalUrl },
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">

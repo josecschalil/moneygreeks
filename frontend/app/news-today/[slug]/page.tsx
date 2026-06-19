@@ -21,6 +21,17 @@ import {
 import SocialShare from "../../components/SocialShare";
 import RecommendedPosts from "@/app/components/recommended";
 import NewsletterSidebarWidget from "@/app/components/NewsletterSidebarWidget";
+import {
+  absoluteUrl,
+  buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  defaultOpenGraphImage,
+  extractFirstImage,
+  firstParagraph,
+  getContentWordCount,
+  getSiteUrl,
+  splitKeywords,
+} from "@/app/utils/seo";
 
 interface ContentBlock {
   type: "h1" | "paragraph" | "image";
@@ -40,6 +51,9 @@ interface ArticleData {
   meta_title?: string;
   meta_description?: string;
   meta_keywords?: string;
+  featured_image?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 async function getArticleData(slug: string): Promise<ArticleData | null> {
@@ -92,26 +106,30 @@ export async function generateMetadata({
   }
   const metaTitle = post.meta_title || `${post.title} | MoneyGreeks News`;
   const metaDescription =
-    post.meta_description ||
-    post.content.find((b) => b.type === "paragraph")?.text ||
-    "Read the latest financial news on MoneyGreeks.";
-  const metaKeywords = post.meta_keywords
-    ? post.meta_keywords.split(",").map((k: string) => k.trim())
-    : [];
+    post.meta_description || firstParagraph(post.content) || "Read the latest financial news on MoneyGreeks.";
+  const metaKeywords = splitKeywords(post.meta_keywords);
+  const canonicalUrl = `${getSiteUrl()}/news-today/${slug}`;
+  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const datePublished = post.date || post.created_at;
+  const dateModified = post.updated_at || datePublished;
 
   return {
     title: metaTitle,
     description: metaDescription,
     keywords: metaKeywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/news-today/${slug}`,
+      url: canonicalUrl,
       type: "article",
-      publishedTime: post.date,
+      publishedTime: datePublished,
+      modifiedTime: dateModified,
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/default-og.jpg`,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: metaTitle,
@@ -122,7 +140,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: metaTitle,
       description: metaDescription,
-      images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/default-og.jpg`],
+      images: [imageUrl],
     },
   };
 }
@@ -150,37 +168,42 @@ export default async function NewsArticlePage({
   }
 
   // Calculate dynamic reading time based on word count
-  const wordCount = post.content
-    .filter((b) => b.type === "paragraph")
-    .reduce((acc, curr) => acc + (curr.text?.split(/\s+/).length || 0), 0);
+  const wordCount = getContentWordCount(post.content);
   const readTime = Math.max(1, Math.ceil(wordCount / 200));
+  const canonicalUrl = `${getSiteUrl()}/news-today/${slug}`;
+  const metaDescription =
+    post.meta_description || firstParagraph(post.content) || "";
+  const metaKeywords = splitKeywords(post.meta_keywords);
+  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    headline: post.title,
-    datePublished: post.date,
-    author: [
-      {
-        "@type": "Person",
-        name: post.author || "MoneyGreeks",
-      },
-    ],
-    publisher: {
-      "@type": "Organization",
-      name: "MoneyGreeks",
-    },
-    description:
-      post.meta_description ||
-      post.content.find((b) => b.type === "paragraph")?.text ||
-      "",
-  };
+  const jsonLd = buildArticleJsonLd({
+    type: "NewsArticle",
+    title: post.title,
+    description: metaDescription,
+    url: canonicalUrl,
+    image: imageUrl,
+    datePublished: post.date || post.created_at,
+    dateModified: post.updated_at || post.date || post.created_at,
+    author: post.author || "MoneyGreeks",
+    section: post.category,
+    keywords: metaKeywords,
+    wordCount,
+  });
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Home", url: getSiteUrl() },
+    { name: "News Today", url: `${getSiteUrl()}/news-today` },
+    { name: post.title, url: canonicalUrl },
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Main Grid Layout */}
       <div className="max-w-7xl mx-auto md:px-4 sm:px-6 lg:px-8  md:py-8">

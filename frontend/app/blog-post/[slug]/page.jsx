@@ -2,6 +2,16 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { User, Calendar, Clock } from "lucide-react";
 import RecommendedPosts from "@/app/components/recommended";
+import {
+  absoluteUrl,
+  buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  defaultOpenGraphImage,
+  extractFirstImage,
+  getContentWordCount,
+  getSiteUrl,
+  splitKeywords,
+} from "@/app/utils/seo";
 
 /* -------------------- DATA FETCH -------------------- */
 async function getBlogPost(slug) {
@@ -24,20 +34,29 @@ export async function generateMetadata({ params }) {
 
   const metaTitle = post.meta_title || `${post.title} | MoneyGreeks`;
   const metaDescription = post.meta_description || post.subtitle || "";
-  const metaKeywords = post.meta_keywords ? post.meta_keywords.split(',').map(k => k.trim()) : [];
+  const metaKeywords = splitKeywords(post.meta_keywords);
+  const canonicalUrl = `${getSiteUrl()}/blog-post/${slug}`;
+  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const datePublished = post.created_at || post.date;
+  const dateModified = post.updated_at || datePublished;
 
   return {
     title: metaTitle,
     description: metaDescription,
     keywords: metaKeywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: metaTitle,
       description: metaDescription,
+      url: canonicalUrl,
       type: "article",
-      publishedTime: post.created_at,
+      publishedTime: datePublished,
+      modifiedTime: dateModified,
       images: [
         {
-          url: post.featured_image,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: post.title,
@@ -48,7 +67,7 @@ export async function generateMetadata({ params }) {
       card: "summary_large_image",
       title: metaTitle,
       description: metaDescription,
-      images: [post.featured_image],
+      images: [imageUrl],
     },
   };
 }
@@ -104,27 +123,32 @@ export default async function BlogPostPage({ params }) {
     });
   };
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "image": post.featured_image ? [post.featured_image] : [],
-    "datePublished": post.created_at,
-    "dateModified": post.created_at,
-    "author": [{
-        "@type": "Person",
-        "name": post.author || "Jose C S",
-    }],
-    "publisher": {
-      "@type": "Organization",
-      "name": "MoneyGreeks",
-    },
-    "description": post.meta_description || post.subtitle || ""
-  };
+  const canonicalUrl = `${getSiteUrl()}/blog-post/${slug}`;
+  const wordCount = getContentWordCount(post.content);
+  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const jsonLd = buildArticleJsonLd({
+    type: "BlogPosting",
+    title: post.title,
+    description: post.meta_description || post.subtitle || "",
+    url: canonicalUrl,
+    image: imageUrl,
+    datePublished: post.created_at || post.date,
+    dateModified: post.updated_at || post.created_at || post.date,
+    author: post.author || "Jose C S",
+    section: post.category,
+    keywords: splitKeywords(post.meta_keywords),
+    wordCount,
+  });
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Home", url: getSiteUrl() },
+    { name: "Blog", url: `${getSiteUrl()}/blog` },
+    { name: post.title, url: canonicalUrl },
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <div className="max-w-7xl mx-auto px-4 py-2 md:py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         <main className="lg:col-span-3">
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">

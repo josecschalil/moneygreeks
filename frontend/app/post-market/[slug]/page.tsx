@@ -13,6 +13,14 @@ import {
   Minus,
 } from "lucide-react";
 import SocialShare from "../../components/SocialShare";
+import {
+  absoluteUrl,
+  buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  defaultOpenGraphImage,
+  getSiteUrl,
+  splitKeywords,
+} from "@/app/utils/seo";
 
 // ─── Mock Post-Market Report Data ────────────────────────────────────────────
 // Replace this with a real API fetch when your backend endpoint is ready.
@@ -468,22 +476,30 @@ export async function generateMetadata({
     report.report_data?.technical?.conclusion ||
     "Daily Post-Market Analysis";
   const metaKeywords = report.meta_keywords
-    ? report.meta_keywords.split(",").map((k: string) => k.trim())
+    ? splitKeywords(report.meta_keywords)
     : [];
+  const canonicalUrl = `${getSiteUrl()}/post-market/${slug}`;
+  const imageUrl = absoluteUrl(report.featured_image || defaultOpenGraphImage());
+  const datePublished = report.created_at || report.report_date;
+  const dateModified = report.updated_at || datePublished;
 
   return {
     title: metaTitle,
     description: metaDescription,
     keywords: metaKeywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: metaTitle,
       description: metaDescription,
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}/post-market/${slug}`,
+      url: canonicalUrl,
       type: "article",
-      publishedTime: report.created_at,
+      publishedTime: datePublished,
+      modifiedTime: dateModified,
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_SITE_URL}/images/default-og.jpg`,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: metaTitle,
@@ -494,7 +510,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: metaTitle,
       description: metaDescription,
-      images: [`${process.env.NEXT_PUBLIC_SITE_URL}/images/default-og.jpg`],
+      images: [imageUrl],
     },
   };
 }
@@ -532,30 +548,37 @@ export default async function PostMarketReportPage({
     quickSnapshot,
   } = report_data;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: backendReport.title,
-    datePublished: backendReport.report_date,
-    author: [
-      {
-        "@type": "Person",
-        name: backendReport.analyst || "Jose C S",
-      },
-    ],
-    publisher: {
-      "@type": "Organization",
-      name: "MoneyGreeks",
-    },
+  const canonicalUrl = `${getSiteUrl()}/post-market/${slug}`;
+  const jsonLd = buildArticleJsonLd({
+    type: "Article",
+    title: backendReport.title,
     description:
       backendReport.meta_description || backendReport.overall_conclusion || "",
-  };
+    url: canonicalUrl,
+    image: absoluteUrl(backendReport.featured_image || defaultOpenGraphImage()),
+    datePublished: backendReport.report_date || backendReport.created_at,
+    dateModified:
+      backendReport.updated_at || backendReport.report_date || backendReport.created_at,
+    author: backendReport.analyst || "Jose C S",
+    section: "Post-Market",
+    keywords: splitKeywords(backendReport.meta_keywords),
+    wordCount: undefined,
+  });
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd([
+    { name: "Home", url: getSiteUrl() },
+    { name: "Post-Market", url: `${getSiteUrl()}/post-market` },
+    { name: backendReport.title, url: canonicalUrl },
+  ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <div className="w-full h-1 bg-gray-900"></div>
 

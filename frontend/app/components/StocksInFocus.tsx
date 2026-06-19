@@ -34,7 +34,7 @@ export default async function StocksInFocus() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/stock-movers/`,
       {
-        cache: "no-store",
+        next: { revalidate: 60 },
       },
     );
 
@@ -51,11 +51,12 @@ export default async function StocksInFocus() {
         .filter((item: any) => item.category === "gainer")
         .sort(
           (a: any, b: any) =>
-            parseFloat(b.change_percent) - parseFloat(a.change_percent),
+            parseFloat(b.change_percent) - parseFloat(a.change_percent) ||
+            String(a.symbol).localeCompare(String(b.symbol)),
         )
         .slice(0, 6);
 
-      stocks = topStocks.map((item: any) => {
+      const mappedStocks = topStocks.map((item: any) => {
         const changeVal = parseFloat(item.change_percent || "0");
 
         return {
@@ -66,6 +67,10 @@ export default async function StocksInFocus() {
           up: changeVal >= 0,
         };
       });
+
+      if (mappedStocks.length > 0) {
+        stocks = mappedStocks;
+      }
     }
   } catch (err) {
     console.error("Could not fetch stock-movers:", err);
