@@ -264,9 +264,9 @@ export default async function ReportsPage({ searchParams }) {
   }));
   const displayTrending = latestNews.length > 0 ? latestNews : trendingAnalysis;
 
-  // Fill up to 10 each with demo data
-  const premarketList = fillWithDemo(livePremarket, demoPremarket, 10);
-  const postmarketList = fillWithDemo(livePostmarket, demoPostmarket, 10);
+  // No demo data usage
+  const premarketList = livePremarket;
+  const postmarketList = livePostmarket;
 
   // Combine and SORT all data by newest date
   const fullList = [...premarketList, ...postmarketList].sort(
@@ -277,11 +277,11 @@ export default async function ReportsPage({ searchParams }) {
   const featuredPremarket =
     fullList.find(
       (r) => !(r.report_type || "").toLowerCase().includes("post"),
-    ) || premarketList[0];
+    );
   const featuredPostmarket =
     fullList.find((r) =>
       (r.report_type || "").toLowerCase().includes("post"),
-    ) || postmarketList[0];
+    );
 
   // Apply Searching & Filtering logic for the main grid
   let gridData = fullList;
@@ -311,7 +311,7 @@ export default async function ReportsPage({ searchParams }) {
   } else {
     // Default view: exclude featured items so they don't duplicate
     gridData = fullList.filter(
-      (r) => r.id !== featuredPremarket.id && r.id !== featuredPostmarket.id,
+      (r) => r.id !== featuredPremarket?.id && r.id !== featuredPostmarket?.id,
     );
   }
 
@@ -626,93 +626,101 @@ export default async function ReportsPage({ searchParams }) {
                 flexDirection: "column",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginBottom: 14,
-                  borderBottom: "1px solid #c4c6cd",
-                  paddingBottom: 8,
-                }}
-              >
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: 16, color: "#006c47" }}
-                >
-                  light_mode
-                </span>
-                <span
-                  style={{
-                    color: "#006c47",
-                    fontFamily: "'Hanken Grotesk', sans-serif",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Premarket Analysis
-                </span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    color: "#74777d",
-                    fontFamily: "'Hanken Grotesk', sans-serif",
-                    fontSize: 11,
-                  }}
-                >
-                  {formatDate(featuredPremarket.report_date)}
-                </span>
-              </div>
-              <h2
-                style={{
-                  fontFamily: "'Source Serif 4', serif",
-                  fontSize: "clamp(22px, 5vw, 34px)",
-                  fontWeight: 600,
-                  lineHeight: 1.15,
-                  color: "#041627",
-                  marginBottom: 14,
-                }}
-              >
-                {featuredPremarket.title}
-              </h2>
-              <p
-                style={{
-                  fontFamily: "'Source Serif 4', serif",
-                  fontSize: 15,
-                  color: "#44474c",
-                  lineHeight: 1.7,
-                  marginBottom: 20,
-                  flex: 1,
-                }}
-              >
-                {truncateText(featuredPremarket.overall_conclusion, 160)}
-              </p>
-              <Link
-                href={`/market-data/${featuredPremarket.slug}`}
-                className="read-link"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  color: "#041627",
-                  fontFamily: "'Hanken Grotesk', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                }}
-              >
-                Read Full Analysis
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: 17 }}
-                >
-                  arrow_forward
-                </span>
-              </Link>
+              {featuredPremarket ? (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 14,
+                      borderBottom: "1px solid #c4c6cd",
+                      paddingBottom: 8,
+                    }}
+                  >
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: 16, color: "#006c47" }}
+                    >
+                      light_mode
+                    </span>
+                    <span
+                      style={{
+                        color: "#006c47",
+                        fontFamily: "'Hanken Grotesk', sans-serif",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Premarket Analysis
+                    </span>
+                    <span
+                      style={{
+                        marginLeft: "auto",
+                        color: "#74777d",
+                        fontFamily: "'Hanken Grotesk', sans-serif",
+                        fontSize: 11,
+                      }}
+                    >
+                      {formatDate(featuredPremarket.report_date)}
+                    </span>
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "'Source Serif 4', serif",
+                      fontSize: "clamp(22px, 5vw, 34px)",
+                      fontWeight: 600,
+                      lineHeight: 1.15,
+                      color: "#041627",
+                      marginBottom: 14,
+                    }}
+                  >
+                    {featuredPremarket.title}
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: "'Source Serif 4', serif",
+                      fontSize: 15,
+                      color: "#44474c",
+                      lineHeight: 1.7,
+                      marginBottom: 20,
+                      flex: 1,
+                    }}
+                  >
+                    {truncateText(featuredPremarket.overall_conclusion, 160)}
+                  </p>
+                  <Link
+                    href={`/market-data/${featuredPremarket.slug}`}
+                    className="read-link"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      color: "#041627",
+                      fontFamily: "'Hanken Grotesk', sans-serif",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Read Full Analysis
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: 17 }}
+                    >
+                      arrow_forward
+                    </span>
+                  </Link>
+                </>
+              ) : (
+                <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#74777d" }}>
+                  No premarket reports available.
+                </div>
+              )}
             </div>
 
             {/* Col 2 — Featured Post-Market */}
@@ -725,93 +733,101 @@ export default async function ReportsPage({ searchParams }) {
                 flexDirection: "column",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginBottom: 14,
-                  borderBottom: "1px solid #c4c6cd",
-                  paddingBottom: 8,
-                }}
-              >
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: 16, color: "#041627" }}
-                >
-                  dark_mode
-                </span>
-                <span
-                  style={{
-                    color: "#041627",
-                    fontFamily: "'Hanken Grotesk', sans-serif",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    letterSpacing: "0.15em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  Post-Market Analysis
-                </span>
-                <span
-                  style={{
-                    marginLeft: "auto",
-                    color: "#74777d",
-                    fontFamily: "'Hanken Grotesk', sans-serif",
-                    fontSize: 11,
-                  }}
-                >
-                  {formatDate(featuredPostmarket.report_date)}
-                </span>
-              </div>
-              <h2
-                style={{
-                  fontFamily: "'Source Serif 4', serif",
-                  fontSize: "clamp(22px, 5vw, 34px)",
-                  fontWeight: 600,
-                  lineHeight: 1.25,
-                  color: "#041627",
-                  marginBottom: 14,
-                }}
-              >
-                {featuredPostmarket.title}
-              </h2>
-              <p
-                style={{
-                  fontFamily: "'Source Serif 4', serif",
-                  fontSize: 14,
-                  color: "#44474c",
-                  lineHeight: 1.7,
-                  marginBottom: 20,
-                  flex: 1,
-                }}
-              >
-                {truncateText(featuredPostmarket.overall_conclusion, 160)}
-              </p>
-              <Link
-                href={`/post-market/${featuredPostmarket.slug}`}
-                className="read-link"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  color: "#041627",
-                  fontFamily: "'Hanken Grotesk', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                }}
-              >
-                Read Full Analysis
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: 17 }}
-                >
-                  arrow_forward
-                </span>
-              </Link>
+              {featuredPostmarket ? (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 14,
+                      borderBottom: "1px solid #c4c6cd",
+                      paddingBottom: 8,
+                    }}
+                  >
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: 16, color: "#041627" }}
+                    >
+                      dark_mode
+                    </span>
+                    <span
+                      style={{
+                        color: "#041627",
+                        fontFamily: "'Hanken Grotesk', sans-serif",
+                        fontSize: 12,
+                        fontWeight: 600,
+                        letterSpacing: "0.15em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Post-Market Analysis
+                    </span>
+                    <span
+                      style={{
+                        marginLeft: "auto",
+                        color: "#74777d",
+                        fontFamily: "'Hanken Grotesk', sans-serif",
+                        fontSize: 11,
+                      }}
+                    >
+                      {formatDate(featuredPostmarket.report_date)}
+                    </span>
+                  </div>
+                  <h2
+                    style={{
+                      fontFamily: "'Source Serif 4', serif",
+                      fontSize: "clamp(22px, 5vw, 34px)",
+                      fontWeight: 600,
+                      lineHeight: 1.25,
+                      color: "#041627",
+                      marginBottom: 14,
+                    }}
+                  >
+                    {featuredPostmarket.title}
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: "'Source Serif 4', serif",
+                      fontSize: 14,
+                      color: "#44474c",
+                      lineHeight: 1.7,
+                      marginBottom: 20,
+                      flex: 1,
+                    }}
+                  >
+                    {truncateText(featuredPostmarket.overall_conclusion, 160)}
+                  </p>
+                  <Link
+                    href={`/post-market/${featuredPostmarket.slug}`}
+                    className="read-link"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 6,
+                      color: "#041627",
+                      fontFamily: "'Hanken Grotesk', sans-serif",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Read Full Analysis
+                    <span
+                      className="material-symbols-outlined"
+                      style={{ fontSize: 17 }}
+                    >
+                      arrow_forward
+                    </span>
+                  </Link>
+                </>
+              ) : (
+                <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#74777d" }}>
+                  No post-market reports available.
+                </div>
+              )}
             </div>
 
             {/* Col 3 — Trending */}
