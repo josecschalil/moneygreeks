@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import PageTracker from "@/app/components/PageTracker";
 import {
   User,
   Calendar,
@@ -209,6 +210,7 @@ export default async function EducationArticlePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <PageTracker pageType="education" pageSlug={slug} pageTitle={post.title} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

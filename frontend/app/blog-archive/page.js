@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import PageTracker from "@/app/components/PageTracker";
 async function fetchBlogPostData() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, {
@@ -43,6 +44,7 @@ export default async function BlogArchivePage() {
 
   return (
     <main className="bg-white min-h-screen">
+      <PageTracker pageType="archive" pageSlug="archive" pageTitle="Archive" />
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-24">
         {/* ================= FEATURED INSIGHTS ================= */}
         <section>

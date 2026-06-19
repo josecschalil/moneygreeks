@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import PageTracker from "@/app/components/PageTracker";
 import {
   AlertCircle,
   ArrowUpRight,
@@ -572,6 +573,7 @@ export default async function PostMarketReportPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <PageTracker pageType="post_market" pageSlug={slug} pageTitle={backendReport.title} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

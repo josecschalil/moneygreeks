@@ -106,6 +106,13 @@ export default function AdminLayout({
             <Activity size={20} />
             System Status
           </Link>
+          <Link
+            href="/admin/analytics"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
+          >
+            <BarChart2 size={20} />
+            Analytics
+          </Link>
         </nav>
 
         <div className="p-4 border-t border-gray-100 space-y-2">

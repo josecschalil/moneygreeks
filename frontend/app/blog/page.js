@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PageTracker from "@/app/components/PageTracker";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -355,6 +356,7 @@ export default async function ReportsPage({ searchParams }) {
       className="min-h-screen"
       style={{ backgroundColor: "#f7f9fb", color: "#191c1e" }}
     >
+      <PageTracker pageType="blog" pageSlug="blog" pageTitle="Blog" />
       <style>{`
         .report-card {
           background-color: #ffffff;

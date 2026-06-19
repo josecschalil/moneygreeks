@@ -37,4 +37,6 @@ urlpatterns = [
     path("live-indian-indices/", LiveIndianIndicesView.as_view(), name="live-indian-indices"),
     path("admin-login/", AdminLoginView.as_view(), name="admin-login"),
     path("news-posts/", NewsPostsView.as_view(), name="news-posts"),
+    path("track/", TrackPageViewView.as_view(), name="track-pageview"),
+    path("analytics/", AnalyticsView.as_view(), name="analytics"),
 ] + router.urls

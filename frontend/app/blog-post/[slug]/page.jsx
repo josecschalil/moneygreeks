@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { User, Calendar, Clock } from "lucide-react";
 import RecommendedPosts from "@/app/components/recommended";
+import PageTracker from "@/app/components/PageTracker";
 import {
   absoluteUrl,
   buildArticleJsonLd,
@@ -147,6 +148,8 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <PageTracker pageType="blog_post" pageSlug={slug} pageTitle={post.title} />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <div className="max-w-7xl mx-auto px-4 py-2 md:py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">

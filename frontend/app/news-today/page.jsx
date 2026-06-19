@@ -1,4 +1,5 @@
 import styles from "./MarketInsight.module.css";
+import PageTracker from "../components/PageTracker";
 import HeroSection from "../components/HeroSection";
 import LatestIntelligence from "../components/LatestIntelligence";
 import DeepDiveSection from "../components/DeepDiveSection";
@@ -78,6 +79,7 @@ export default async function MarketInsightPage() {
 
   return (
     <div className={styles.page}>
+      <PageTracker pageType="news_today" pageSlug="news-today" pageTitle="News Today" />
       <main className={styles.main}>
         <HeroSection post={heroPost} />
         <LatestIntelligence posts={latestPosts} />

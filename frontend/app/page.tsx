@@ -1,4 +1,5 @@
 import Navbar from "./components/navbar";
+import PageTracker from "./components/PageTracker";
 import MarketTicker from "./components/MarketTicker";
 import MarketPulse from "./components/MarketPulse";
 import Sidebar from "./components/Sidebar";
@@ -12,6 +13,7 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <div className={styles.mi}>
+      <PageTracker pageType="home" pageSlug="home" pageTitle="Home" />
       <MarketTicker />
 
       <main className={styles.main}>

@@ -4,6 +4,7 @@ import TopSectors from "@/app/components/topSectors";
 import RecommendedPosts from "@/app/components/recommended";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import PageTracker from "@/app/components/PageTracker";
 import fs from "fs";
 import path from "path";
 import {
@@ -418,24 +419,15 @@ export default async function MarketBlogPost({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <PageTracker pageType="market_report" pageSlug={data.slug} pageTitle={data.title} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
-            <li>
-              <Link href="/" className="hover:text-blue-600">
-                Home
-              </Link>
-            </li>
-            <li className="before:content-['›'] before:mx-2">
-              <Link href="/" className="hover:text-blue-600">
-                Moneygreeks
-              </Link>
-            </li>
-            <li className="before:content-['›'] before:mx-2 text-blue-600 font-medium">
-              pre-market-data
-            </li>
+            <li><a href="/" className="hover:text-blue-600">Home</a></li>
+            <li className="text-gray-400 before:mx-2"><a href="/" className="hover:text-blue-600">Moneygreeks</a></li>
+            <li className="text-blue-600 font-medium">pre-market-data</li>
           </ol>
         </div>
       </nav>

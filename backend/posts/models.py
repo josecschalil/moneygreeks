@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Index
 
 class MarketReport(models.Model):
     STATUS_DRAFT = "draft"
@@ -295,3 +296,66 @@ class ApiSystemLog(models.Model):
 
     def __str__(self):
         return f"{self.api_name} - {self.status}"
+
+
+class PageView(models.Model):
+    PAGE_TYPE_BLOG_POST = "blog_post"
+    PAGE_TYPE_MARKET_REPORT = "market_report"
+    PAGE_TYPE_POST_MARKET = "post_market"
+    PAGE_TYPE_EDUCATION = "education"
+    PAGE_TYPE_NEWS_TODAY = "news_today"
+    PAGE_TYPE_HOME = "home"
+    PAGE_TYPE_BLOG = "blog"
+    PAGE_TYPE_ARCHIVE = "archive"
+    PAGE_TYPE_OTHER = "other"
+    PAGE_TYPE_CHOICES = [
+        (PAGE_TYPE_BLOG_POST, "Blog Post"),
+        (PAGE_TYPE_MARKET_REPORT, "Pre-Market Report"),
+        (PAGE_TYPE_POST_MARKET, "Post-Market Report"),
+        (PAGE_TYPE_EDUCATION, "Education Article"),
+        (PAGE_TYPE_NEWS_TODAY, "News Today"),
+        (PAGE_TYPE_HOME, "Home"),
+        (PAGE_TYPE_BLOG, "Blog"),
+        (PAGE_TYPE_ARCHIVE, "Archive"),
+        (PAGE_TYPE_OTHER, "Other"),
+    ]
+
+    DEVICE_DESKTOP = "desktop"
+    DEVICE_MOBILE = "mobile"
+    DEVICE_TABLET = "tablet"
+    DEVICE_BOT = "bot"
+    DEVICE_UNKNOWN = "unknown"
+    DEVICE_CHOICES = [
+        (DEVICE_DESKTOP, "Desktop"),
+        (DEVICE_MOBILE, "Mobile"),
+        (DEVICE_TABLET, "Tablet"),
+        (DEVICE_BOT, "Bot"),
+        (DEVICE_UNKNOWN, "Unknown"),
+    ]
+
+    page_type = models.CharField(max_length=30, choices=PAGE_TYPE_CHOICES, default=PAGE_TYPE_OTHER)
+    page_slug = models.CharField(max_length=255, blank=True, db_index=True)
+    page_title = models.CharField(max_length=500, blank=True)
+    # Privacy-safe: SHA-256(IP + daily_salt) — raw IP never stored
+    ip_hash = models.CharField(max_length=64, db_index=True)
+    session_id = models.CharField(max_length=64, blank=True, db_index=True)
+    user_agent = models.TextField(blank=True)
+    referrer = models.CharField(max_length=1000, blank=True)
+    is_bot = models.BooleanField(default=False, db_index=True)
+    bot_name = models.CharField(max_length=100, blank=True)
+    device_type = models.CharField(max_length=10, choices=DEVICE_CHOICES, default=DEVICE_UNKNOWN)
+    country_code = models.CharField(max_length=5, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        indexes = [
+            Index(fields=["page_type", "created_at"]),
+            Index(fields=["page_type", "page_slug", "created_at"]),
+            Index(fields=["is_bot", "created_at"]),
+        ]
+        verbose_name = "Page View"
+        verbose_name_plural = "Page Views"
+
+    def __str__(self):
+        return f"{self.page_type}:{self.page_slug} @ {self.created_at}"
