@@ -78,6 +78,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        <meta name="msvalidate.01" content="C6FB87B97050C3C58A2FFB66ADA96CFE" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1764727420030766"
