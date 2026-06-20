@@ -4,6 +4,14 @@ import { fetchPostsByCategory } from "../utils/api";
 import { fetchEducationCategories } from "../utils/api";
 import NewsletterSidebarWidget from "@/app/components/NewsletterSidebarWidget";
 
+export const metadata = {
+  title: "Trading Education & Academy | MoneyGreeks",
+  description: "Learn to trade the stock market with our comprehensive education hub. Master price action, option greeks, and trading psychology.",
+  alternates: {
+    canonical: "/education",
+  },
+};
+
 export default async function IntelligenceHub() {
   const eduPosts = await fetchPostsByCategory("education") || [];
 

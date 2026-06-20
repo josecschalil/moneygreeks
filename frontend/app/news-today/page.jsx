@@ -8,6 +8,15 @@ import AdvancedMarketFeed from "../components/AdvancedMarketFeed";
 
 const API = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+export const metadata = {
+  title: "News Today | MoneyGreeks",
+  description: "Latest financial news, market intelligence, and deep dives from MoneyGreeks.",
+  alternates: {
+    canonical: "/news-today",
+  },
+};
+
+
 async function fetchSection(placement, limit) {
   try {
     const url = placement

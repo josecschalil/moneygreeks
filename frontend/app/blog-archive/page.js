@@ -1,6 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import PageTracker from "@/app/components/PageTracker";
+
+export const metadata = {
+  title: "Blog Archive | MoneyGreeks",
+  description: "Browse the complete archive of financial insights, market analysis, and trading education articles from MoneyGreeks.",
+  alternates: {
+    canonical: "/blog-archive",
+  },
+};
+
 async function fetchBlogPostData() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/`, {

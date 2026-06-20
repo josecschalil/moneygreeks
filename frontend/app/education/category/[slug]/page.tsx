@@ -1,5 +1,29 @@
 import Link from "next/link";
 import { fetchPostsByCategory } from "../../../utils/api";
+import { getSiteUrl } from "../../../utils/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  let categoryName = slug.charAt(0).toUpperCase() + slug.slice(1).replace("-", " ");
+  
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/education-categories/${slug}/`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.name) categoryName = data.name;
+    }
+  } catch (err) {
+    // Ignore fetch errors during metadata generation
+  }
+
+  return {
+    title: `${categoryName} | MoneyGreeks Education`,
+    description: `Explore trading education resources for ${categoryName}.`,
+    alternates: {
+      canonical: `/education/category/${slug}`,
+    },
+  };
+}
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
