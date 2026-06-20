@@ -27,7 +27,7 @@ function PostEditorInner() {
     title: "",
     subtitle: "",
     slug: "",
-    category: "education",
+    category: searchParams.get("category") || "education",
     featured_image: "",
     author: "MoneyGreeks Team",
     authorDesignation: "Market Analyst",
@@ -109,6 +109,90 @@ function PostEditorInner() {
 
   const addContentBlock = (type: "h1" | "paragraph" | "image") => {
     setContent([...content, { type, text: "", url: "", caption: "" }]);
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      parseMarkdown(text);
+    };
+    reader.readAsText(file);
+    
+    // Reset file input
+    e.target.value = '';
+  };
+
+  const parseMarkdown = (md: string) => {
+    // Title
+    const titleMatch = md.match(/^#\s+(.+)/m);
+    const title = titleMatch ? titleMatch[1].trim() : "";
+
+    // Subtitle
+    const subtitleMatch = md.match(/\*\*Subtitle:\*\*\s+(.+)/);
+    const subtitle = subtitleMatch ? subtitleMatch[1].trim() : "";
+
+    // Extractor helper
+    const extractSection = (header: string) => {
+      // Look for '## Header', then capture everything until the next '## ' or end of string
+      const regex = new RegExp(`##\\s+${header}[^\\n]*\\n([\\s\\S]*?)(?=\\n##\\s|$)`, "i");
+      const match = md.match(regex);
+      return match ? match[1].trim() : "";
+    };
+
+    const metaTitle = extractSection("Meta Title");
+    const metaDesc = extractSection("Meta Description");
+    const metaKeywords = extractSection("Meta Keywords");
+    
+    let slug = extractSection("URL Slug");
+    if (slug.startsWith("/")) slug = slug.slice(1);
+
+    const highlightsText = extractSection("Key Highlights");
+    const parsedHighlights = highlightsText
+      .split("\n")
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    const blogPostText = extractSection("Blog Post");
+    const newContent: ContentBlock[] = [];
+    const blocks = blogPostText.split(/\n\s*\n/);
+    
+    for (let block of blocks) {
+      block = block.trim();
+      if (!block || block.replace(/-/g, "").trim() === "" || block.startsWith("*Disclaimer:")) continue;
+      
+      if (block.startsWith("#")) {
+        newContent.push({ type: "h1", text: block.replace(/^#+\s*/, "") });
+      } else {
+        // Append to the previous paragraph block if one exists, otherwise create a new one
+        if (newContent.length > 0 && newContent[newContent.length - 1].type === "paragraph") {
+          newContent[newContent.length - 1].text += "\n\n" + block;
+        } else {
+          newContent.push({ type: "paragraph", text: block });
+        }
+      }
+    }
+
+    setFormData(prev => ({
+      ...prev,
+      title: title || prev.title,
+      subtitle: subtitle || prev.subtitle,
+      slug: slug || prev.slug,
+      meta_title: metaTitle || prev.meta_title,
+      meta_description: metaDesc || prev.meta_description,
+      meta_keywords: metaKeywords || prev.meta_keywords,
+    }));
+
+    if (parsedHighlights.length > 0) {
+      setKeyHighlights(parsedHighlights);
+    }
+    
+    if (newContent.length > 0) {
+      setContent(newContent);
+    }
   };
 
   const updateContentBlock = (index: number, field: keyof ContentBlock, value: string) => {
@@ -210,6 +294,20 @@ function PostEditorInner() {
         )}
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          
+          {/* Markdown Import Section */}
+          <div className="p-6 md:p-8 border-b border-gray-100 flex items-center justify-between bg-blue-50/50">
+            <div>
+              <h2 className="text-lg font-semibold text-blue-900">Import from Markdown</h2>
+              <p className="text-sm text-blue-700 mt-1">Upload a .md file to automatically populate the form fields below.</p>
+            </div>
+            <label className="cursor-pointer bg-white border border-blue-200 text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 transition-colors shadow-sm inline-flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload .MD File
+              <input type="file" accept=".md" className="hidden" onChange={handleFileUpload} />
+            </label>
+          </div>
+
           <form className="divide-y divide-gray-100">
             {/* Basic Information Section */}
             <div className="p-6 md:p-8 space-y-6">
@@ -236,20 +334,6 @@ function PostEditorInner() {
                     placeholder="e.g. how-to-trade-options"
                     required
                   />
-                </div>
-                <div className="col-span-2 md:col-span-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleBasicChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white"
-                  >
-                    <option value="education">Education</option>
-                    <option value="news">News</option>
-                    <option value="finance">Finance</option>
-                    <option value="technology">Technology</option>
-                  </select>
                 </div>
                 {formData.category === "education" && (
                   <div className="col-span-2 md:col-span-1">

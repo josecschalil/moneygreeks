@@ -52,7 +52,7 @@ export default function NewsManagement() {
           <p className="text-gray-500 mt-1">Manage all your financial and technological news articles.</p>
         </div>
         <Link 
-          href="/admin/post-editor" 
+          href="/admin/post-editor?category=news" 
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold shadow-sm hover:bg-blue-700 transition-colors"
         >
           <Plus size={18} />
