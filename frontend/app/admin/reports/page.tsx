@@ -67,7 +67,7 @@ export default function ReportsManagement() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${slug}/`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${slug}`,
         {
           method: "DELETE",
         },

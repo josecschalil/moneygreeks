@@ -105,7 +105,9 @@ function getDistanceFromSpot(
   ) {
     return "";
   }
-  const distance = Math.abs(((strikeValue - underlyingValue) / underlyingValue) * 100);
+  const distance = Math.abs(
+    ((strikeValue - underlyingValue) / underlyingValue) * 100,
+  );
   return `${formatMarketNumber(distance)}% from spot`;
 }
 
@@ -154,8 +156,9 @@ function getOpeningBriefing({
     item.index_name?.toLowerCase().includes("vix"),
   );
   const niftyOptions =
-    optionChainSummaries.find((item) => item.symbol?.toUpperCase() === "NIFTY") ||
-    optionChainSummaries[0];
+    optionChainSummaries.find(
+      (item) => item.symbol?.toUpperCase() === "NIFTY",
+    ) || optionChainSummaries[0];
   const fiiNet = Number(
     institutionalFlows.find((item) =>
       String(item.institution_type).toUpperCase().includes("FII"),
@@ -171,12 +174,15 @@ function getOpeningBriefing({
   const breadthRatio = Number(marketBreadth?.advance_decline_ratio);
 
   let score = 0;
-  if (!Number.isNaN(giftChange)) score += giftChange > 0.15 ? 1 : giftChange < -0.15 ? -1 : 0;
-  if (!Number.isNaN(breadthRatio)) score += breadthRatio >= 1.2 ? 1 : breadthRatio < 0.9 ? -1 : 0;
+  if (!Number.isNaN(giftChange))
+    score += giftChange > 0.15 ? 1 : giftChange < -0.15 ? -1 : 0;
+  if (!Number.isNaN(breadthRatio))
+    score += breadthRatio >= 1.2 ? 1 : breadthRatio < 0.9 ? -1 : 0;
   if (!Number.isNaN(fiiNet) && !Number.isNaN(diiNet)) {
     score += fiiNet > 0 && diiNet > 0 ? 1 : fiiNet < 0 && diiNet < 0 ? -1 : 0;
   }
-  if (!Number.isNaN(vixChange)) score += vixChange < -3 ? 1 : vixChange > 3 ? -1 : 0;
+  if (!Number.isNaN(vixChange))
+    score += vixChange < -3 ? 1 : vixChange > 3 ? -1 : 0;
 
   const stance =
     score >= 2
@@ -280,20 +286,31 @@ async function getMarketData(slug: string) {
   console.log("Fetching data for slug:", slug);
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${slug}/`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/reports/${slug}`,
+      {
+        cache: "no-store",
+      },
+    );
 
     if (res.ok) {
       return await res.json();
     }
   } catch (error) {
-    console.warn("Backend reports endpoint unavailable. Trying local premarket file fallback.");
+    console.warn(
+      "Backend reports endpoint unavailable. Trying local premarket file fallback.",
+    );
   }
 
   // Fallback: Read local file from frontend/public/data/premarket/[slug].json
   try {
-    const filePath = path.join(process.cwd(), "public", "data", "premarket", `${slug}.json`);
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "data",
+      "premarket",
+      `${slug}.json`,
+    );
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf8");
       return JSON.parse(fileContent);
@@ -311,8 +328,19 @@ export async function generateMetadata({ params }: PageProps) {
   if (!data) return { title: "Pre-Market Data | MoneyGreeks" };
 
   const metaTitle = data.meta_title || `${data.title} | MoneyGreeks`;
-  const metaDescription = data.meta_description || "Complete analysis of Indian stock market opening with GIFTNIFTY, NIFTY50, BANKNIFTY, BSE SENSEX performance.";
-  const metaKeywords = data.meta_keywords ? splitKeywords(data.meta_keywords) : ["India Market", "NIFTY", "Sensex", "Stock Market", "Market Open", "Trading"];
+  const metaDescription =
+    data.meta_description ||
+    "Complete analysis of Indian stock market opening with GIFTNIFTY, NIFTY50, BANKNIFTY, BSE SENSEX performance.";
+  const metaKeywords = data.meta_keywords
+    ? splitKeywords(data.meta_keywords)
+    : [
+        "India Market",
+        "NIFTY",
+        "Sensex",
+        "Stock Market",
+        "Market Open",
+        "Trading",
+      ];
   const canonicalUrl = `${getSiteUrl()}/market-data/${slug}`;
   const imageUrl = absoluteUrl(data.featured_image || defaultOpenGraphImage());
   const datePublished = data.created_at || data.report_date;
@@ -419,14 +447,32 @@ export default async function MarketBlogPost({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageTracker pageType="market_report" pageSlug={data.slug} pageTitle={data.title} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <PageTracker
+        pageType="market_report"
+        pageSlug={data.slug}
+        pageTitle={data.title}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <ol className="flex items-center space-x-2 text-sm text-gray-500">
-            <li><a href="/" className="hover:text-blue-600">Home</a></li>
-            <li className="text-gray-400 before:mx-2"><a href="/" className="hover:text-blue-600">Moneygreeks</a></li>
+            <li>
+              <a href="/" className="hover:text-blue-600">
+                Home
+              </a>
+            </li>
+            <li className="text-gray-400 before:mx-2">
+              <a href="/" className="hover:text-blue-600">
+                Moneygreeks
+              </a>
+            </li>
             <li className="text-blue-600 font-medium">pre-market-data</li>
           </ol>
         </div>
@@ -547,7 +593,8 @@ export default async function MarketBlogPost({ params }: PageProps) {
                         </p>
                       )}
                       <p className="mt-3 text-xs leading-5 text-gray-500">
-                        These are expiry OI walls, not direct intraday support or resistance. Use them only as context.
+                        These are expiry OI walls, not direct intraday support
+                        or resistance. Use them only as context.
                       </p>
                     </div>
                   </div>
@@ -1203,7 +1250,7 @@ export default async function MarketBlogPost({ params }: PageProps) {
                           </div>
                           <div className="grid grid-cols-2 gap-3 text-sm">
                             <div>
-                            <p className="text-xs text-gray-500">
+                              <p className="text-xs text-gray-500">
                                 Call OI Wall
                               </p>
                               <p className="font-medium text-red-600">
@@ -1247,7 +1294,9 @@ export default async function MarketBlogPost({ params }: PageProps) {
 
                   <div className="mt-5 space-y-3">
                     <p className="rounded-md bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-800">
-                      Highest OI strikes can be far from spot. Treat this section as expiry positioning context, not a day-trading level map.
+                      Highest OI strikes can be far from spot. Treat this
+                      section as expiry positioning context, not a day-trading
+                      level map.
                     </p>
                     {optionChainSummaries.map((item) => (
                       <p

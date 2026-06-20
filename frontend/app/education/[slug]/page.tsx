@@ -56,7 +56,7 @@ interface ArticleData {
 async function getArticleData(slug: string): Promise<ArticleData | null> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}/`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}`,
       {
         next: { revalidate: 60 },
       },
@@ -103,10 +103,16 @@ export async function generateMetadata({
   }
   const metaTitle = post.meta_title || `${post.title} | MoneyGreeks Academy`;
   const metaDescription =
-    post.meta_description || firstParagraph(post.content) || "Master financial analysis and trading concepts with MoneyGreeks Academy.";
+    post.meta_description ||
+    firstParagraph(post.content) ||
+    "Master financial analysis and trading concepts with MoneyGreeks Academy.";
   const metaKeywords = splitKeywords(post.meta_keywords);
   const canonicalUrl = `${getSiteUrl()}/education/${slug}`;
-  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    post.featured_image ||
+      extractFirstImage(post.content) ||
+      defaultOpenGraphImage(),
+  );
   const datePublished = post.date || post.created_at;
   const dateModified = post.updated_at || datePublished;
 
@@ -171,7 +177,11 @@ export default async function EducationArticlePage({
   const metaDescription =
     post.meta_description || firstParagraph(post.content) || "";
   const metaKeywords = splitKeywords(post.meta_keywords);
-  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    post.featured_image ||
+      extractFirstImage(post.content) ||
+      defaultOpenGraphImage(),
+  );
 
   // Custom Author Profiles
   const getAuthorBio = (authorName: string) => {
@@ -210,7 +220,11 @@ export default async function EducationArticlePage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageTracker pageType="education" pageSlug={slug} pageTitle={post.title} />
+      <PageTracker
+        pageType="education"
+        pageSlug={slug}
+        pageTitle={post.title}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

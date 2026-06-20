@@ -18,9 +18,12 @@ import {
 async function getBlogPost(slug) {
   if (!slug) notFound();
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}/`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}`,
+    {
+      cache: "no-store",
+    },
+  );
 
   if (!res.ok) notFound();
   return res.json();
@@ -37,7 +40,11 @@ export async function generateMetadata({ params }) {
   const metaDescription = post.meta_description || post.subtitle || "";
   const metaKeywords = splitKeywords(post.meta_keywords);
   const canonicalUrl = `${getSiteUrl()}/blog-post/${slug}`;
-  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    post.featured_image ||
+      extractFirstImage(post.content) ||
+      defaultOpenGraphImage(),
+  );
   const datePublished = post.created_at || post.date;
   const dateModified = post.updated_at || datePublished;
 
@@ -107,26 +114,51 @@ export default async function BlogPostPage({ params }) {
   const formattedDate = formatDate(post.created_at);
 
   const renderContent = (content) => {
-    if (typeof content === "string") return <div className="whitespace-pre-line">{content}</div>;
+    if (typeof content === "string")
+      return <div className="whitespace-pre-line">{content}</div>;
     if (!Array.isArray(content)) return null;
     return content.map((block, i) => {
       switch (block.type) {
-        case "h1": return <h2 key={i} className="text-2xl font-bold text-gray-900 mt-8 mb-4">{block.text}</h2>;
-        case "paragraph": return <p key={i} className="mb-6 leading-relaxed">{block.text}</p>;
-        case "image": return (
-          <figure key={i} className="my-8">
-            <img src={block.url} alt={block.caption || ""} className="w-full rounded-xl shadow-sm" />
-            {block.caption && <figcaption className="text-center text-sm text-gray-500 mt-3">{block.caption}</figcaption>}
-          </figure>
-        );
-        default: return null;
+        case "h1":
+          return (
+            <h2 key={i} className="text-2xl font-bold text-gray-900 mt-8 mb-4">
+              {block.text}
+            </h2>
+          );
+        case "paragraph":
+          return (
+            <p key={i} className="mb-6 leading-relaxed">
+              {block.text}
+            </p>
+          );
+        case "image":
+          return (
+            <figure key={i} className="my-8">
+              <img
+                src={block.url}
+                alt={block.caption || ""}
+                className="w-full rounded-xl shadow-sm"
+              />
+              {block.caption && (
+                <figcaption className="text-center text-sm text-gray-500 mt-3">
+                  {block.caption}
+                </figcaption>
+              )}
+            </figure>
+          );
+        default:
+          return null;
       }
     });
   };
 
   const canonicalUrl = `${getSiteUrl()}/blog-post/${slug}`;
   const wordCount = getContentWordCount(post.content);
-  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    post.featured_image ||
+      extractFirstImage(post.content) ||
+      defaultOpenGraphImage(),
+  );
   const jsonLd = buildArticleJsonLd({
     type: "BlogPosting",
     title: post.title,
@@ -148,10 +180,20 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageTracker pageType="blog_post" pageSlug={slug} pageTitle={post.title} />
+      <PageTracker
+        pageType="blog_post"
+        pageSlug={slug}
+        pageTitle={post.title}
+      />
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="max-w-7xl mx-auto px-4 py-2 md:py-10 grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
         <main className="lg:col-span-3">
           <article className="bg-white rounded-2xl shadow-sm overflow-hidden">

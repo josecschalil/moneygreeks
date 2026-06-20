@@ -448,7 +448,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 async function getPostMarketReport(slug: string) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/post-market-list/${slug}/`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/post-market-list/${slug}`,
       {
         cache: "no-store",
       },
@@ -480,7 +480,9 @@ export async function generateMetadata({
     ? splitKeywords(report.meta_keywords)
     : [];
   const canonicalUrl = `${getSiteUrl()}/post-market/${slug}`;
-  const imageUrl = absoluteUrl(report.featured_image || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    report.featured_image || defaultOpenGraphImage(),
+  );
   const datePublished = report.created_at || report.report_date;
   const dateModified = report.updated_at || datePublished;
 
@@ -559,7 +561,9 @@ export default async function PostMarketReportPage({
     image: absoluteUrl(backendReport.featured_image || defaultOpenGraphImage()),
     datePublished: backendReport.report_date || backendReport.created_at,
     dateModified:
-      backendReport.updated_at || backendReport.report_date || backendReport.created_at,
+      backendReport.updated_at ||
+      backendReport.report_date ||
+      backendReport.created_at,
     author: backendReport.analyst || "Jose C S",
     section: "Post-Market",
     keywords: splitKeywords(backendReport.meta_keywords),
@@ -573,7 +577,11 @@ export default async function PostMarketReportPage({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <PageTracker pageType="post_market" pageSlug={slug} pageTitle={backendReport.title} />
+      <PageTracker
+        pageType="post_market"
+        pageSlug={slug}
+        pageTitle={backendReport.title}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -1166,7 +1174,7 @@ export default async function PostMarketReportPage({
             </section>
 
             <div className="mt-8">
-              <SocialShare 
+              <SocialShare
                 url={`${process.env.NEXT_PUBLIC_SITE_URL}/post-market/${slug}`}
                 title={backendReport.title}
               />
