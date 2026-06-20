@@ -193,6 +193,37 @@ class BlogPost(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.category == "news":
+            self._enforce_news_capacity()
+
+    def _enforce_news_capacity(self):
+        """
+        Enforce max 3 posts in 'latest' and 'deep_dive'.
+        Overflow from 'latest' goes to 'deep_dive'.
+        Overflow from 'deep_dive' goes to 'live_feed'.
+        """
+        # 1. Latest -> Deep Dive
+        latest_posts = BlogPost.objects.filter(
+            category="news", news_placement="latest"
+        ).order_by("-created_at", "-id")
+        
+        if latest_posts.count() > 3:
+            # Move the oldest posts to deep_dive
+            overflow_ids = list(latest_posts.values_list('id', flat=True)[3:])
+            BlogPost.objects.filter(id__in=overflow_ids).update(news_placement="deep_dive")
+            
+        # 2. Deep Dive -> Live Feed
+        deep_dive_posts = BlogPost.objects.filter(
+            category="news", news_placement="deep_dive"
+        ).order_by("-created_at", "-id")
+        
+        if deep_dive_posts.count() > 3:
+            # Move the oldest posts to live_feed
+            overflow_ids = list(deep_dive_posts.values_list('id', flat=True)[3:])
+            BlogPost.objects.filter(id__in=overflow_ids).update(news_placement="live_feed")
+
     def __str__(self):
         return self.title
 
