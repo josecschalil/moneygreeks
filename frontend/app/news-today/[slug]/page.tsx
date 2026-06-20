@@ -59,7 +59,7 @@ interface ArticleData {
 async function getArticleData(slug: string): Promise<ArticleData | null> {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}/`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/blog-post/${slug}`,
       {
         next: { revalidate: 60 },
       },
@@ -106,10 +106,16 @@ export async function generateMetadata({
   }
   const metaTitle = post.meta_title || `${post.title} | MoneyGreeks News`;
   const metaDescription =
-    post.meta_description || firstParagraph(post.content) || "Read the latest financial news on MoneyGreeks.";
+    post.meta_description ||
+    firstParagraph(post.content) ||
+    "Read the latest financial news on MoneyGreeks.";
   const metaKeywords = splitKeywords(post.meta_keywords);
   const canonicalUrl = `${getSiteUrl()}/news-today/${slug}`;
-  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    post.featured_image ||
+      extractFirstImage(post.content) ||
+      defaultOpenGraphImage(),
+  );
   const datePublished = post.date || post.created_at;
   const dateModified = post.updated_at || datePublished;
 
@@ -174,7 +180,11 @@ export default async function NewsArticlePage({
   const metaDescription =
     post.meta_description || firstParagraph(post.content) || "";
   const metaKeywords = splitKeywords(post.meta_keywords);
-  const imageUrl = absoluteUrl(post.featured_image || extractFirstImage(post.content) || defaultOpenGraphImage());
+  const imageUrl = absoluteUrl(
+    post.featured_image ||
+      extractFirstImage(post.content) ||
+      defaultOpenGraphImage(),
+  );
 
   const jsonLd = buildArticleJsonLd({
     type: "NewsArticle",
