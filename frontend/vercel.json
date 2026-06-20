@@ -1,0 +1,31 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/news-today/",
+      "destination": "/news-today",
+      "permanent": true
+    },
+    {
+      "source": "/education/",
+      "destination": "/education",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/financial-data/",
+      "destination": "/financial-data",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)/",
+      "destination": "/$1",
+      "permanent": true
+    }
+  ]
+}
