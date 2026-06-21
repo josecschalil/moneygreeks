@@ -20,6 +20,16 @@ export const metadata = {
   title: "MoneyGreeks | Finance Insights and Market Research",
   description:
     "MoneyGreeks provides daily pre-market reports, stock market news, trading education, FII/DII analysis, and actionable insights for Indian traders and investors.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon-48x48.png", type: "image/png", sizes: "48x48" },
+      { url: "/icon-192x192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   keywords: [
     "stock market",
     "Indian stock market",
